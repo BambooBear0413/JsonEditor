@@ -1,0 +1,8 @@
+icon/icon.png
+icon/json/array.png
+icon/json/boolean.png
+icon/json/number.png
+icon/json/object.png
+icon/json/string.png
+icon/redo.png
+icon/undo.png

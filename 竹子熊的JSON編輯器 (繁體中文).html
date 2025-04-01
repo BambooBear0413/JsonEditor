@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+	<head>
+		<title>竹子熊的JSON編輯器</title>
+		<link rel="stylesheet" href="attachment_assets/html_style.css">
+		<link rel="icon" href="attachment_assets/icon.ico" type="image/x-icon">
+		<script src="attachment_assets/toc.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>竹子熊的JSON編輯器</h1>
+			<p>版本：0.0.0 (Beta)</p>
+			<img src="attachment_assets/icon.svg" height="160">
+		</header>
+		
+		<h2 id="toc">目錄</h2>
+			<ul id="table_of_content"></ul>
+		
+		<h2 id="introduction" class="title">介紹</h2>
+		<p><b>竹子熊的JSON編輯器</b>（以下簡稱「JSON編輯器」）是一款由Java寫成，用於編輯JSON格式檔案的程式。</p>
+		<p><b>JSON</b>，全稱<b>JavaScript Object Notation</b>，是一種獨立於程式語言（即便全稱包含JavaScript）、輕量級的資料交換格式，應用十分廣泛。</p>
+		<p>JSON擁有六種資料類型：<b>布林值</b>、<b>數值</b>、<b>字串</b>、<b>空值</b>、<b>物件</b>跟<b>陣列</b>（參見：<a href="https://www.json.org/json-zh.html">https://www.json.org/json-zh.html（簡體中文）</a>），其中物件跟陣列還可以再包含其他JSON元素。通常一個JSON檔案會以物件或陣列為根元素，其中可能再包含多個物件或陣列，並可能形成複雜的資料結構，此時，使用「JSON編輯器」開啟它，也許是個不錯的選擇。</p>
+		<img src="attachment_assets/zh_tw/json_editor_example.png" class="center-image">
+		<p>透過「JSON編輯器」，就可以非常清楚的看到JSON檔案中的資料結構（如上圖）。此外，透過「JSON編輯器」編輯JSON檔案，還可以<b>避免遺漏標點符號導致格式錯誤</b>等問題。</p>
+		
+		<h3 id="character_encoding" class="title">字元編碼</h3>
+		<p><b>「JSON編輯器」在不論讀取或儲存檔案，均使用「UTF-8」編碼</b>。如果檔案的編碼不是UTF-8，使用「JSON編輯器」開啟後，可能會出現亂碼（尤其是含有非ASCII字元的檔案），需特別注意。</p>
+		
+		<h3 id="json_null" class="title">「JSON編輯器」中的JSON Null</h3>
+		<p>在<b>0.1.0版本之前</b>，「JSON編輯器」<b>不會支援JSON當中的<code>null</code>（空值）</b>，所有<code>null</code>在程式內均會<b>被轉換為JSON字串<code>"null"</code></b>，且<b>沒有任何方法可以在「JSON編輯器」中新增「空值」</b>。</p>
+		<p>如果JSON檔案中有<code>null</code>，且其具有高度重要性時，不建議在「JSON編輯器」能夠支援之前，使用程式開啟檔案，甚至進行編輯並儲存。</p>
+		
+		<h3 id="root_element" class="title">JSON的根元素</h3>
+		<p>任何元素都能作為JSON檔案的「根元素」，然而，<b>「JSON編輯器」只允許「JSON物件」和「JSON陣列」作為根元素</b>。</p>
+		<p>當在「JSON編輯器」裡開始編輯新的JSON檔案時，根元素始終是「JSON物件」。<b>只有開啟根元素為「JSON陣列」的JSON檔案時，根元素才會變成「JSON陣列」</b>。</p>
+
+		<h2 id="escape_sequence" class="title">跳脫序列</h2>
+		<p>JSON的字串（包含「鍵」）有跳脫序列，用來表示一些控制字元（如換行、Tab等），或雙引號（<code>"</code>）、反斜線（<code>\</code>）等有其他含意的字元。</p>
+		<p>雖然使用「JSON編輯器」編輯JSON字串（包含「鍵」），像雙引號（<code>"</code>）就不需要使用<code>\"</code>代替，然而大部分在JSON字串中應用跳脫序列所代表的字元（如：換行等）即使在「JSON編輯器」中也沒辦法直接輸入。因此在「JSON編輯器」中編輯JSON字串（包含「鍵」）時，亦有跳脫序列。</p>
+		<p>在「JSON編輯器」裡編輯JSON字串時所有可用的跳脫序列如下：</p>
+		<ul>
+			<li><code>\\</code>：<code>\</code>本身。</li>
+			<li><code>\b</code>：<ruby>退格符<rp>(</rp><rt>Backspace</rt><rp>)</rp></ruby>（U+0008）。</li>
+			<li><code>\f</code>：<ruby>換頁符<rp>(</rp><rt>Form Feed</rt><rp>)</rp></ruby>（U+000C）。</li>
+			<li><code>\n</code>：<ruby>換行符<rp>(</rp><rt>Line Feed</rt><rp>)</rp></ruby>（U+000A）。</li>
+			<li><code>\r</code>：<ruby>回車<rp>(</rp><rt>Carriage Return</rt><rp>)</rp></ruby>（U+000D）。</li>
+			<li><code>\t</code>：<ruby>水平製表符<rp>(</rp><rt>Horizontal Tab</rt><rp>)</rp></ruby>（U+0009）。</li>
+			<li><code>\uXXXX</code>（XXXX為四位十六進制數字）：UTF-16編碼中，XXXX所代表的字元。</li>
+		</ul>
+		<p>當<code>\</code>字元後緊鄰的字元不包含以上任何一種（甚至沒有字元），就會輸出「<code>\\</code>」（在JSON字串中代表<code>\</code>本身）以及緊鄰字元本身（如果有）。</p>
+		<ul>
+			<li>例1：<code>\</code>和<code>\\</code>的輸出結果都是<code>\\</code>。</li>
+			<li>例2：<code>\u718A</code>的輸出結果是<code>熊</code>（U+718A），而<code>\u718</code>的輸出結果是<code>\\u718</code>。</li>
+			<li>例3：<code>\a</code>的輸出結果是<code>\\a</code>。</li>
+		</ul>
+		<p>如果JSON字串（包含「鍵」）中使用到<code>\</code>這個字元本身，仍建議一律使用<code>\\</code>表示，避免意外發生。</p>
+
+		<h2 id="shortcuts" class="title">快捷鍵</h2>
+		<table>
+			<tr>
+				<th scope="column">快捷鍵</th>
+				<th scope="column">動作</th>
+				<th scope="column">備註</th>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+				<td>復原</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td>
+				<td>重做</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>N</kbd></td>
+				<td>新建檔案</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>O</kbd></td>
+				<td>開啟舊檔</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>S</kbd></td>
+				<td>儲存檔案</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></td>
+				<td>另存新檔</td>
+				<td></td>
+			</tr>
+		</table>
+		
+		<h2 id="java" class="title">Java</h2>
+		<p>「JSON編輯器」需要<b>Java 17</b>以上版本才能運行，如果你的電腦沒有安裝Java 17或更高版本，可以考慮從以下兩個地方取得（兩者可能略有不同，但不影響「JSON編輯器」執行）：</p>
+		<ul>
+			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
+			<li><a href="https://adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a>（若不打算進行Java開發，可只安裝JRE。）</li>
+		</ul>
+		<p>如果電腦已經有安裝Java，或者剛安裝完，可以打開<ruby>命令行<rp>(</rp><rt>Command Line</rt><rp>)</rp></ruby>（如Windows系統中的cmd），輸入命令<code>java --version</code>，即可檢查Java版本。</p>
+		
+		<p>※近期「JSON編輯器」的Java最低所需版本可能會升至Java 21，因此安裝Java時，亦可考慮直接安裝Java 21。</p>
+	
+		<h2 id="languages" class="title">「JSON編輯器」本身支援的語言</h2>
+		<ul>
+			<li>English (US) （<code>en_us</code>） *預設語言</li>
+			<li>繁體中文（台灣）（<code>zh_tw</code>）</li>
+			<li>简体中文（中国大陆）（<code>zh_cn</code>）</li>
+		</ul>
+		
+		<h2 id="settings" class="title">設定（<code>settings.properties</code>）</h2>
+		<p>「JSON編輯器」的設定儲存在<code>settings.properties</code>檔案中，可以在程式內透過設定頁面更改，也可以從外部更改（不建議這麼做）。</p>
+		<p>目前<code>settings.properties</code>中的所有設定如下表所示，當中所有設定皆可於程式內更改（有些設定需要「啟用實驗性功能」才能於程式內更改）。</p>
+		<table>
+			<tr>
+				<th scope="column">鍵</th>
+				<th scope="column">類型</th>
+				<th scope="column">預設值</th>
+				<th scope="column">備註</th>
+			</tr>
+			<tr>
+				<td><code>language</code></td>
+				<td>語言代碼</td>
+				<td style="text-align:center"><code>en_us</code></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><code>isExperimentalFeaturesEnabled</code></td>
+				<td>布林值</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>是否啟用實驗性功能。須重啟程式，變更才會生效。</td>
+			</tr>
+			<tr>
+				<td><code>fontFamily</code></td>
+				<td>字族名稱</td>
+				<td style="text-align:center"><code>Dialog</code></td>
+				<td><code>Dialog</code>是Java預設字族的名稱。<b style="color:red">實驗性功能</b></td>
+			</tr>
+			<tr>
+				<td><code>fontSize</code></td>
+				<td>整數值</td>
+				<td style="text-align:center"><code>15</code></td>
+				<td>字體大小。最小值為<code>8</code>，最大值為<code>28</code>。</td>
+			</tr>
+			<tr>
+				<td><code>enablesPrettyPrinting</code></td>
+				<td>布林值</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>相較於未啟用時，啟用此項後儲存的JSON檔案可讀性較高（經過排版），但檔案大小會稍大。</td>
+			</tr>
+			<tr>
+				<td><code>enablesHtmlEscaping</code></td>
+				<td>布林值</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>啟用此項後，儲存JSON檔案時，會將<code>=</code>、<code>&gt;</code>、<code>&lt;</code>等於HTML中有特殊功能的字元轉成跳脫序列。</td>
+			</tr>
+			<tr>
+				<td><code>enablesUnicodeEscaping</code></td>
+				<td>布林值</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>啟用此項後，儲存JSON檔案時，會將「非ASCII字元」轉成Unicode跳脫序列。<b style="color:red">實驗性功能</b></td>
+			</tr>
+		</table>
+		<p>對於尚處於「實驗性功能」的設定，一旦將「實驗性功能」禁用以後重啟「JSON編輯器」，其設定值將回歸預設值。</p>
+		<p>如果「JSON編輯器」開啟時在<code>settings.properties</code>檔案中發現「未知設定」時，會特別紀錄。當使用者於程式內更改設定並套用時，程式會覆寫該檔案，而先前特別儲存的「未知設定」便可保留在檔案中（位於註釋「Unknown Properties」之下）。<code>settings.properties</code>檔案中的「註釋」則無此機制（會於覆寫後消失。）。</p>
+
+		<h2 id="plugin"  class="title">插件</h2>
+		<p>「JSON編輯器」中的插件類似知名遊戲Minecraft中的資料包，可在不需撰寫任何程式碼的情況下，添加部分功能或內容到「JSON編輯器」中。</p>
+		<p>插件可以是<b>一個資料夾，或一個ZIP壓縮檔</b>（附檔名必須為<code>.zip</code>），其中<b>必須包含<code>plugin.json</code></b>。<br>
+			插件<b>必須放在「plugins」資料夾</b>（首次開啟「JSON編輯器」時會自動創建）<b>或其中的資料夾裡</b>。</p>
+		<p>「JSON編輯器」在搜尋插件時，會讀取「plugins」資料夾以下的所有資料夾及ZIP壓縮檔。如果資料夾中找到<code>plugin.json</code>，則該資料夾將視為插件檔案，否則「JSON編輯器」會繼續讀取該資料夾內的資料夾或ZIP壓縮檔；如果ZIP壓縮檔中找到<code>plugin.json</code>，則該壓縮檔將視為插件檔案，否則「JSON編輯器」會直接忽略該壓縮檔（不會進一步搜尋）。</p>
+		
+		<h3 id="plugin_structure"  class="title">插件檔案的結構</h3>
+		<ul>
+			<li>插件資料夾/插件壓縮檔</li>
+			<ul>
+				<li><code>lang</code></li>
+				<ul>
+					<li><code>&lt;語言ID&gt;.json</code></li>
+				</ul>
+				<li><code>plugin.json</code></li>
+			</ul>
+		</ul>
+		
+		<h3 id="plugin_json"  class="title"><code>plugin.json</code></h3>
+		<p><code>plugin.json</code>是<b>每個插件必有的檔案</b>，檔案中包含「插件ID」等資訊，並作為「JSON編輯器」識別插件的主要依據。</p>
+		<p><code>plugin.json</code>檔案的結構如下。<b style="color:red">紅色粗體字</b>代表必須包含的JSON元素（必需項）。</p>
+		
+		<ul>
+			<li>根元素（物件）</li>
+			<ul>
+				<li><b style="color:red">id</b>（字串）：插件的ID，用於識別插件。插件ID第一個字元必須為小寫拉丁字母（<code>a</code>-<code>z</code>），而其餘部分只能包含小寫拉丁字母（<code>a</code>-<code>z</code>）、數字（<code>0</code>-<code>9</code>）和下劃線（<code>_</code>），長度需為2～64個字元。<span style="color:red">ID錯誤將導致插件無法被正常載入！</span><br>
+					插件ID應盡可能具有獨特性，因為插件ID衝突時，「JSON編輯器」只會載入最先載入到的同ID插件。</li>
+				<li><b>plugin_format</b>（數值）：插件的格式版本。預設為<b style="color:green">當前「JSON編輯器」版本對應的插件格式版本</b>（對應關係見附表）。目前此欄位的值對插件不會有任何實質影響，但在日後可能會影響插件的載入。</li>
+				<li><b>display_name</b>（字串）：顯示名稱。為語言檔中的「翻譯鍵名」。預設為「<b style="color:green">&lt;插件ID&gt;.name</b>」。</li>
+				<li><b>authors</b>（字串或陣列）：插件作者。暫時不提供翻譯。無預設值。</li>
+				<li><b>credits</b>（字串或陣列）：插件製作人員名單。暫時不提供翻譯。無預設值。</li>
+				<li><b>description</b>（字串）：關於此插件的描述。為語言檔中的「翻譯鍵名」，無預設值。</li>
+			</ul>
+		</ul>
+		
+		<table>
+			<caption>「JSON編輯器」版本與插件格式版本對照表</caption>
+			<tr>
+				<th scope="column">插件格式版本</th>
+				<th scope="column">「JSON編輯器」版本</th>
+				<th scope="column">更動或備註</th>
+			</tr>
+			<tr>
+				<td style="text-align:center">1</td>
+				<td style="text-align:center">0.0.0-</td>
+				<td>
+					<ul>
+						<li>語言檔</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+		
+		<h3 id="language_file"  class="title">語言檔</h3>
+		<p>語言檔用於替「JSON編輯器」添加翻譯，不論是<b>補充原版翻譯的不足、添加語言，或單純的添加插件翻譯</b>。</p>
+		<p>每個語言檔（包含原版翻譯）<b>都是JSON格式的檔案，副檔名必須為<code>.json</code>，且放置在<code>lang</code>資料夾中</b>。其<b>檔名將會作為「語言代碼」</b>，供「JSON編輯器」識別語言。<br>
+			語言代碼的第一個字元必須為小寫拉丁字母（<code>a</code>-<code>z</code>），而其餘部分只能包含小寫拉丁字母（<code>a</code>-<code>z</code>）、數字（<code>0</code>-<code>9</code>）和下劃線（<code>_</code>），長度需為2～64個字元。<span style="color:red">錯誤的語言代碼將導致語言檔無法被正常載入！</span></p>
+		<p>「JSON編輯器」在尋找翻譯文字時，會先搜尋使用者當前語言，找不到或其值為空字串時，會從語言檔中指定的「替代語言」中尋找；若語言檔中沒有指定「替代語言」，或者在「替代語言」中依舊找不到或其值為空字串，則會在「預設語言」（<code>en_us</code>）中尋找；若再次找不到，或其值為空字串，則會直接使用「翻譯鍵名」。<br>
+			因此，<b>替插件添加翻譯時，務必製作<code>en_us.json</code></b>。</p>
+		<p>如果有多個「相同語言」的語言檔中出現相同「翻譯鍵名」（發生「翻譯鍵名衝突」），「JSON編輯器」會<b>使用優先載入到的</b>。換言之，你<b>無法利用插件覆蓋原版翻譯</b>（因為原版翻譯的載入始終早於插件載入）。<br>
+			由於此特性，<b>屬於插件內容之翻譯的翻譯鍵名應包含「插件ID」</b>，以降低發生翻譯鍵名衝突的機率。</p>
+		
+		<p>語言檔有兩種結構，分別如下：</p>
+		
+		<ul>
+			<li>根元素（物件）</li>
+			<ul>
+				<li><b>lang.name</b>（字串）：將會作為該語言的顯示名稱，同樣無法覆蓋已載入的「相同語言」之名稱。</li>
+				<li><b>&lt;翻譯鍵名&gt;</b>（字串）：此翻譯鍵名在該語言中對應的內容。</li>
+			</ul>
+		</ul>
+		
+		<ul>
+			<li>根元素（陣列）</li>
+			<ul>
+				<li>（字串）：替代語言的語言代碼。</li>
+				<li>（物件）</li>
+				<ul>
+					<li><b>lang.name</b>（字串）：將會作為該語言的顯示名稱，同樣無法覆蓋已載入的「相同語言」之名稱。</li>
+					<li><b>&lt;翻譯鍵名&gt;</b>（字串）：此翻譯鍵名在該語言中對應的內容。</li>
+				</ul>
+			</ul>
+		</ul>
+
+		<p>備註：第二種格式的根元素之下可以包含多個字串與物件，並且次序不影響載入與否（但會影響載入順序）。</p>
+
+		<p>特別注意，如果顯示翻譯內容的元件不支援換行等行為，那麼即使在語言檔中使用如<code>\n</code>等跳脫序列，實際於程式中也無法達到期望中的效果。</p>
+
+		<h4 id="parameter_in_translation" class="title">翻譯內容中的參數</h4>
+		<p>如果你打算製作「JSON編輯器」本身沒支援的語言，就需要特別注意「內容中的參數」。</p>
+		<p>在「JSON編輯器」中，所有翻譯內容都被視為「格式化字串」處理（格式參見<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文檔</a>，或參考<a href="https://jax-work-archive.blogspot.com/2015/02/java-stringformat.html" target="_blank">這篇文章</a>），以便在翻譯內容中納入參數，而在原版內容中，便有部分翻譯內容具有參數（諸如檔案名稱等）。因為翻譯內容皆為格式化文字，若內容包含<code>%</code>，應使用<code>%%</code>代表（有點像跳脫序列中的<code>\\</code>），否則可能導致意外問題發生。</p>
+		<p>「JSON編輯器」原版內容中，所有帶有參數的翻譯鍵名列表如下：</p>
+		
+		<table>
+			<tr>
+				<th scope="column">翻譯鍵名</th>
+				<th scope="columm">參數數量</th>
+				<th scope="column">參數說明</th>
+			</tr>
+			<tr>
+				<td><code>json_editor.save_file.file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>：檔案名稱。</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.error.failed_to_save_file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>：檔案名稱。</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.browse</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>：網址。</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.open_file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>：檔案名稱。</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.open_file.file_not_exist</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>：檔案名稱。</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+
+		<h4 id="language_file_suggestion" class="title">語言代碼、語言名稱與翻譯鍵名建議</h4>
+		<p>此建議遵守與否並不影響語言檔之載入，僅作為<b>製作語言檔時的參考</b>。</p>
+		<p>語言代碼建議由兩個部分組成：<b>「語言」</b>、<b>「國家或地區」</b>，對於某些語言還可添加<b>「使用文字」</b>的部分（如拉丁字母、西里爾字母等），之間<b>以「下劃線」（<code>_</code>）分隔</b>。雖然語言代碼總字元長度最多可達64字元，但「語言」及「國家或地區」建議約<b>2～4個字元</b>即可。</p>
+		<ul>
+			<li>例1：「JSON編輯器」的預設語言<code>en_us</code>中，<code>en</code>代表「英文」、<code>us</code>代表「美國」。</li>
+			<li>例2：如果打算製作由「拉丁字母」寫成的「哈薩克文」，其語言代碼可命名為<code>kk_kz_latin</code>，其中<code>kk</code>代表「哈薩克文」、<code>kz</code>代表「哈薩克」、<code>latin</code>代表「拉丁字母」；若要製作「西里爾字母」版，則其語言代碼可命名為<code>kk_kz_cyrillic</code>，其中<code>cyrillic</code>代表「西里爾字母」。</li>
+		</ul>
+		<p>語言名稱類似於語言代碼，由兩個部分組成：<b>「語言」</b>、<b>「國家或地區」</b>，其中「國家或地區」<b>以括號（<code>()</code>，或具有相同或類似意義的符號）包括</b>，並且如果可行，語言名稱應<b>以該語言的方式表示</b>。</p>
+		<ul>
+			<li>例1：「JSON編輯器」的預設語言<code>en_us</code>的語言名稱為「English (US)」，其中「English」即「英文」、「US」即「美國」。</li>
+			<li>例2：「JSON編輯器」本身支援的語言<code>zh_tw</code>，其語言名稱為「繁體中文（台灣）」，當中的「台灣」便是使用全形括號（<code>（）</code>）括起。</li>
+		</ul>
+		<p>翻譯鍵名應<b>盡可能的表達其意義</b>，且<b>建議使用英文</b>；全部<b>使用小寫字母</b>，並<b>使用「點」（<code>.</code>）分隔每個部分</b>，每個部份中<b>使用「下劃線」（<code>_</code>）連接詞彙</b>（即<ruby>蛇形命名法<rp>(</rp><rt>Snake Case</rt><rp>)</rp></ruby>）。</p>
+		<ul>
+			<li>例：「JSON編輯器」中，有個翻譯鍵名為<code>json_editor.settings.language</code>，其中<code>json_editor</code>代表「JSON編輯器」本身用到的翻譯鍵名（對於插件內容的翻譯，可替換「插件ID」），<code>settings</code>代表它與設定相關，<code>language</code>代表它與「語言」有關。而<code>json_editor.settings.language</code>實際上就是設定視窗中，「語言」選項的「名稱」所使用的翻譯鍵名。</li>
+		</ul>
+
+		<h2 id="open_source_libraries"  class="title">第三方開源程式庫</h2>
+		<h3 id="gson"  class="title">Gson</h3>
+		<p>版本：2.10.1<br>
+		Copyright 2008 Google Inc.</p>
+		<p>Gson是一款由Google開發（非官方產品）的Java程式庫，主要用於序列化Java物件為JSON，或反序列化JSON為Java物件（Java物件←→JSON）。<br>
+		「JSON編輯器」使用它來處理JSON，包含讀取與寫出等。</p>
+		<p>許可協定：<a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License Version 2.0</a><br>
+		查看更多：<a href="https://github.com/google/gson" target="_blank">https://github.com/google/gson</a></p>
+		
+		<h2 id="credits"  class="title">Credits</h2>
+		<ul>
+			<li>作者：竹子熊</li>
+			<li>翻譯協助（「JSON編輯器」）：RandomWill（<code>zh_cn</code>）</li>
+		</ul>
+		
+		<footer>
+			<p>Copyright 2025 竹子熊</p>
+		</footer>
+	</body>
+</html>

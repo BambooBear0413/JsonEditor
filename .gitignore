@@ -1,0 +1,14 @@
+test*
+
+target/
+src/test/
+
+plugins/
+report/
+reports/
+settings.properties
+
+# Eclipse Project
+.project
+.classpath
+.settings/

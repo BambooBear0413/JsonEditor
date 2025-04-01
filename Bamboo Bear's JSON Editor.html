@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bamboo Bear's JSON Editor</title>
+		<link rel="stylesheet" href="attachment_assets/html_style.css">
+		<link rel="icon" href="attachment_assets/icon.ico" type="image/x-icon">
+		<script src="attachment_assets/toc.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>Bamboo Bear's JSON Editor</h1>
+			<p>Version: 0.0.0 (Beta)</p>
+			<img src="attachment_assets/icon.svg" height="160">
+		</header>
+
+		<h2 id="toc">Table of Content</h2>
+			<ul id="table_of_content"></ul>
+
+		<h2 id="introduction"  class="title">Introduction</h2>
+		<p><b>Bamboo Bear's JSON Editor</b> ("JSON Editor") is a Java program used for editing JSON files.</p>
+		<p><b>JSON</b> (<b>JavaScript Object Notation</b>), is a language-independent, lightweight data interchange format, and is widely used.</p>
+		<p>There are 6 data types in JSON: <b>Boolean</b>, <b>Number</b>, <b>String</b>, <b>Null</b>, <b>Object</b>, and <b>Array</b> (See also: <a href="https://www.json.org/json-en.html">https://www.json.org/json-en.html</a>), where objects and arrays can contain other JSON elements. A JSON file usually includes many objects and arrays, potentially forming a complex structure. In this case, using the "JSON Editor" to open it might be a good choice.</p>
+		<img src="attachment_assets/en_us/json_editor_example.png" class="center-image">
+		<p>By opening a JSON file in the "JSON Editor", you can clearly see the structure of the JSON data (like the image above). Additionally, editing JSON files in the "JSON Editor" can help you prevent formatting errors caused by missing punctuation marks or other issues.</p>
+		
+		<h3 id="character_encoding" class="title">About Character Encoding</h3>
+		<p><b>the "JSON Editor" uses the UTF-8 for both reading and saving files</b>. Therefore, when you open the file whose character encoding is not UTF-8, the garbled characters may appear in the "JSON Editor", especially for the files that contain non-ASCII characters.</p>
+		
+		<h3 id="json_null" class="title">About JSON Null in "Json Editor"</h3>
+		<p><b>JSON null</b> (<code>null</code>) is one of the data types in JSON, but <b>the "JSON Editor" does not support it until version 0.1.0.</b> When loading JSON files, all JSON null values (<code>null</code>) will <b>be converted to JSON string <code>"null"</code></b> in the "JSON Editor", and <b>there is no way to add a JSON null</b> in the "JSON Editor".</p>
+		<p>If the JSON file contains JSON null values (<code>null</code>) that are very important for the data, it is not recommended to open, edit, or save the file by the "JSON Editor" before the "JSON Editor" supports JSON null.</p>
+
+		<h3 id="root_element" class="title">About JSON Root Element</h3>
+		<p>JSON allows any types of JSON Element to be "the root element", However, <b>the "JSON Editor" only allows JSON objects and JSON arrays to be the root element</b>.</p>
+		<p>When you start editing a new JSON file in the "JSON Editor", a JSON object will always be the root element. <b>Having a JSON array as the root element only applies when you open a JSON file whose root element is a JSON array</b>.</p>
+
+		<h2 id="escape_sequence" class="title">Escape Sequences</h2>
+		<p>The JSON string includes escape sequences to represent certain control characters, such as line feeds and horizontal tabs, as well as special characters like double quotes (<code>"</code>) and backslashes (<code>\</code>).</p>
+		<p>When you edit JSON strings in the "JSON Editor", you don't have to use <code>\"</code> to represent <code>"</code>, but most characters that should be represented by escape sequences in a JSON string, such as line feed, etc., still cannot be entered directly in the "JSON Editor". Therefore, there are specific escape sequences you can use when editing JSON strings in the "JSON Editor".</p>
+		<p>All escape sequences that can be used when editing JSON strings in the "JSON Editor" are listed below:</p>
+		<ul>
+			<li><code>\\</code>: <code>\</code> itself.</li>
+			<li><code>\b</code>: Backspace (U+0008).</li>
+			<li><code>\f</code>: Form Feed (U+000C).</li>
+			<li><code>\n</code>: Line Feed (U+000A).</li>
+			<li><code>\r</code>: Carriage Return (U+000D).</li>
+			<li><code>\t</code>: Horizontal Tab (U+0009).</li>
+			<li><code>\uXXXX</code> (where XXXX is a four-digit hexadecimal number): The character corresponding to XXXX in UTF-16 encoding.</li>
+		</ul>
+
+		<p>If <code>\</code> is immediately followed by characters that are not listed above, or if there is no character immediately following <code>\</code>, when the "JSON Editor" saves the file, it will output <code>\\</code>, which represent <code>\</code> in the JSON string, along with any characters that follow it (if any).</p>
+		<ul>
+			<li>Example 1: Both <code>\</code> and <code>\\</code> result in <code>\\</code>.</li>
+			<li>Example 2: <code>\u718A</code> results in <code><abbr title="A Chinese character which means &quot;bear&quot;.">熊</abbr></code> (U+718A), and <code>\u718</code> result in <code>\\u718</code>.</li>
+			<li>Example 3: <code>\a</code> results in <code>\\a</code>.</li>
+		</ul>
+
+		<p>If the content of a JSON string contains <code>\</code>, it is recommended to represent it as <code>\\</code> to avoid unexpected situations.</p>
+
+		<h2 id="shortcuts" class="title">Shortcuts</h2>
+		<table>
+			<tr>
+				<th scope="column">Shortcut</th>
+				<th scope="column">Action</th>
+				<th scope="column">Notes</th>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+				<td>Undo</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td>
+				<td>Redo</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>N</kbd></td>
+				<td>New File</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>O</kbd></td>
+				<td>Open File</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>S</kbd></td>
+				<td>Save</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></td>
+				<td>Save As...</td>
+			</tr>
+		</table>
+
+		<h2 id="java" class="title">Java</h2>
+		<p><b>Java 17</b> is required to run the "JSON Editor", If your computer hasn't installed Java 17 or a later version, you can obtain it from one of the sources listed below. (Java obtained from different sources may have slight differences, but these differences will not affect the functionality of the "JSON Editor".)</p>
+		<ul>
+			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
+			<li><a herf="https://www.adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a> (If you don't want to do Java development, you can install JRE only.)</li>
+		</ul>
+		<p>If your computer already has Java installed, or you have just installed it, you can open a command line tool, such as Command Prompt (cmd) in Windows, and run the command <code>java --version</code> to check the Java version.</p>
+		<p>*Java 21 may be required in future versions. Therefore, when installing Java, it is advisable to consider installing Java 21.</p>
+
+		<h2 id="languages" class="title">Supported Languages</h2>
+		<ul>
+			<li>English (US) (<code>en_us</code>) *default language</li>
+			<li>繁體中文（台灣） (<code>zh_tw</code>)</li>
+			<li>简体中文（中国大陆） (<code>zh_cn</code>)</li>
+		</ul>
+
+		<h2 id="settings" class="title">Settings (<code>settings.properties</code>)</h2>
+		<p>The settings of the "JSON Editor" are saved in the file <code>settings.properties</code>. They can be changed through the settings dialog in the "JSON Editor" or edited by another application (this is not recommended).</p>
+		<p>All settings in <code>settings.properties</code> are listed below, and each of them can be changed in the "JSON Editor" (some can only be changed when experimental features are enabled).</p>
+		<table>
+			<tr>
+				<th scope="column">Key</th>
+				<th scope="column">Type</th>
+				<th scope="column">Default Value</th>
+				<th scope="column">Notes</th>
+			</tr>
+			<tr>
+				<td><code>language</code></td>
+				<td>language code</td>
+				<td style="text-align:center"><code>en_us</code></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><code>isExperimentalFeaturesEnabled</code></td>
+				<td>Boolean</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>Enable experimental features. The change will take effect after restarting the program.</td>
+			</tr>
+			<tr>
+				<td><code>fontFamily</code></td>
+				<td>font family name</td>
+				<td style="text-align:center"><code>Dialog</code></td>
+				<td><code>Dialog</code> is the name of the Java default font family. <b style="color:red">Experimental Feature</b></td>
+			</tr>
+			<tr>
+				<td><code>fontSize</code></td>
+				<td>integer</td>
+				<td style="text-align:center"><code>15</code></td>
+				<td>Font size. The minimum value is <code>8</code>, and the maximum value is <code>28</code>.</td>
+			</tr>
+			<tr>
+				<td><code>enablesPrettyPrinting</code></td>
+				<td>Boolean</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled.</td>
+			</tr>
+			<tr>
+				<td><code>enablesHtmlEscaping</code></td>
+				<td>Boolean</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>After enabling HTML escaping, characters with special meaning in HTML, such as <code>=</code>, <code>&gt;</code>, and <code>&lt;</code>, will be escaped when saving the file.</td>
+			</tr>
+			<tr>
+				<td><code>enablesUnicodeEscaping</code></td>
+				<td>Boolean</td>
+				<td style="text-align:center"><code>false</code></td>
+				<td>After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b></td>
+			</tr>
+		</table>
+		<p>For settings that are "experimental features", once the experimental features are disabled and the "JSON Editor" is restarted, the values of these settings will be restored to their default values.</p>
+		<p>When the "JSON Editor" starts, if it detects any "unknown settings" in the <code>settings.properties</code>, it will store them in memory. When the user changes and applies settings in the "JSON Editor", the program will rewrite the file, and the "unknown settings" will be written back into the file (under the "Unknown Properties" comment). However, the original comment in the <code>setting.properties</code> will be removed after the rewrite.</p>
+
+		<h2 id="plugin" class="title">Plugins</h2>
+		<p>Plugins of the "JSON Editor" are similar to datapacks in Minecraft, a famous game; they allow you to add content or functionality to the "JSON Editor" without programming.</p>
+		<p>A plugin can be <b>either a directory or a ZIP file with the <code>.zip</code> extension</b> that <b>contains the file <code>plugin.json</code></b>.<br>
+			Plugins <b>must be placed in the "plugins" direcotory</b>, which is automatically created when the "JSON Editor" starts, <b>or in one of its subdirectories</b>.</p>
+		<p>When the "JSON Editor" searches for plugins, it scans all directories and ZIP files within the "plugins" directory. If it finds a directory containing <code>plugin.json</code>, that directory will be identified as a plugin; otherwise, the "JSON Editor" will continue scanning the subdirectories and ZIP files within it. If it finds ZIP file containing <code>plugin.json</code>, the ZIP file will be identified as a plugin; otherwise, it will be ignored.</p>
+
+		<h3 id="plugin_structure" class="title">Plugin Structure</h3>
+		<ul>
+			<li>Directory or ZIP file</li>
+			<ul>
+				<li><code>lang</code></li>
+				<ul>
+					<li><code>&lt;Language ID&gt;.json</code></li>
+				</ul>
+				<li><code>plugin.json</code></li>
+			</ul>
+		</ul>
+
+		<h3 id="plugin_json" class="title"><code>plugin.json</code></h3>
+		<p>The <code>plugin.json</code> file is a required file for each plugin. It contains information such as the "plugin ID", and serves as the primary reference for the "JSON Editor" to identify plugins.</p>
+		<p>The structure of the <code>plugin.json</code> file is as follows. <b style="color:red">Text in bold red</b> represents required JSON elements.</p>
+
+		<ul>
+			<li>The root element (Object)</li>
+			<ul>
+				<li><b style="color:red">id</b> (String): Plugin ID, used to identify plugin. The plugin ID must start with a lowercase letter (<code>a</code>-<code>z</code>), and can only contain lowercase letters (<code>a</code>-<code>z</code>), numbers (<code>0</code>-<code>9</code>), and underscores (<code>_</code>). Its length must be between 2 and 64 characters (inclusive). <span style="color:red">An illegal plugin ID will prevent the plugin from being loaded!</span><br>
+					The plugin ID should be as unique as possible. If a plugin ID conflict occurs, the "JSON Editor" will only load the first plugin it finds.</li>
+				<li><b>plugin_format</b> (Number): The format version of the plugin. Defaults to <b style="color:green">the format version corresponding to the current "JSON Editor" version</b> (See the table below). The value does not affect plugins currently, but it may impact plugin loading in the future.</li>
+				<li><b>display_name</b> (String): The display name of the plugin. The value should be a "Translation Key" in language file. Defaults to "<b style="color:green">&lt;Plugin ID&gt;.name</b>".</li>
+				<li><b>authors</b> (String or Array): The authors of the plugin. Translation is not supported temporarily. No default value.</li>
+				<li><b>credits</b> (String or Array): The credits of the plugin. Translation is not supported temporarily. No default value.</li>
+				<li><b>description</b> (String): The description about the plugin. The value should be a "Translation key" in language file. No default value.</li>
+			</ul>
+		</ul>
+
+		<table>
+			<caption>Plugin Format Version</caption>
+			<tr>
+				<th scope="column">Plugin Format Version</th>
+				<th scope="column">"JSON Editor" Version</th>
+				<th scope="column">Changes or Notes</th>
+			</tr>
+			<tr>
+				<td style="text-align:center">1</td>
+				<td style="text-align:center">0.0.0-</td>
+				<td>
+					<ul>
+						<li>Language File.</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+
+		<h3 id="language_file" class="title">Langauge File</h3>
+		<p>Language files are used to add translation to the "JSON Editor", whether to improve incomplete vanilla translations, add new languages for vanilla content, or provide translations for plugin content.</p>
+		<p>All language files (including vanilla translations) are <b>in JSON format with the <code>.json</code> extension</b> and <b>are placed in the <code>lang</code> directory</b>. <b>The filename will be used as the "language ID"</b> for the "JSON Editor" to identify the language.<br>
+			The language ID must start with a lowercase letter (<code>a</code>-<code>z</code>), and can only contain lowercase letters (<code>a</code>-<code>z</code>), numbers (<code>0</code>-<code>9</code>), and underscores (<code>_</code>). Its length must be between 2 and 64 characters (inclusive). <span style="color:red">An illegal language ID will prevent the language file from being loaded!</span></p>
+		<p>When the "JSON Editor" searches for translation content, it first looks in the user's current language. If the content is not found or is an empty string, it will search in the "alternative languages" specified in the language file. If no "alternative languages" are specified or the content is still not found or is an empty string, the "default value" (<code>en_us</code>) will be searched. If the content is still not found or is an empty string, the "translation key" will be used as the translation content.<br>
+			Therefore, <b>making <code>en_us.json</code> is essential when adding translations for plugin content</b>.</p>
+		<p>If the same "translation keys" appear in multiple language files of the same language (a "translation key conflict" occurs), the "JSON Editor" will <b>only use the translation loaded first</b>. In other words, <b>plugins cannot overwrite vanilla translations</b> because vanilla translations are always loaded before plugins.<br>
+			Therefore, <b>translation keys for plugin content should include the "plugin ID"</b> to reduce the probability of translation key conflicts.</p>
+		
+		<p>The structure of the language file has two forms, as follows:</p>
+
+		<ul>
+			<li>The root element (Object)</li>
+			<ul>
+				<li><b>lang.name</b> (String): the display name of the language. This cannot overwrite the name of the "same" language which is loaded earlier.</li>
+				<li><b>&lt;translation key&gt;</b> (String): the corresponding content in this language.</li>
+			</ul>
+		</ul>
+		
+		<ul>
+			<li>The root element (Array)</li>
+			<ul>
+				<li>(String): The language ID of alternative languages.</li>
+				<li>(Object)</li>
+				<ul>
+					<li><b>lang.name</b> (String): the display name of the language. This cannot overwrite the name of the "same" language which is loaded earlier.</li>
+					<li><b>&lt;translation key&gt;</b> (String): the corresponding content in this language.</li>
+				</ul>
+			</ul>
+		</ul>
+
+		<p>Notes: The root element of the second form can contain multiple strings and objects. Their order does not affect whether the content will be loaded, but it does affect the loading sequence.</p>
+
+		<p>It is important to notice that the support for formatting, such as line breaks, depends on the component displaying the content. If the component does not support line breaks, using <code>\n</code> in the language file will not achieve the expect effect.</p>
+
+		<h4 id="parameter_in_translation" class="title">Parameters in Translations</h4>
+		<p>If you want to make the language that does not supported by the "JSON Editor", you have to notice "parameters in translations".</p>
+		<p>In the "JSON Editor", all the translation content are handle as "formatted strings" (see the format in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">the Java SE API Documents</a>, or see <a href="https://medium.com/@AlexanderObregon/javas-string-format-method-explained-82707214c953" target="_blank">this article</a>), so that we can put some arguments into content. And in the vanilla content, there are some translations have parameters, such as filename. Because all the translations are formatted strings, if the content contains <code>%</code> character, it should be represented by <code>%%</code> (like the escape sequence <code>\\</code>); otherwise, something unexpected might occur.</p>
+
+		<p>All the translation keys of the "JSON Editor" vanilla content that have parameters are listed below:</p>
+
+		<table>
+			<tr>
+				<th scope="column">Translation Key</th>
+				<th scope="columm">Parameter Count</th>
+				<th scope="column">Description</th>
+			</tr>
+			<tr>
+				<td><code>json_editor.save_file.file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>: the filename.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.error.failed_to_save_file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>: the filename.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.browse</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>: URL.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.open_file</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>: the filename.</li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><code>json_editor.warning.open_file.file_not_exist</code></td>
+				<td style="text-align:center;">1</td>
+				<td>
+					<ul>
+						<li><code>%1$s</code>: the filename.</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+
+		<h4 id="language_file_suggestion" class="title">Suggestions for Language File</h4>
+		<p>Following the suggestions below or not does not affect the loading of language files; it is only for reference when making language files.</p>
+		<p>The language ID is recommended to consist of two parts: <b>"language"</b> and <b>country or region</b>. For some languages, an additional <b>script</b> part, such as Latin or Cyrillic, can be added. <b>Each part is separated by underscore (<code>_</code>)</b>. Although the maximum length of the language ID is 64 characters, it is recommended that the "language" and "country or region" parts <b>be between 2 and 4 characters (inclusive)</b>.</p>
+		<ul>
+			<li>Example 1: In the ID of the default language <code>en_us</code>, where <code>en</code> represents "English", and <code>us</code> represents "the USA".</li>
+			<li>Example 2: If you want to make a language file for "Kazakh" written in "Latin script", the language ID can be named <code>kk_kz_latin</code>, where <code>kk</code> represents "Kazakh", <code>kz</code> represents "Kazakhstan", and <code>latin</code> represents "Latin script". If you want to make a langauge file for the same language written in "Cyrillic script", the language ID can be named <code>kk_kz_cyrillic</code>, where <code>cyrillic</code> represents "Cyrillic script".</li>
+		</ul>
+		<p>The langauge name is recommended to consist of two parts: <b>"language"</b> and <b>country or region</b>, similar to the language ID, where "country or region" should be enclosed in parentheses(<code>()</code>), or other punctuations with the same or similar meanings. The langauge name should <b>be written in that language</b> if possible</p>
+		<ul>
+			<li>Example 1: The name of one of the suggested languages <code>zh_tw</code> is "繁體中文（台灣）", where "繁體中文" means "Traditional Chinese", and "台灣", which is enclosed by fullwidth parentheses (<code>（）</code>), means Taiwan.</li>
+			<li>Example 2: The name of the default language <code>en_us</code> is "English (US)", where the "country or region" (US) part is enclosed by (halfwidth) parentheses (<code>()</code>).</li>
+		</ul>
+		<p>Translation keys should, as much as possible, represent their meaning (or where they are used) and are recommended to be written in English. Words in translation keys should be written in lowercase, each part should be separated by dots (<code>.</code>), and using underscores (<code>_</code>) to connect words within each part (Snake case).</p>
+		<ul>
+			<li>In the "JSON Editor", there is a translation key named <code>json_editor.settings.language</code>, where <code>json_editor</code> represents that the key is used by vanilla content (for plugin content, this part can be replaced by the plugin id), <code>settings</code> represents that the key is related to the settings, and <code>language</code> represents that the key is related to "language". In fact, the translation key <code>json_editor.settings.langauge</code> is used for the label of the "Language" option in the settings screen.</li>
+		</ul>
+
+		<h2 id="open_source_libraries" class="title">Third-Party Open Source Libraries</h2>
+		<h3 id="gson" class="title">Gson</h3>
+		<p>Version: 2.10.1<br>
+			Copyright 2008 Google Inc.</p>
+		
+		<p>A Java library developed by Google that serializes Java objects to JSON, and deserializes JSON to Java objects (Java objects <-> JSON)</p>
+		
+		<p>License: <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License Version 2.0</a><br>
+			See also: <a href="https://github.com/google/gson" target="_blank">https://github.com/google/gson</a></p>
+			
+		<h2 id="credits" class="title">Credits</h2>
+		<ul>
+			<li>Author: Bamboo Bear (Chinese: 竹子熊)</li>
+			<li>Translation Assistance ("JSON Editor"): RandomWill（<code>zh_cn</code>）</li>
+		</ul>
+		
+		<footer>
+			<p>Copyright 2025 Bamboo Bear
+		</footer>
+	</body>
+</html>

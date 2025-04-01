@@ -1,0 +1,9 @@
+================================== Credits ==================================
+Author: Bamboo Bear(竹子熊)
+Translation Assistance: RandomWill(zh_cn)
+
+========== Open Source Libraries used in Bamboo Bear's JSON Editor ==========
+1. Gson 2.10.1
+Copyright 2008 Google Inc.
+License: Apache License Version 2.0
+https://github.com/google/gson

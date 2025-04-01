@@ -1,0 +1,37 @@
+<svg width="640" height="640" xmlns="http://www.w3.org/2000/svg">
+	<path d="M 160 120
+			 C 80 120 80 180 80 220
+			 S 80 320 40 320
+			 C 80 320 80 380 80 420
+			 S 80 520 160 520
+			 C 100 520 100 460 100 420
+			 S 100 320 80 320
+			 C 100 320 100 260 100 220
+			 S 100 120 160 120" stroke-width="0"/>
+	<path d="M 480 120
+			 C 560 120 560 180 560 220
+			 S 560 320 600 320
+			 C 560 320 560 380 560 420
+			 S 560 520 480 520
+			 C 540 520 540 460 540 420
+			 S 540 320 560 320
+			 C 540 320 540 260 540 220
+			 S 540 120 480 120" stroke-width="0"/>
+	
+	<circle cx="196.393" cy="236.281" r="45" stroke="black" stroke-width="10"/>
+	<circle cx="196.393" cy="236.281" r="30" fill="#ffffff" stroke-width="0"/>
+	
+	<circle cx="443.607" cy="236.281" r="45" stroke="black" stroke-width="10"/>
+	<circle cx="443.607" cy="236.281" r="30" fill="#ffffff" stroke-width="0"/>
+	
+	<ellipse cx="320" cy="340" rx="161.245" ry="140" stroke="black" stroke-width="10"/>
+	
+	<circle cx="256" cy="340" r="20" fill="#ffffff" stroke-width="0"/>
+	<circle cx="384" cy="340" r="20" fill="#ffffff" stroke-width="0"/>
+	
+	<ellipse cx="320" cy="400" rx="69.86" ry="48.789" fill="#ffffff" stroke="black" stroke-width="10"/>
+	<path d="M 337.889 364.223
+			 A 40 40 0 0 0 302.111 364.223
+			 A 40 40 0 0 0 320 388.068
+			 A 40 40 0 0 0 337.889 364.223" stroke-width="0" fill="black"/>
+</svg>
