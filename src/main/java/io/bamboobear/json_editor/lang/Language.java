@@ -46,7 +46,7 @@ public final class Language {
 	void load(JsonElement element) {
 		if(element instanceof JsonObject object) { //TODO java-21
 			if(name == UNKNOWN) {
-				name = JsonObjectUtilities.getAsString(object, "lang.name", UNKNOWN);
+				name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
 			}
 			
 			Map<String, JsonElement> map = object.asMap();

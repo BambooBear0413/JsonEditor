@@ -46,14 +46,14 @@ public abstract class Plugin {
 		}
 		this.id = id;
 		
-		name = TranslatableText.of(JsonObjectUtilities.getAsString(pluginJson, "display_name", String.format("%s.name", id)));
+		name = TranslatableText.of(JsonObjectUtilities.getString(pluginJson, "display_name", String.format("%s.name", id)));
 		authors = loadArrayOrString(pluginJson, "authors");
 		credits = loadArrayOrString(pluginJson, "credits");
 		
-		String desc = JsonObjectUtilities.getAsString(pluginJson, "description", null);
+		String desc = JsonObjectUtilities.getString(pluginJson, "description", null);
 		description = desc == null ? TranslatableText.EMPTY : TranslatableText.of(desc);
 		
-		formatVersion = JsonObjectUtilities.getAsInteger(pluginJson, "plugin_format", Plugin.LATEST_FORMAT_VERSION);
+		formatVersion = JsonObjectUtilities.getInteger(pluginJson, "plugin_format", Plugin.LATEST_FORMAT_VERSION);
 	}
 	
 	public String id() {
@@ -81,9 +81,9 @@ public abstract class Plugin {
 	}
 	
 	private String[] loadArrayOrString(JsonObject object, String name) {
-		var array = JsonObjectUtilities.getAsJsonArray(object, name);
+		var array = JsonObjectUtilities.getJsonArray(object, name);
 		if(array == null) {
-			String str = JsonObjectUtilities.getAsString(object, name, null);
+			String str = JsonObjectUtilities.getString(object, name, null);
 			return str == null ? new String[0] : new String[] {str};
 		}
 		
