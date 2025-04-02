@@ -2,6 +2,8 @@ package io.bamboobear.json_editor.component;
 
 public sealed interface EditorComponent permits EditorTextField, EditorComboBox{
 	public default String translateInputValue(String input) {
+		if(input == null) return "";
+
 		StringBuffer sb = new StringBuffer(input.length());
 		char[] chars = input.toCharArray();
 		
@@ -23,6 +25,8 @@ public sealed interface EditorComponent permits EditorTextField, EditorComboBox{
 	}
 	
 	public default String translateOutputValue(String input) {
+		if(input == null) return "";
+		
 		StringBuffer sb = new StringBuffer(input.length());
 		char[] chars = input.toCharArray();
 
