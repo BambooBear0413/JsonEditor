@@ -172,6 +172,6 @@ public class SettingsDialog extends Dialog{
 	}
 	
 	private void removeAllChanges() {
-		changeSettings = new HashMap<String, String>();
+		changeSettings.clear();
 	}
 }
