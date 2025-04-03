@@ -1,6 +1,5 @@
 package io.bamboobear.json_editor.component;
 
-import javax.swing.Action;
 import javax.swing.JMenu;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
@@ -10,15 +9,10 @@ public class Menu extends JMenu{
 	
 	private TranslatableText text;
 	
-	public Menu() {
-	}
+	public Menu() { this(null); }
 	
 	public Menu(TranslatableText text) {
 		setText(text);
-	}
-	
-	public Menu(Action action) {
-		super(action);
 	}
 	
 	@Override

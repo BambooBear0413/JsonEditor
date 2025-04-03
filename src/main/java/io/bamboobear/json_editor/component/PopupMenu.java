@@ -9,12 +9,9 @@ public class PopupMenu extends JPopupMenu{
 	
 	private TranslatableText label;
 	
-	public PopupMenu() {
-		super();
-	}
+	public PopupMenu() { this(null); }
 	
 	public PopupMenu(TranslatableText label) {
-		super();
 		setLabel(label);
 	}
 	

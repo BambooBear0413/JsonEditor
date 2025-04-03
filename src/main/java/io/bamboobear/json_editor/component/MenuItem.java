@@ -1,6 +1,5 @@
 package io.bamboobear.json_editor.component;
 
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
@@ -11,28 +10,12 @@ public class MenuItem extends JMenuItem{
 
 	private TranslatableText text;
 
-	public MenuItem() {
-	}
-	
-	public MenuItem(TranslatableText text) {
-		setText(text);
-	}
-	
-	public MenuItem(Icon icon) {
-		super(icon);
-	}
-	
-	public MenuItem(Action action) {
-		super(action);
-	}
+	public MenuItem()                      { this(null, null); }
+	public MenuItem(TranslatableText text) { this(text, null); }
+	public MenuItem(Icon icon)              {this(null, icon); }
 	
 	public MenuItem(TranslatableText text, Icon icon) {
 		super(icon);
-		setText(text);
-	}
-	
-	public MenuItem(TranslatableText text, int mnemonic) {
-		super("", mnemonic);
 		setText(text);
 	}
 	

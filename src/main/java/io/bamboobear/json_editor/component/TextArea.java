@@ -17,17 +17,9 @@ public class TextArea extends JTextArea{
 	private TranslatableText displayText;
 	private boolean updateTextWhenRepaint;
 	
-	public TextArea() {
-		this("");
-	}
-	
-	public TextArea(String text) {
-		this(text, true);
-	}
-	
-	public TextArea(TranslatableText text) {
-		this(text, true);
-	}
+	public TextArea()                      { this(""); }
+	public TextArea(String text)           { this(text, true); }
+	public TextArea(TranslatableText text) { this(text, true); }
 	
 	protected TextArea(TranslatableText text, boolean popupMenu) {
 		this(text.getDisplayText(), popupMenu);

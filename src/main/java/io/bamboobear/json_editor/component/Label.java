@@ -14,25 +14,11 @@ public class Label extends JLabel{
 	private TranslatableText text;
 	private boolean useCustomFont = false;
 	
-	public Label() {
-	}
-	
-	public Label(TranslatableText text) {
-		setText(text);
-	}
-	
-	public Label(TranslatableText text, int horizontalAlignment) {
-		super("", horizontalAlignment);
-		setText(text);
-	}
-	
-	public Label(Icon icon) {
-		super(icon);
-	}
-	
-	public Label(Icon icon, int horizontalAlignment) {
-		super(icon, horizontalAlignment);
-	}
+	public Label()                                               { this(null, null, LEADING); }
+	public Label(TranslatableText text)                          { this(text, null, LEADING); }
+	public Label(TranslatableText text, int horizontalAlignment) { this(text, null, horizontalAlignment); }
+	public Label(Icon icon)                                      { this(null, icon, LEADING); }
+	public Label(Icon icon, int horizontalAlignment)             { this(null, icon, horizontalAlignment); }
 	
 	public Label(TranslatableText text, Icon icon, int horizontalAlignment) {
 		super(icon, horizontalAlignment);

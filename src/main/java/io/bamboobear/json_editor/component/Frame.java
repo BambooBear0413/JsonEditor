@@ -1,7 +1,5 @@
 package io.bamboobear.json_editor.component;
 
-import java.awt.GraphicsConfiguration;
-
 import javax.swing.JFrame;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
@@ -12,20 +10,9 @@ public class Frame extends JFrame {
 	private TranslatableText title;
 	
 	public Frame() {
-		super();
+		this(null);
 	}
-	
-	public Frame(GraphicsConfiguration gc) {
-		super(gc);
-	}
-	
 	public Frame(TranslatableText title) {
-		super();
-		setTitle(title);
-	}
-	
-	public Frame(TranslatableText title, GraphicsConfiguration gc) {
-		super(gc);
 		setTitle(title);
 	}
 	

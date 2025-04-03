@@ -17,17 +17,9 @@ public class TextField extends JTextField{
 	private TranslatableText displayText;
 	private boolean updateTextWhenRepaint;
 	
-	public TextField() {
-		this("");
-	}
-	
-	public TextField(String text) {
-		this(text, true);
-	}
-	
-	public TextField(TranslatableText text) {
-		this(text, true);
-	}
+	public TextField()                      { this(""); }
+	public TextField(String text)           { this(text, true); }
+	public TextField(TranslatableText text) { this(text, true); }
 	
 	protected TextField(TranslatableText text, boolean popupMenu) {
 		this(text.getDisplayText(), popupMenu);

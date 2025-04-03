@@ -2,7 +2,6 @@ package io.bamboobear.json_editor.component;
 
 import java.awt.Font;
 
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
@@ -15,20 +14,9 @@ public class Button extends JButton{
 	private TranslatableText text;
 	private boolean useCustomFont;
 	
-	public Button(){
-	}
-	
-	public Button(Icon icon) {
-		super(icon);
-	}
-	
-	public Button(TranslatableText text) {
-		setText(text);
-	}
-	
-	public Button(Action action) {
-		super(action);
-	}
+	public Button()                      { this(null, null); }
+	public Button(Icon icon)             { this(null, icon); }
+	public Button(TranslatableText text) { this(text, null); }
 	
 	public Button(TranslatableText text, Icon icon) {
 		super(icon);
