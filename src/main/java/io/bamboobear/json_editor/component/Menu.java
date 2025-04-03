@@ -1,5 +1,7 @@
 package io.bamboobear.json_editor.component;
 
+import java.awt.Cursor;
+
 import javax.swing.JMenu;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
@@ -13,6 +15,7 @@ public class Menu extends JMenu{
 	
 	public Menu(TranslatableText text) {
 		setText(text);
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	
 	@Override

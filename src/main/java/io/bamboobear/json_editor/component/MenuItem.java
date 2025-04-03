@@ -1,5 +1,7 @@
 package io.bamboobear.json_editor.component;
 
+import java.awt.Cursor;
+
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
@@ -17,6 +19,8 @@ public class MenuItem extends JMenuItem{
 	public MenuItem(TranslatableText text, Icon icon) {
 		super(icon);
 		setText(text);
+		
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	
 	@Override

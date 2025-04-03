@@ -1,5 +1,6 @@
 package io.bamboobear.json_editor.component;
 
+import java.awt.Cursor;
 import java.awt.Font;
 
 import javax.swing.Icon;
@@ -21,6 +22,8 @@ public class Button extends JButton{
 	public Button(TranslatableText text, Icon icon) {
 		super(icon);
 		setText(text);
+		
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	
 	@Override
