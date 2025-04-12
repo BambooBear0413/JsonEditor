@@ -65,6 +65,7 @@
 	"json_editor.settings.html_escaping":"HTML跳脫序列",
 	"json_editor.settings.unicode_escaping": "Unicode跳脫序列",
 	"json_editor.about_editor.title": "關於 竹子熊的JSON編輯器",
+	"json_editor.about_editor.issue_tracker": "問題追蹤器",
 	"json_editor.plugin_list.title": "插件列表",
 	"json_editor.plugin_list.no_plugin": "噢！沒有發現任何插件耶",
 	"json_editor.plugin_list.plugin_id": "插件ID",

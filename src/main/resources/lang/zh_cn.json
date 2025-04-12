@@ -65,6 +65,7 @@
 	"json_editor.settings.html_escaping": "HTML转义",
 	"json_editor.settings.unicode_escaping": "Unicode转义",
 	"json_editor.about_editor.title": "关于 竹子熊的JSON编辑器",
+	"json_editor.about_editor.issue_tracker": "问题追踪器",
 	"json_editor.plugin_list.title": "插件列表",
 	"json_editor.plugin_list.no_plugin": "噢！没有发现任何插件耶",
 	"json_editor.plugin_list.plugin_id": "插件ID",

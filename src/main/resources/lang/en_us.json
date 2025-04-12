@@ -65,6 +65,7 @@
 	"json_editor.settings.html_escaping": "HTML Escaping",
 	"json_editor.settings.unicode_escaping": "Unicode Escaping",
 	"json_editor.about_editor.title": "About Bamboo Bear's JSON Editor",
+	"json_editor.about_editor.issue_tracker": "Issue Tracker",
 	"json_editor.plugin_list.title": "Plugin List",
 	"json_editor.plugin_list.no_plugin": "Oops! No plugins were found.",
 	"json_editor.plugin_list.plugin_id": "Plugin ID",

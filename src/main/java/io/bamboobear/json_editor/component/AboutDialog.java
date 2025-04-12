@@ -58,6 +58,10 @@ public class AboutDialog extends Dialog{
 		centeralPanel.add(createFilePanel("README", Language::hasReadmePath, Language::getReadmePath));
 		centeralPanel.add(createFilePanel("HTML", Language::hasHtmlPath, Language::getHtmlPath));
 		
+		Button issueTrackerButton = new Button(TranslatableText.of("json_editor.about_editor.issue_tracker"));
+		issueTrackerButton.addActionListener(e -> Main.browse("https://github.com/BambooBear0413/JsonEditor/issues"));
+		centeralPanel.add(issueTrackerButton);
+		
 		add(centeralPanel);
 	}
 	
