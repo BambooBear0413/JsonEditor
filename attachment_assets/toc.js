@@ -1,5 +1,5 @@
 function generateToc() {
-    let tocMenu = document.getElementById("table_of_content");
+    let tocMenu = document.getElementById("table_of_contents");
     let titles = document.getElementsByClassName("title");
     let currentMenu = tocMenu;
 
