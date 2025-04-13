@@ -12,3 +12,16 @@ settings.properties
 .project
 .classpath
 .settings/
+
+# IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+bin/
+
+# MacOS
+*.DS_Store
