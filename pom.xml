@@ -9,7 +9,7 @@
 
 	<packaging>jar</packaging>
 
-	<name>Bamboo Bear's Json Editor</name>
+	<name>Bamboo Bear's JSON Editor</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
