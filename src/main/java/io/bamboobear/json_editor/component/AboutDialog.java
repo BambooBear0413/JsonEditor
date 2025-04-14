@@ -28,17 +28,13 @@ public class AboutDialog extends Dialog{
 		init();
 		
 		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				closeDialog();
-			}
+			@Override public void windowClosing(WindowEvent e) { dispose(); }
 		});
 		
 		pack();
 		if(getWidth() < 500) setSize(500, getHeight());
 		setLocationRelativeTo(getParent());
 		setResizable(false);
-		setVisible(true);
 	}
 	
 	private void init() {
@@ -93,15 +89,18 @@ public class AboutDialog extends Dialog{
 			dialog.requestFocus();
 			return;
 		}
+		
 		dialog = new AboutDialog();
+		dialog.setVisible(true);
 	}
 	
 	public static AboutDialog getDialog() {
 		return dialog;
 	}
 	
-	private void closeDialog() {
+	@Override
+	public void dispose() {
 		dialog = null;
-		dispose();
+		super.dispose();
 	}
 } 

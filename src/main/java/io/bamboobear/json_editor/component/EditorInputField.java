@@ -1,9 +1,28 @@
 package io.bamboobear.json_editor.component;
 
-public sealed interface EditorComponent permits EditorTextField, EditorComboBox{
-	public default String translateInputValue(String input) {
-		if(input == null) return "";
+import javax.swing.JComponent;
 
+import io.bamboobear.json_editor.Main;
+import io.bamboobear.json_editor.component.json.JsonComponent;
+import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
+
+public sealed interface EditorInputField permits EditorTextField, EditorComboBox{
+	JComponent getAsComponent();
+	
+	void setValue(String value);
+	String getValue();
+	
+	Type getType();
+	
+	boolean isEditable();
+	
+	default void addChange(JsonComponent<?> json, String beforeChange, String afterChange) {
+		getType().addChange(json, beforeChange, afterChange);
+	}
+	
+	default String translateInputValue(String input) {
+		if(input == null) return "";
+		
 		StringBuffer sb = new StringBuffer(input.length());
 		char[] chars = input.toCharArray();
 		
@@ -24,7 +43,7 @@ public sealed interface EditorComponent permits EditorTextField, EditorComboBox{
 		return sb.toString();
 	}
 	
-	public default String translateOutputValue(String input) {
+	default String translateOutputValue(String input) {
 		if(input == null) return "";
 		
 		StringBuffer sb = new StringBuffer(input.length());
@@ -74,5 +93,23 @@ public sealed interface EditorComponent permits EditorTextField, EditorComboBox{
 		}
 		
 		return sb.toString();
+	}
+	
+	public static enum Type {
+		KEY((json, before, after) -> Main.getEditor().addKeyFieldChange(json, before, after)),
+		VALUE((json, before, after) -> Main.getEditor().addValueFieldChange((JsonPrimitiveComponent<?>)json, before, after));
+		
+		private ChangeAdder adder;
+		
+		Type(ChangeAdder adder) {
+			this.adder = adder;
+		}
+		
+		public void addChange(JsonComponent<?> json, String before, String after) {
+			adder.addChange(json, before, after);
+		}
+		
+		@FunctionalInterface
+		private interface ChangeAdder {void addChange(JsonComponent<?> json, String before, String after);}
 	}
 }

@@ -16,15 +16,17 @@ import com.google.gson.JsonPrimitive;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.ResourceImageLoader;
 import io.bamboobear.json_editor.component.Button;
+import io.bamboobear.json_editor.component.EditorInputField.Type;
+import io.bamboobear.json_editor.component.EditorTextField;
 import io.bamboobear.json_editor.component.Label;
-import io.bamboobear.json_editor.component.json.JsonCompositeComponent.KeyValuePair;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
 public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel permits JsonCompositeComponent, JsonPrimitiveComponent{
-	protected Label icon;
+	protected final Label icon;
 	
 	protected final Button removeButton;
+	protected final EditorTextField keyField = new EditorTextField(this, Type.KEY);
 	
 	private JsonCompositeComponent<?> parent;
 	
@@ -41,20 +43,17 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		removeButton.addActionListener(e -> remove());
 	}
 	
-	public abstract void updateGUI();
-	
 	public void remove() {
 		JsonCompositeComponent<?> oldParent = getParentElement();
 		int index = oldParent.indexOf(this);
-		KeyValuePair kvp = oldParent.removeElement(this);
-		if(kvp != null) {
-			Main.getEditor().addRemoveElementChange(kvp.getKeyField(), this, oldParent, index);
-		}
+		if(index < 0) return;
+		
+		oldParent.removeElement(this);
+		Main.getEditor().addRemoveElementChange(this, oldParent, index);
 		oldParent.refresh();
 	}
 	
 	public final void refresh() {
-		updateGUI();
 		revalidate();
 		repaint();
 	}
@@ -63,15 +62,25 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		return icon;
 	}
 	
-	public abstract T getAsJsonElement();
+	public final String getKey() {
+		return keyField.getValue();
+	}
+	
+	public abstract T getJsonElement();
+	
+	public final void setKey(String key) {
+		keyField.setValue(key);
+	}
+	
+	public final void setKeyDisplayText(TranslatableText text) {
+		keyField.setDisplayText(text);
+	}
 	
 	public abstract boolean setValue(JsonElement value);
 	
-	protected abstract int getGridHeight();
-	
 	public abstract String getTypeID();
 	
-	public TranslatableText getTypeDisplayName() {
+	public final TranslatableText getTypeDisplayName() {
 		return getTypeDisplayName(getTypeID());
 	}
 	
@@ -89,9 +98,16 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 	
 	protected void setParentElement(JsonCompositeComponent<?> parent) {
 		this.parent = parent;
+		
+		keyField.setVisible(parent != null);
+		removeButton.setVisible(parent != null);
+		icon.setVisible(parent != null);
+		
+		if(parent instanceof JsonObjectComponent)     keyField.setValue(keyField.getValue());
+		else if(parent instanceof JsonArrayComponent) keyField.setDisplayText(getTypeDisplayName());
 	}
 	
-	public JsonCompositeComponent<?> getParentElement() {
+	public final JsonCompositeComponent<?> getParentElement() {
 		return parent;
 	}
 	

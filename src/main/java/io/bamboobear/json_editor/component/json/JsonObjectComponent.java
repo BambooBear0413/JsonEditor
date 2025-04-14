@@ -23,10 +23,10 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 	}
 
 	@Override
-	public JsonObject getAsJsonElement() {
+	public JsonObject getJsonElement() {
 		JsonObject object = new JsonObject();
-		for(KeyValuePair kvp : content) {
-			object.add(kvp.getKey(), kvp.getJsonComponent().getAsJsonElement());
+		for(JsonComponent<?> element : getElements()) {
+			object.add(element.getKey(), element.getJsonElement());
 		}
 		return object;
 	}
@@ -37,7 +37,7 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 			return false;
 		}
 		
-		content.clear();
+		removeAllElements();
 		
 		Map<String, JsonElement> map = value.getAsJsonObject().asMap();
 		map.forEach((key, json) -> {
@@ -65,8 +65,7 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 			JsonComponent<?> c = JsonComponent.createDefaultJsonComponent(typeID);
 			addElement("", c);
 			int index = indexOf(c);
-			KeyValuePair kvp = content.get(index);
-			Main.getEditor().addAddElementChange(kvp.getKeyField(), kvp.getJsonComponent(), this, index);
+			Main.getEditor().addAddElementChange(c, this, index);
 			refresh();
 		}
 	}
@@ -75,18 +74,18 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 		return new ComboBoxItem(JsonComponent.getTypeDisplayName(typeID), typeID);
 	}
 	
-	public State checkKey(String key) {
+	public boolean checkKey(String key) {
 		boolean hasFound = false;
-		for(KeyValuePair pair : content) {
-			if(pair.getKey().equals(key)) {
+		for(JsonComponent<?> element : getElements()) {
+			if(element.getKey().equals(key)) {
 				if(hasFound) {
-					return State.WARNING;
+					return true;
 				} else {
 					hasFound = true;
 				}
 			}
 		}
-		return State.NORMAL;
+		return false;
 	}
 	
 	@Override
@@ -99,8 +98,8 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 	}
 	
 	public int indexOf(String key) {
-		for(int i = 0; i < content.size(); i++) {
-			if(content.get(i).getKey().equals(key)) {
+		for(int i = 0; i < getElementCount(); i++) {
+			if(getElement(i).getKey().equals(key)) {
 				return i;
 			}
 		}
@@ -109,11 +108,11 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 	
 	public JsonComponent<?> getElement(String key) {
 		int i = indexOf(key);
-		return (i == -1) ? null : content.get(i).getJsonComponent();
+		return (i == -1) ? null : getElement(i);
 	}
 	
 	public String getKey(JsonComponent<?> element) {
 		int i = indexOf(element);
-		return (i == -1) ? null : content.get(i).getKey();
+		return (i == -1) ? null : getElement(i).getKey();
 	}
 }

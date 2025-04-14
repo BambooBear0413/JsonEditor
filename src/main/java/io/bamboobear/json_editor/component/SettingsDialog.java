@@ -35,15 +35,11 @@ public class SettingsDialog extends Dialog{
 		init();
 		
 		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				closeDialog();
-			}
+			@Override public void windowClosing(WindowEvent e) { dispose(); }
 		});
 		
 		setSize(800, 400);
 		setLocationRelativeTo(getParent());
-		setVisible(true);
 	}
 	
 	private void init() {
@@ -87,14 +83,12 @@ public class SettingsDialog extends Dialog{
 		buttons.setPreferredSize(new Dimension(0, 40));
 		
 		Button applyButton = new Button(TranslatableText.of("json_editor.settings.apply"));
-		applyButton.addActionListener(e -> {
-			saveSettings();
-		});
+		applyButton.addActionListener(e -> saveSettings());
 		
 		Button applyAndCloseButton = new Button(TranslatableText.of("json_editor.settings.apply_and_close"));
 		applyAndCloseButton.addActionListener(e -> {
 			saveSettings();
-			closeDialog();
+			dispose();
 		});
 		
 		Button restoreDefaultsButton = new Button(TranslatableText.of("json_editor.settings.restore_defaults"));
@@ -112,9 +106,7 @@ public class SettingsDialog extends Dialog{
 		});
 		
 		Button cancelButton = new Button(TranslatableText.of("json_editor.cancel"));
-		cancelButton.addActionListener(e -> {
-			closeDialog();
-		});
+		cancelButton.addActionListener(e -> dispose());
 		
 		buttons.add(applyButton);
 		buttons.add(applyAndCloseButton);
@@ -130,7 +122,9 @@ public class SettingsDialog extends Dialog{
 			dialog.requestFocus();
 			return;
 		}
+		
 		dialog = new SettingsDialog();
+		dialog.setVisible(true);
 	}
 	
 	public static void addSettingChange(String key, String value) {
@@ -142,30 +136,27 @@ public class SettingsDialog extends Dialog{
 	public static SettingsDialog getDialog() {
 		return dialog;
 	}
-	
-	private void closeDialog() {
+
+	@Override
+	public void dispose() {
 		dialog = null;
-		dispose();
+		super.dispose();
 	}
 	
 	private void saveSettings() {
 		Settings.save(changeSettings);
 		
-		var frame = Main.getMainWindow();
-		var dialogs = new Dialog[] {this, AboutDialog.getDialog(), PluginListDialog.getDialog()};
+		var mainWindow = Main.getMainWindow();
+		mainWindow.refreshTitle();
+		mainWindow.getJMenuBar().revalidate();
+		mainWindow.revalidate();
+		mainWindow.repaint();
 		
-		frame.refreshTitle();
-		frame.revalidate();
-		frame.getJMenuBar().revalidate();
-		frame.repaint();
-		
-		for(Dialog dialog : dialogs) {
-			if(dialog == null) {
-				continue;
-			}
-			dialog.refreshTitle();
-			dialog.revalidate();
-			dialog.repaint();
+		var windows = mainWindow.getOwnedWindows();
+		for(var window : windows) {
+			if (window instanceof Dialog dialog) dialog.refreshTitle();
+			window.revalidate();
+			window.repaint();
 		}
 		
 		removeAllChanges();

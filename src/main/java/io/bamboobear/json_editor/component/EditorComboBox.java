@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import io.bamboobear.json_editor.Main;
+import javax.swing.JComponent;
+
 import io.bamboobear.json_editor.component.json.JsonComponent;
-import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
 import io.bamboobear.json_editor.component.json.JsonComponent.State;
+import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
 
 @SuppressWarnings("serial")
-public final class EditorComboBox extends ComboBox implements EditorComponent{
+public final class EditorComboBox extends ComboBox implements EditorInputField{
 	private volatile String beforeChange;
 	
 	private final JsonComponent<?> json;
@@ -38,11 +39,26 @@ public final class EditorComboBox extends ComboBox implements EditorComponent{
 			}
 		});
 	}
+	
+	@Override
+	public JComponent getAsComponent() {
+		return this;
+	}
+	
+	@Override
+	public void setValue(String str) {
+		super.setValue(translateInputValue(str));
+	}
+	
+	@Override
+	public String getValue() {
+		return translateOutputValue(super.getValue());
+	}
 
 	private void fireValueChange() {
 		String afterChange = getValue();
 		if(beforeChange != null && !beforeChange.equals(afterChange)) {
-			Main.getEditor().addComboBoxValueChange(this, beforeChange, afterChange);
+			addChange(json, beforeChange, afterChange);
 			beforeChange = afterChange;
 		}
 	}
@@ -65,15 +81,15 @@ public final class EditorComboBox extends ComboBox implements EditorComponent{
 		}
 	}
 	
-	@Override
-	public void setValue(String str) {
-		super.setValue(translateOutputValue(str));
-	}
-	
 	private State getState() {
 		if(json instanceof JsonPrimitiveComponent<?> primitive) {
 			return primitive.getValueComponentState();
 		}
 		throw new IllegalStateException();
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.VALUE;
 	}
 }

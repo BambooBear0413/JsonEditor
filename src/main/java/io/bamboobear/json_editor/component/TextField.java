@@ -78,13 +78,13 @@ public class TextField extends JTextField{
 	@Override
 	public void setEditable(boolean b) {
 		super.setEditable(b);
-		if(displayText != null) {
-			updateTextWhenRepaint = !isEditable();
-		}
+		displayText = null;
 	}
 	
 	public void setDisplayText(TranslatableText text) {
 		super.setText(text.getDisplayText());
+		this.displayText = text;
+		setEditable(false);
 		updateTextWhenRepaint = !isEditable();
 	}
 	

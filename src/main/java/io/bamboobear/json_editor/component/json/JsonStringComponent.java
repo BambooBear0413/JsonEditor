@@ -1,13 +1,12 @@
 package io.bamboobear.json_editor.component.json;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import com.google.gson.JsonPrimitive;
 
-import io.bamboobear.json_editor.component.EditorComboBox;
+import io.bamboobear.json_editor.component.EditorInputField;
+import io.bamboobear.json_editor.component.EditorInputField.Type;
 import io.bamboobear.json_editor.component.EditorTextField;
-import io.bamboobear.json_editor.component.EditorTextField.Type;
 
 @SuppressWarnings("serial")
 public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
@@ -20,19 +19,13 @@ public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
 	}
 	
 	@Override
-	protected JComponent createValueComponent() {
+	protected EditorInputField createValueComponent() {
 		return new EditorTextField("", this, Type.VALUE);
 	}
 
 	@Override
 	public void setValue(String value) {
-		if(valueComponent instanceof EditorTextField textField) {
-			if(textField.isEditable()) {
-				textField.setText(value);
-			}
-		} else if (valueComponent instanceof EditorComboBox comboBox) {
-			comboBox.setValue(value);
-		}
+		valueComponent.setValue(value);
 	}
 
 	@Override
@@ -46,16 +39,11 @@ public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
 
 	@Override
 	public String getValue() {
-		if(valueComponent instanceof EditorTextField textField) {
-			return textField.getValue();
-		} else if (valueComponent instanceof EditorComboBox comboBox) {
-			return comboBox.getValue();
-		}
-		throw new IllegalStateException("It's shouldn't happen :(");
+		return valueComponent.getValue();
 	}
 
 	@Override
-	public JsonPrimitive getAsJsonElement() {
+	public JsonPrimitive getJsonElement() {
 		return new JsonPrimitive(getValue());
 	}
 	

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -19,17 +20,19 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 import io.bamboobear.json_editor.ErrorReport;
 import io.bamboobear.json_editor.JsonFile;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.ResourceImageLoader;
 import io.bamboobear.json_editor.component.Button;
-import io.bamboobear.json_editor.component.EditorComboBox;
-import io.bamboobear.json_editor.component.EditorTextField;
+import io.bamboobear.json_editor.component.json.JsonBooleanComponent;
 import io.bamboobear.json_editor.component.json.JsonComponent;
 import io.bamboobear.json_editor.component.json.JsonCompositeComponent;
+import io.bamboobear.json_editor.component.json.JsonNumberComponent;
 import io.bamboobear.json_editor.component.json.JsonObjectComponent;
+import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
 import io.bamboobear.json_editor.lang.TranslatableText;
 import io.bamboobear.json_editor.util.OptionPaneDialogUtilities;
 
@@ -129,7 +132,6 @@ public class JsonEditor extends JPanel{
 		}
 		
 		JsonCompositeComponent<?> root = getRootComponent();
-		root.updateGUI();
 		body.revalidate();
 		body.repaint();
 		removeAllChange();
@@ -158,7 +160,7 @@ public class JsonEditor extends JPanel{
 	private boolean save(boolean saveAsNewFile) {
 		boolean result = false;
 		
-		JsonElement root = getRootComponent().getAsJsonElement();
+		JsonElement root = getRootComponent().getJsonElement();
 		
 		try {
 			if(this.file == null || saveAsNewFile) {
@@ -263,20 +265,20 @@ public class JsonEditor extends JPanel{
 		changesRecord.removeAllRecord();
 	}
 	
-	public void addTextFieldValueChange(EditorTextField textField, String before, String after) {
-		changesRecord.addChange(ChangeType.TEXT_FIELD_VALUE_CHANGE, textField, before, after);
+	public void addKeyFieldChange(JsonComponent<?> json, String before, String after) {
+		changesRecord.addChange(ChangeType.KEY_FIELD_CHANGE, json, before, after);
 	}
 	
-	public void addComboBoxValueChange(EditorComboBox comboBox, String before, String after) {
-		changesRecord.addChange(ChangeType.COMBO_BOX_VALUE_CHANGE, comboBox, before, after);
+	public void addValueFieldChange(JsonPrimitiveComponent<?> json, String before, String after) {
+		changesRecord.addChange(ChangeType.VALUE_FIELD_CHANGE, json, before, after);
 	}
 	
-	public void addAddElementChange(EditorTextField keyField, JsonComponent<?> json, JsonCompositeComponent<?> parent, int index) {
-		changesRecord.addChange(ChangeType.ADD_ELEMENT_CHANGE, keyField, json, parent, index);
+	public void addAddElementChange(JsonComponent<?> json, JsonCompositeComponent<?> parent, int index) {
+		changesRecord.addChange(ChangeType.ADD_ELEMENT_CHANGE, json, parent, index);
 	}
 	
-	public void addRemoveElementChange(EditorTextField keyField, JsonComponent<?> json, JsonCompositeComponent<?> parent, int index) {
-		changesRecord.addChange(ChangeType.REMOVE_ELEMENT_CHANGE, keyField, json, parent, index);
+	public void addRemoveElementChange(JsonComponent<?> json, JsonCompositeComponent<?> parent, int index) {
+		changesRecord.addChange(ChangeType.REMOVE_ELEMENT_CHANGE, json, parent, index);
 	}
 	
 	private class ChangesRecord {
@@ -392,42 +394,38 @@ public class JsonEditor extends JPanel{
 		/**
 		 * arguments:
 		 * <ol start=0>
-		 * <li>{@linkplain EditorTextField} - the EditorTextField whose value has changed</li>
+		 * <li>{@linkplain JsonComponent} - the JsonComponent whose corresponding key has changed</li>
+		 * <li>{@linkplain String} - the key before the change</li>
+		 * <li>{@linkplain String} - the key after the change</li>
+		 * </ol>
+		 * */
+		KEY_FIELD_CHANGE((args) -> {
+			JsonComponent<?> json = (JsonComponent<?>)args[0];
+			json.setKey(args[1].toString());
+		}, (args) -> {
+			JsonComponent<?> json = (JsonComponent<?>)args[0];
+			json.setKey(args[2].toString());
+		}, JsonComponent.class, String.class, String.class),
+		
+		/**
+		 * arguments:
+		 * <ol start=0>
+		 * <li>{@linkplain JsonPrimitiveComponent} - the JsonPrimitiveComponent whose value has changed</li>
 		 * <li>{@linkplain String} - the value before the change</li>
 		 * <li>{@linkplain String} - the value after the change</li>
 		 * </ol>
 		 * */
-		TEXT_FIELD_VALUE_CHANGE((args) -> {
-			EditorTextField textField = (EditorTextField)args[0];
-			String text = args[1].toString();
-			doTextChange(textField, text);
+		VALUE_FIELD_CHANGE((args) -> {
+			JsonPrimitiveComponent<?> jpc = (JsonPrimitiveComponent<?>)args[0];
+			doValueChange(jpc, args[1].toString());
 		}, (args) -> {
-			EditorTextField textField = (EditorTextField)args[0];
-			String text = args[2].toString();
-			doTextChange(textField, text);
-		}, EditorTextField.class, String.class, String.class),
+			JsonPrimitiveComponent<?> jpc = (JsonPrimitiveComponent<?>)args[0];
+			doValueChange(jpc, args[2].toString());
+		}, JsonPrimitiveComponent.class, String.class, String.class),
 		
 		/**
 		 * arguments:
 		 * <ol start=0>
-		 * <li>{@linkplain EditorComboBox} - the EditorComboBox whose value has changed</li>
-		 * <li>{@linkplain String} - the value before the change</li>
-		 * <li>{@linkplain String} - the value after the change</li>
-		 * </ol>*/
-		COMBO_BOX_VALUE_CHANGE((args) -> {
-			EditorComboBox comboBox = (EditorComboBox)args[0];
-			comboBox.setValue(args[1].toString());
-			comboBox.requestFocus();
-		}, (args) -> {
-			EditorComboBox comboBox = (EditorComboBox)args[0];
-			comboBox.setValue(args[2].toString());
-			comboBox.requestFocus();
-		}, EditorComboBox.class, String.class, String.class),
-		
-		/**
-		 * arguments:
-		 * <ol start=0>
-		 * <li>{@linkplain EditorTextField} - the EditorTextField.</li>
 		 * <li>{@linkplain JsonComponent} - the JsonComponent which was added</li>
 		 * <li>{@linkplain JsonCompositeComponent} - the JsonCompositeComponent which is the parent of JsonComponent</li>
 		 * <li>{@linkplain Integer} - the index</li>
@@ -436,12 +434,11 @@ public class JsonEditor extends JPanel{
 			doRemove(args);
 		}, (args) -> {
 			doAdd(args);
-		}, EditorTextField.class, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
+		}, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
 		
 		/**
 		 * arguments:
 		 * <ol start=0>
-		 * <li>{@linkplain EditorTextField} - the EditorTextField.</li>
 		 * <li>{@linkplain JsonComponent} - the JsonComponent which was removed.</li>
 		 * <li>{@linkplain JsonCompositeComponent} - the JsonCompositeComponent which is the parent of JsonComponent before the change</li>
 		 * <li>{@linkplain Integer} - the index</li>
@@ -450,7 +447,7 @@ public class JsonEditor extends JPanel{
 			doAdd(args);
 		}, (args) -> {
 			doRemove(args);
-		}, EditorTextField.class, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
+		}, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
 		
 		//TODO ELEMENT_POSITION_CHANGE
 		
@@ -477,35 +474,26 @@ public class JsonEditor extends JPanel{
 		}
 		
 		private static void doRemove(Object[] args) {
-			JsonCompositeComponent<?> parent = (JsonCompositeComponent<?>)args[2];
-			parent.removeElement((JsonComponent<?>)args[1]);
-			parent.getRootElement().refresh();
+			JsonCompositeComponent<?> parent = (JsonCompositeComponent<?>)args[1];
+			parent.removeElement((JsonComponent<?>)args[0]);
+			parent.refresh();
 		}
 		
 		private static void doAdd(Object[] args) {
-			EditorTextField keyField = (EditorTextField)args[0];
-			JsonCompositeComponent<?> parent = (JsonCompositeComponent<?>)args[2];
-			JsonComponent<?> c = (JsonComponent<?>)args[1];
-			int index = (int)args[3];
+			JsonCompositeComponent<?> parent = (JsonCompositeComponent<?>)args[1];
+			JsonComponent<?> c = (JsonComponent<?>)args[0];
+			int index = (int)args[2];
 			
-			parent.addElement(keyField, c, index);
+			parent.addElement(c, index);
 			c.requestFocus();
-			parent.getRootElement().refresh();
+			parent.refresh();
 		}
 		
-		private static void doTextChange(EditorTextField textField, String text) {
-			textField.setText(text);
-			textField.requestFocus();
-			switch(textField.getType()) {
-			case KEY -> {
-				JsonCompositeComponent<?> parent = textField.getJsonComponent().getParentElement();
-				if(parent != null) {
-					parent.repaint();
-				}
-			}
-			case VALUE -> {
-				textField.repaint();
-			}
+		private static void doValueChange(JsonPrimitiveComponent<?> json, String value) {
+			switch(json) {
+			case JsonBooleanComponent jbc -> jbc.setValue(Boolean.valueOf(value));
+			case JsonNumberComponent  jnc -> jnc.setValue(new BigDecimal(value));
+			default                       -> json.setValue(new JsonPrimitive(value));
 			}
 		}
 	}

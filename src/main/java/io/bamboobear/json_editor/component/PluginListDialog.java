@@ -30,16 +30,12 @@ public class PluginListDialog extends Dialog {
 		init();
 		
 		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				closeDialog();
-			}
+			@Override public void windowClosing(WindowEvent e) { dispose(); }
 		});
 		
 		setSize(800, 400);
 		setLocationRelativeTo(getParent());
 		setResizable(false);
-		setVisible(true);
 	}
 	
 	private void init() {
@@ -93,16 +89,19 @@ public class PluginListDialog extends Dialog {
 			dialog.requestFocus();
 			return;
 		}
+		
 		dialog = new PluginListDialog();
+		dialog.setVisible(true);
 	}
 	
 	public static PluginListDialog getDialog() {
 		return dialog;
 	}
 	
-	private void closeDialog() {
+	@Override
+	public void dispose() {
 		dialog = null;
-		dispose();
+		super.dispose();
 	}
 	
 	private class PluginInfoPanel extends JPanel {

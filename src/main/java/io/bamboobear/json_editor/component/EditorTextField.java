@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Objects;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.json.JsonComponent;
 import io.bamboobear.json_editor.component.json.JsonComponent.State;
 import io.bamboobear.json_editor.component.json.JsonObjectComponent;
@@ -15,13 +16,17 @@ import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
-public final class EditorTextField extends TextField implements EditorComponent{
+public final class EditorTextField extends TextField implements EditorInputField{
 	private volatile String beforeChange;
 	
 	private String value;
 	
 	private final JsonComponent<?> json;
 	private final Type type;
+	
+	public EditorTextField(JsonComponent<?> json, Type type) {
+		this("", json, type);
+	}
 	
 	public EditorTextField(String value, JsonComponent<?> json, Type type) {
 		super(value == null ? "" : value);
@@ -38,28 +43,30 @@ public final class EditorTextField extends TextField implements EditorComponent{
 				fireTextChange(false);
 			}
 		});
-		this.json = json;
-		this.type = type;
+		this.json = Objects.requireNonNull(json, "json component is null");
+		this.type = Objects.requireNonNull(type, "type is null");
 		checkArgument(json, type);
 	}
 	
 	public EditorTextField(String value, TranslatableText text, JsonComponent<?> json, Type type) {
 		super(text);
 		this.value = value;
-		this.json = json;
-		this.type = type;
+		this.json = Objects.requireNonNull(json, "json component is null");;
+		this.type = Objects.requireNonNull(type, "type is null");;
 		checkArgument(json, type);
 	}
 	
 	private void checkArgument(JsonComponent<?> json, Type type) {
-		if(type == null) {
-			throw new NullPointerException();
-		}
 		if(type == Type.VALUE) {
 			if(!(json instanceof JsonPrimitiveComponent<?>)) {
 				throw new IllegalArgumentException();
 			}
 		}
+	}
+	
+	@Override
+	public JComponent getAsComponent() {
+		return this;
 	}
 	
 	@Override
@@ -81,11 +88,18 @@ public final class EditorTextField extends TextField implements EditorComponent{
 		super.setText(translateInputValue(t));
 	}
 	
+	@Override
+	public void setValue(String value) {
+		this.setText(value);
+	}
+	
+	@Override
 	public String getValue() {
 		String str = (getDisplayText() == null) ? getText() : value;
 		return translateOutputValue(str);
 	}
 	
+	@Override
 	public Type getType() {
 		return type;
 	}
@@ -121,7 +135,7 @@ public final class EditorTextField extends TextField implements EditorComponent{
 		return switch(type) {
 		case KEY -> {
 			if(json.getParentElement() instanceof JsonObjectComponent object && isEditable()) {
-				yield object.checkKey(getValue());
+				yield object.checkKey(getValue()) ? State.WARNING : State.NORMAL;
 			}
 			yield State.NON_EDITABLE;
 		}
@@ -144,7 +158,7 @@ public final class EditorTextField extends TextField implements EditorComponent{
 	private void fireTextChange(boolean repaint) {
 		String afterChange = getValue();
 		if(!beforeChange.equals(afterChange)) {
-			Main.getEditor().addTextFieldValueChange(this, beforeChange, afterChange);
+			addChange(json, beforeChange, afterChange);
 			beforeChange = afterChange;
 			
 			if(repaint) {
@@ -153,9 +167,5 @@ public final class EditorTextField extends TextField implements EditorComponent{
 				});
 			}
 		}
-	}
-	
-	public enum Type {
-		KEY, VALUE;
 	}
 }

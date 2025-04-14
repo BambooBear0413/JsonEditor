@@ -3,13 +3,12 @@ package io.bamboobear.json_editor.component.json;
 import java.math.BigDecimal;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import com.google.gson.JsonPrimitive;
 
-import io.bamboobear.json_editor.component.EditorComboBox;
+import io.bamboobear.json_editor.component.EditorInputField;
+import io.bamboobear.json_editor.component.EditorInputField.Type;
 import io.bamboobear.json_editor.component.EditorTextField;
-import io.bamboobear.json_editor.component.EditorTextField.Type;
 
 @SuppressWarnings("serial")
 public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
@@ -22,19 +21,13 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 	}
 	
 	@Override
-	protected JComponent createValueComponent() {
+	protected EditorInputField createValueComponent() {
 		return new EditorTextField("0", this, Type.VALUE);
 	}
 
 	@Override
 	public void setValue(Number value) {
-		if(valueComponent instanceof EditorTextField textField) {
-			if(textField.isEditable()) {
-				textField.setText(String.valueOf(value));
-			}
-		} else if(valueComponent instanceof EditorComboBox comboBox) {
-			comboBox.setValue(String.valueOf(value));
-		}
+		valueComponent.setValue(String.valueOf(value));
 	}
 
 	@Override
@@ -52,34 +45,23 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 
 	@Override
 	public Number getValue() throws NumberFormatException {
-		if(valueComponent instanceof EditorTextField textField) {
-			try {
-				return getAsNumber(textField.getValue());
-			} catch (NumberFormatException e) {
-				return 0; // default value
-			}
-		} else if(valueComponent instanceof EditorComboBox comboBox) {
-			try {
-				return getAsNumber(comboBox.getValue());
-			} catch (NumberFormatException e) {
-				return 0; // default value
-			}
+		try {
+			return getAsNumber(valueComponent.getValue());
+		} catch (NumberFormatException e) {
+			return 0; // default value
 		}
-		throw new IllegalStateException("It's shouldn't happen :(");
 	}
 
 	@Override
-	public JsonPrimitive getAsJsonElement() {
+	public JsonPrimitive getJsonElement() {
 		return new JsonPrimitive(getValue());
 	}
 	
 	@Override
 	public State getValueComponentState() {		
 		try {
-			if(valueComponent instanceof EditorTextField textField && textField.isEditable()) {
-				getAsNumber(textField.getValue());
-			} else if(valueComponent instanceof EditorComboBox comboBox && comboBox.isEditable()) {
-				getAsNumber(comboBox.getValue());
+			if(valueComponent.isEditable()) {
+				getAsNumber(valueComponent.getValue());
 			}
 		} catch (NumberFormatException e) {
 			return State.ERROR;

@@ -21,10 +21,10 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 	}
 
 	@Override
-	public JsonArray getAsJsonElement() {
+	public JsonArray getJsonElement() {
 		JsonArray array = new JsonArray();
-		for(KeyValuePair pair : content) {
-			array.add(pair.getJsonComponent().getAsJsonElement());
+		for(JsonComponent<?> element : getElements()) {
+			array.add(element.getJsonElement());
 		}
 		return array;
 	}
@@ -36,7 +36,8 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 		}
 		
 		JsonArray array = value.getAsJsonArray();
-		this.content.clear();
+
+		removeAllElements();
 		
 		for(JsonElement e : array) {
 			JsonComponent<?> c = JsonComponent.createDefaultJsonComponent(e);
@@ -63,8 +64,7 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 			JsonComponent<?> c = JsonComponent.createDefaultJsonComponent(typeID);
 			addElement("", c.getTypeDisplayName(), c);
 			int index = indexOf(c);
-			KeyValuePair kvp = content.get(index);
-			Main.getEditor().addAddElementChange(kvp.getKeyField(), kvp.getJsonComponent(), this, index);
+			Main.getEditor().addAddElementChange(c, this, index);
 			refresh();
 		}
 	}
