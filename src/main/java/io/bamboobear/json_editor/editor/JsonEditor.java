@@ -293,7 +293,7 @@ public class JsonEditor extends JPanel{
 		
 		private void save() {
 			if(!undoChanges.isEmpty()) {
-				savingPoint = undoChanges.get(undoChanges.size() - 1); //TODO java-21
+				savingPoint = undoChanges.getLast();
 			} else {
 				savingPoint = null;
 			}
@@ -303,39 +303,31 @@ public class JsonEditor extends JPanel{
 			if(savingPoint == null) {
 				return undoChanges.isEmpty();
 			}
-			return savingPoint == undoChanges.get(undoChanges.size() - 1); //TODO java-21
+			return savingPoint == undoChanges.getLast();
 		}
 		
 		public synchronized void addChange(ChangeType type, Object...args) throws IllegalArgumentException {
 			Change cr = checkArguments(type, args);
 			if(undoChanges.size() == LIMIT) {
-				undoChanges.remove(1); //TODO java-21
+				undoChanges.removeFirst();
 			}
 			undoChanges.add(cr);
 			redoChanges.clear();
 			updateButtons();
 		}
 		
-		public synchronized void undo() { //TODO java-21
+		public synchronized void undo() {
 			if(canDoUndo()) {
-				int i = undoChanges.size() - 1;
-				Change cr = undoChanges.get(i);
-				
-				cr.undo();
-				redoChanges.add(cr);
-				undoChanges.remove(i);
+				undoChanges.getLast().undo();
+				redoChanges.add(undoChanges.removeLast());
 			}
 			updateButtons();
 		}
 		
-		public synchronized void redo() { //TODO java-21
+		public synchronized void redo() {
 			if(canDoRedo()) {
-				int i = redoChanges.size() - 1;
-				Change cr = redoChanges.get(i);
-				
-				cr.redo();
-				undoChanges.add(cr);
-				redoChanges.remove(i);
+				redoChanges.getLast().redo();
+				undoChanges.add(redoChanges.removeLast());
 			}
 			updateButtons();
 		}

@@ -2,7 +2,6 @@ package io.bamboobear.json_editor.lang;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -44,29 +43,28 @@ public final class Language {
 	}
 	
 	void load(JsonElement element) {
-		if(element instanceof JsonObject object) { //TODO java-21
-			if(name == UNKNOWN) {
-				name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
-			}
+		switch(element) {
+		case JsonObject object -> {
+			if(name == UNKNOWN) name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
 			
-			Map<String, JsonElement> map = object.asMap();
-			map.forEach((key, value) -> {
+			object.asMap().forEach((key, value) -> {
 				if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
 					add(key, value.getAsString());
 				}
 			});
-		} else if(element instanceof JsonArray array) {
+		}
+		case JsonArray array -> {
 			String[] languages = JsonArrayUtilities.getStrings(array, (string) -> string.matches("^" + LANGUAGE_ID_REGEX + "$"));
-			for(String s : languages) {
-				if(!alternativeLanguages.contains(s)) {
-					alternativeLanguages.add(s);
-				}
+			for(String lang : languages) {
+				if(!alternativeLanguages.contains(lang)) alternativeLanguages.add(lang);
 			}
 			
 			JsonObject[] objects = JsonArrayUtilities.getJsonObjects(array);
 			for(JsonObject object : objects) {
 				load(object);
 			}
+		}
+		default -> {} // TODO loading warning
 		}
 	}
 	

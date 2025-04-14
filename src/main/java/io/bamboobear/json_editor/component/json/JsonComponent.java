@@ -101,7 +101,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		return ResourceImageLoader.getImageIcon(String.format("json/%s.png", name), DEFAULT_HEIGHT, DEFAULT_HEIGHT, Image.SCALE_SMOOTH);
 	}
 	
-	public static final JsonComponent<?> createDefaultJsonComponent(String typeID) { //TODO java-21
+	public static final JsonComponent<?> createDefaultJsonComponent(String typeID) {
 		return switch(typeID) {
 		case JsonArrayComponent.TYPE_ID -> new JsonArrayComponent();
 		case JsonBooleanComponent.TYPE_ID -> new JsonBooleanComponent();
