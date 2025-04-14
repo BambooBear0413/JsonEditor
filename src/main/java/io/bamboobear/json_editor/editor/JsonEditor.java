@@ -464,22 +464,6 @@ public class JsonEditor extends JPanel{
 		
 		//TODO ELEMENT_REPLACEMENT_CHANGE
 		
-		/**
-		 * arguments:
-		 * <ol start=0>
-		 * <li>{@linkplain ChangeRecord[] - ChangeRecord array}
-		 */
-		COMPOUND_CHANGE((args) -> {
-			Change[] records = (Change[])args[0];
-			for(int i = records.length - 1; i >= 0; i--) {
-				records[i].undo();
-			}
-		}, (args) -> {
-			Change[] records = (Change[])args[0];
-			for(int i = 0; i < records.length; i++) {
-				records[i].redo();
-			}
-		}, Change[].class)
 		;
 		
 		private final Consumer<Object[]> undo;
