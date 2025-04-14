@@ -13,9 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -181,23 +180,23 @@ public class Main{
 		return jw;
 	}
 	
-	public static void browse(String url) {
+	public static void browse(String uri) {
 		try {
-			browse(new URL(url));
-		} catch (MalformedURLException e) {
+			browse(new URI(uri));
+		} catch (URISyntaxException e) {
 			ErrorReport.output(e);
 		}
 	}
 	
-	public static void browse(URL url) {
-		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.of("json_editor.warning.browse", url).getDisplayText(), TranslatableText.of("json_editor.warning.browse.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
+	public static void browse(URI uri) {
+		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.of("json_editor.warning.browse", uri).getDisplayText(), TranslatableText.of("json_editor.warning.browse.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
 		if(result != JOptionPane.YES_OPTION) {
 			return;
 		}
 		
 		try {
-			Desktop.getDesktop().browse(url.toURI());
-		} catch (IOException | URISyntaxException e) {
+			Desktop.getDesktop().browse(uri);
+		} catch (IOException e) {
 			ErrorReport.output(e);
 		}
 	}
