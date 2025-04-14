@@ -39,10 +39,10 @@ public abstract class Plugin {
 	 */
 	protected Plugin(String id, JsonObject pluginJson) throws PluginLoadingException{
 		if(id == null) {
-			throw new PluginLoadingException("\"id\" is null", new NullPointerException());
+			throw new PluginLoadingException("\"id\" is null");
 		}
 		if(!id.matches("^" + PLUGIN_ID_REGEX + "$")) {
-			throw new PluginLoadingException(new IllegalArgumentException("\"id=\"" + id + ", \"id\" must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long."));
+			throw new PluginLoadingException("\"id=\"" + id + ", \"id\" must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long.");
 		}
 		this.id = id;
 		

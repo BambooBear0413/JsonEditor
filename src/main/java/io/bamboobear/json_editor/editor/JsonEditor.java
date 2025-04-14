@@ -366,7 +366,7 @@ public class JsonEditor extends JPanel{
 				Object o = args[i];
 				Class<?> argumentType = argumentTypes[i];
 				if(o == null) {
-					throw new IllegalArgumentException(new NullPointerException(String.format("args[%d] is null", i)));
+					throw new IllegalArgumentException(String.format("args[%d] is null", i));
 				}
 				if(!argumentType.isInstance(o)) {
 					throw new IllegalArgumentException(String.format("args[%d] is not an instance of %s", 

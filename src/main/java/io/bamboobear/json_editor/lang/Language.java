@@ -32,10 +32,10 @@ public final class Language {
 	 */
 	Language(String id, String readme, String html) throws LanguageLoadingException {
 		if(id == null) {
-			throw new LanguageLoadingException("\"id\" is null", new NullPointerException());
+			throw new LanguageLoadingException("\"id\" is null");
 		}
 		if(!id.matches("^" + LANGUAGE_ID_REGEX + "$")) {
-			throw new LanguageLoadingException(new IllegalArgumentException("\"id=\"" + id + ", \"id\" must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long."));
+			throw new LanguageLoadingException("\"id=\"" + id + ", \"id\" must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long.");
 		}
 		this.id = id;
 		this.readme = readme;

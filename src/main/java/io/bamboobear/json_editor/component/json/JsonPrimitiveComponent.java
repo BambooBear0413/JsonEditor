@@ -61,7 +61,7 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 	public final JsonCompositeComponent<?> getRootElement() {
 		JsonCompositeComponent<?> parent = getParentElement();
 		if (parent == null) {
-			throw new IllegalStateException(new NullPointerException("parent is null"));
+			throw new IllegalStateException("parent is null");
 		} else {
 			return parent.getRootElement();
 		}
