@@ -51,8 +51,6 @@ public class AboutDialog extends Dialog{
 		Label version = new Label(TranslatableText.literal(Main.VERSION), Label.CENTER);
 		northPanel.add(version);
 		
-		add(northPanel, BorderLayout.NORTH);
-		
 		JPanel centeralPanel = new JPanel(new GridLayout(0, 1));
 		
 		centeralPanel.add(createFilePanel("README", Language::hasReadmePath, Language::getReadmePath));
@@ -60,9 +58,10 @@ public class AboutDialog extends Dialog{
 		
 		Button issueTrackerButton = new Button(TranslatableText.of("json_editor.about_editor.issue_tracker"));
 		issueTrackerButton.addActionListener(e -> Main.browse("https://github.com/BambooBear0413/JsonEditor/issues"));
-		centeralPanel.add(issueTrackerButton);
 		
+		add(northPanel, BorderLayout.NORTH);
 		add(centeralPanel);
+		add(issueTrackerButton, BorderLayout.SOUTH);
 	}
 	
 	private Button createButton(Language lang, String filePath) {
