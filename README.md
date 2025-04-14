@@ -1,18 +1,16 @@
 # Bamboo Bear's JSON Editor
-Version: 0.0.0 (Beta)
+Version: 0.1.0 (Beta)
 
 **Bamboo Bear's JSON Editor** ("JSON Editor") is a Java program used for editing JSON files.
 
 \*More information can be found in the attached HTML file.
 
 ## Java
-**Java 17** is required to run the "JSON Editor".
+**Java 21** is required to run the "JSON Editor".
 - [Oracle Java](https://www.oracle.com/java/technologies/downloads/)
-- [Eclipse Temurin Java (Adoptium)](https://adoptium.net/temurin/releases/?version=17)
+- [Eclipse Temurin Java (Adoptium)](https://adoptium.net/temurin/releases/?version=21)
 
 If your computer already has Java installed, or you have just installed it, you can open a command line tool, such as Command Prompt (cmd) in Windows, and run the command `java -version` to check the Java version.
-
-\*Java 21 might be required in future versions. Therefore, when installing Java, you might consider installing Java 21.
 
 ## Supported Language
 - English (US) (`en_us`) *Default Language
@@ -40,7 +38,7 @@ Due to space limitations, more information about plugins can be found in the att
 
 ## Third-Party Open Source Libraries
 ### Gson
-Version: 2.10.1<br>
+Version: 2.13.0<br>
 Copyright 2008 Google Inc.
 
 A Java library developed by Google that serializes Java objects to JSON, and deserializes JSON to Java objects (Java objects <-> JSON).<br>

@@ -9,7 +9,7 @@
 	<body>
 		<header>
 			<h1>竹子熊的JSON编辑器</h1>
-			<p>版本：0.0.0 (Beta)</p>
+			<p>版本：0.1.0 (Beta)</p>
 			<img src="attachment_assets/icon.svg" height="160">
 		</header>
 
@@ -99,14 +99,12 @@
 			</tr>
 		</table>
 		<h2 id="java" class="title">Java</h2>
-		<p>“JSON编辑器”需要<b>Java 17</b>以上版本才能运行，如果你的计算机没有安装Java 17或更高版本，可以考虑从以下两个地方取得（两者可能略有不同，但不影响“JSON编辑器”运行）：</p>
+		<p>“JSON编辑器”需要<b>Java 21</b>以上版本才能运行，如果你的计算机没有安装Java 21或更高版本，可以考虑从以下两个地方取得（两者可能略有不同，但不影响“JSON编辑器”运行）：</p>
 		<ul>
 			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
 			<li><a href="https://adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a>（若不打算进行Java开发，可只安装JRE。）</li>
 		</ul>
 		<p>如果计算机已经有安装Java，或者刚安装完，可以打开<ruby>命令行<rp>(</rp><rt>Command Line</rt><rp>)</rp></ruby>（如Windows系统中的cmd），输入命令<code>java --version</code>，即可检查Java版本。</p>
-
-		<p>※近期“JSON编辑器”的Java最低所需版本可能会升至Java 21，因此安装Java时，亦可考虑直接安装Java 21。</p>
 
 		<h2 id="languages" class="title">“JSON编辑器”本身支援的语言</h2>
 		<ul>
@@ -260,7 +258,7 @@
 
 		<h4 id="placeholders_in_translations" class="title">翻译内容中的占位符</h4>
 		<p>如果你打算制作“JSON编辑器”本身没支援的语言，就需要特别注意“内容中的占位符”。</p>
-		<p>在“JSON编辑器”中，所有翻译内容都是「格式化字串」（格式参见<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中插入参数，。在原版内容中，部分翻译内容应当包含占位符，以便在“JSON编辑器”中替换为文件名称、网址等。</p>
+		<p>在“JSON编辑器”中，所有翻译内容都是「格式化字串」（格式参见<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中插入参数，。在原版内容中，部分翻译内容应当包含占位符，以便在“JSON编辑器”中替换为文件名称、网址等。</p>
 		<p>因为翻译内容都是格式化文字，任何不作为占位符的<code>%</code>都应使用<code>%%</code>，否则，同字符串的其他占位符可能无法正常转换。</p>
 		<p>“JSON编辑器”原版内容中，所有应带有占位符的翻译键名列表如下：</p>
 
@@ -336,7 +334,7 @@
 
 		<h2 id="open_source_libraries" class="title">第三方开源函式库</h2>
 		<h3 id="gson">Gson</h3>
-		<p>版本：2.10.1<br>
+		<p>版本：2.13.0<br>
 			Copyright 2008 Google Inc.</p>
 		<p>Gson是一款由Google开发（非官方产品）的Java函式库，主要用于序列化Java对象为JSON，或反序列化JSON为Java对象（Java对象←→JSON）。<br>
 			“JSON编辑器”使用它来处理JSON，包含读取于写出等。</p>

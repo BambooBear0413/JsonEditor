@@ -1,18 +1,16 @@
 # 竹子熊的JSON編輯器
-版本：0.0.0 (Beta)
+版本：0.1.0 (Beta)
 
 **竹子熊的JSON編輯器**（以下簡稱「JSON編輯器」）是一款由Java寫成，用於編輯JSON檔案的程式。
 
 ※詳細內容請參閱附帶的HTML檔案。
 
 ## Java
-「Json編輯器」需要至少**Java 17**才能運行。
+「Json編輯器」需要至少**Java 21**才能運行。
 - [Oracle Java](https://www.oracle.com/java/technologies/downloads/)
-- [Eclipse Temurin Java (Adoptium)](https://adoptium.net/temurin/releases/?version=17)
+- [Eclipse Temurin Java (Adoptium)](https://adoptium.net/temurin/releases/?version=21)
 
 如果電腦已有安裝Java，或者安裝完Java後，可以開啟命令行（Command Line），如Windows系統中的cmd，輸入命令`java -version`檢查Java版本。
-
-※近期「JSON編輯器」的Java最低所需版本可能會升至Java 21，因此亦可考慮直接安裝Java 21。
 
 ## 「JSON編輯器」本身支援的語言
 - English (US) （`en_us`） *預設語言
@@ -40,7 +38,7 @@
 
 ## 第三方開源程式庫
 ### Gson
-版本：2.10.1<br>
+版本：2.13.0<br>
 Copyright 2008 Google Inc.
 
 Gson是一款Google開發（非官方產品）的Java程式庫，主要用於序列化Java物件為JSON，或反序列化JSON為Java物件（Java物件←→JSON）。<br>

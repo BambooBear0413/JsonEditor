@@ -1,0 +1,4 @@
+# 0.1.0
+## Changes
+- The program now requires **Java 21**.
+- Updated **GSON** to **2.13.0**.

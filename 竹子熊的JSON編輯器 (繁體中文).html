@@ -9,7 +9,7 @@
 	<body>
 		<header>
 			<h1>竹子熊的JSON編輯器</h1>
-			<p>版本：0.0.0 (Beta)</p>
+			<p>版本：0.1.0 (Beta)</p>
 			<img src="attachment_assets/icon.svg" height="160">
 		</header>
 		
@@ -98,15 +98,13 @@
 		</table>
 		
 		<h2 id="java" class="title">Java</h2>
-		<p>「JSON編輯器」需要<b>Java 17</b>以上版本才能運行，如果你的電腦沒有安裝Java 17或更高版本，可以考慮從以下兩個地方取得（兩者可能略有不同，但不影響「JSON編輯器」執行）：</p>
+		<p>「JSON編輯器」需要<b>Java 21</b>以上版本才能運行，如果你的電腦沒有安裝Java 21或更高版本，可以考慮從以下兩個地方取得（兩者可能略有不同，但不影響「JSON編輯器」執行）：</p>
 		<ul>
 			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
 			<li><a href="https://adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a>（若不打算進行Java開發，可只安裝JRE。）</li>
 		</ul>
 		<p>如果電腦已經有安裝Java，或者剛安裝完，可以打開<ruby>命令行<rp>(</rp><rt>Command Line</rt><rp>)</rp></ruby>（如Windows系統中的cmd），輸入命令<code>java --version</code>，即可檢查Java版本。</p>
 		
-		<p>※近期「JSON編輯器」的Java最低所需版本可能會升至Java 21，因此安裝Java時，亦可考慮直接安裝Java 21。</p>
-	
 		<h2 id="languages" class="title">「JSON編輯器」本身支援的語言</h2>
 		<ul>
 			<li>English (US) （<code>en_us</code>） *預設語言</li>
@@ -259,7 +257,7 @@
 
 		<h4 id="placeholders_in_translations" class="title">翻譯內容中的佔位符號</h4>
 		<p>如果你打算製作「JSON編輯器」本身沒支援的語言，就需要特別注意「內容中的佔位符號」。</p>
-		<p>在「JSON編輯器」中，所有翻譯內容都是「格式化字串」（格式參見<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文檔</a>，或參考<a href="https://jax-work-archive.blogspot.com/2015/02/java-stringformat.html" target="_blank">這篇文章</a>），以便在翻譯內容中插入引數。在原版內容中，部分翻譯內容應當包含佔位符號，以便在「JSON編輯器」中替換為檔案名稱、網址等。</p>
+		<p>在「JSON編輯器」中，所有翻譯內容都是「格式化字串」（格式參見<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文檔</a>，或參考<a href="https://jax-work-archive.blogspot.com/2015/02/java-stringformat.html" target="_blank">這篇文章</a>），以便在翻譯內容中插入引數。在原版內容中，部分翻譯內容應當包含佔位符號，以便在「JSON編輯器」中替換為檔案名稱、網址等。</p>
 		<p>因為翻譯內容皆為格式化文字，任何不作為佔位符號的<code>%</code>都應使用<code>%%</code>，否則，同字串中的其他佔位符號可能無法正常轉換。</p>
 		
 		<p>「JSON編輯器」原版內容中，所有應帶有佔位符號的翻譯鍵名列表如下：</p>
@@ -336,7 +334,7 @@
 
 		<h2 id="open_source_libraries"  class="title">第三方開源程式庫</h2>
 		<h3 id="gson"  class="title">Gson</h3>
-		<p>版本：2.10.1<br>
+		<p>版本：2.13.0<br>
 		Copyright 2008 Google Inc.</p>
 		<p>Gson是一款由Google開發（非官方產品）的Java程式庫，主要用於序列化Java物件為JSON，或反序列化JSON為Java物件（Java物件←→JSON）。<br>
 		「JSON編輯器」使用它來處理JSON，包含讀取與寫出等。</p>
