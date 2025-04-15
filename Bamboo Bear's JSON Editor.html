@@ -26,10 +26,6 @@
 		<h3 id="character_encoding" class="title">About Character Encoding</h3>
 		<p><b>the "JSON Editor" uses the UTF-8 for both reading and saving files</b>. Therefore, when you open the file whose character encoding is not UTF-8, the garbled characters may appear in the "JSON Editor", especially for the files that contain non-ASCII characters.</p>
 		
-		<h3 id="json_null" class="title">About JSON Null in "Json Editor"</h3>
-		<p><b>JSON null</b> (<code>null</code>) is one of the data types in JSON, but <b>the "JSON Editor" does not support it until version 0.1.0.</b> When loading JSON files, all JSON null values (<code>null</code>) will <b>be converted to JSON string <code>"null"</code></b> in the "JSON Editor", and <b>there is no way to add a JSON null</b> in the "JSON Editor".</p>
-		<p>If the JSON file contains JSON null values (<code>null</code>) that are very important for the data, it is not recommended to open, edit, or save the file by the "JSON Editor" before the "JSON Editor" supports JSON null.</p>
-
 		<h3 id="root_element" class="title">About JSON Root Element</h3>
 		<p>JSON allows any types of JSON Element to be "the root element", However, <b>the "JSON Editor" only allows JSON objects and JSON arrays to be the root element</b>.</p>
 		<p>When you start editing a new JSON file in the "JSON Editor", a JSON object will always be the root element. <b>Having a JSON array as the root element only applies when you open a JSON file whose root element is a JSON array</b>.</p>

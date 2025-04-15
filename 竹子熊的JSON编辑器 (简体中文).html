@@ -26,10 +26,6 @@
 		<h3 id="character_encoding" class="title">字符编码</h3>
 		<p><b>“JSON编辑器”在读写文件时，均使用“UTF-8”编码</b>。如果文件的编码不是UTF-8，使用“JSON编辑器”开启后，可能会出现乱码（尤其是包含非ASCII字符的文件），需特别注意。</p>
 
-		<h3 id="json_null" class="title">“JSON编辑器”中的JSON Null</h3>
-		<p>在<b>版本0.1.0之前</b>，“JSON编辑器”<b>不会支援JSON当中的<code>null</code>（空值）</b>，所有<code>null</code>在程式内均会<b>被转换为JSON字符串<code>"null"</code></b>，且<b>没有任何方法可以在“JSON编辑器”中添加“空值”</b></p>
-		<p>如果JSON文件中有<code>null</code>，且其具有高度重要性时，不建议在“JSON编辑器”能够支援之前，使用程序开启文件，甚至进行编辑并保存。</p>
-		
 		<h3 id="root_element" class="title">JSON的根元素</h3>
 		<p>任何元素都能作为JSON文件的“根元素”，然而，<b>“JSON编辑器”只允许“JSON对象”和“JSON数组”作为根元素</b>。</p>
 		<p>当在“JSON编辑器”里开始编辑新的JSON文件时，根元素始终是“JSON对象”。<b>只有打开根元素时“JSON数组”的JSON文件时，根元素才会变成“JSON数组”</b>。</p>
