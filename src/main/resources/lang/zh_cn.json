@@ -29,6 +29,7 @@
 	"json_editor.type.boolean": "JSON布尔值",
 	"json_editor.type.object": "JSON对象",
 	"json_editor.type.array": "JSON数组",
+	"json_editor.type.null": "JSON空值",
 	"json_editor.add_element.type": "类型",
 	"json_editor.add_element.key": "键",
 	"json_editor.add_element.title": "新增JSON元素",

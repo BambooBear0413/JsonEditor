@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 
 import io.bamboobear.json_editor.component.json.JsonComponent;
 import io.bamboobear.json_editor.component.json.JsonComponent.State;
+import io.bamboobear.json_editor.component.json.JsonNullComponent;
 import io.bamboobear.json_editor.component.json.JsonObjectComponent;
 import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
 import io.bamboobear.json_editor.lang.TranslatableText;
@@ -58,7 +59,7 @@ public final class EditorTextField extends TextField implements EditorInputField
 	
 	private void checkArgument(JsonComponent<?> json, Type type) {
 		if(type == Type.VALUE) {
-			if(!(json instanceof JsonPrimitiveComponent<?>)) {
+			if(!(json instanceof JsonPrimitiveComponent<?> || json instanceof JsonNullComponent)) {
 				throw new IllegalArgumentException();
 			}
 		}

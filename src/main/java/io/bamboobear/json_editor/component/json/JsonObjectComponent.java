@@ -55,7 +55,8 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 			createComboBoxItem(JsonBooleanComponent.TYPE_ID),
 			createComboBoxItem(JsonNumberComponent.TYPE_ID),
 			createComboBoxItem(JsonObjectComponent.TYPE_ID),
-			createComboBoxItem(JsonStringComponent.TYPE_ID)
+			createComboBoxItem(JsonStringComponent.TYPE_ID),
+			createComboBoxItem(JsonNullComponent.TYPE_ID)
 		};
 			
 		AddElementDialog dialog = new AddElementDialog(new ComboBox(items));

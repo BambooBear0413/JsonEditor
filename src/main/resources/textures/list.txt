@@ -4,5 +4,6 @@ icon/json/boolean.png
 icon/json/number.png
 icon/json/object.png
 icon/json/string.png
+icon/json/null.png
 icon/redo.png
 icon/undo.png

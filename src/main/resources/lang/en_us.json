@@ -29,6 +29,7 @@
 	"json_editor.type.boolean": "JSON Boolean",
 	"json_editor.type.object": "JSON Object",
 	"json_editor.type.array": "JSON Array",
+	"json_editor.type.null": "JSON Null",
 	"json_editor.add_element.type": "Type",
 	"json_editor.add_element.key": "Key",
 	"json_editor.add_element.title": "Add a JSON Element",

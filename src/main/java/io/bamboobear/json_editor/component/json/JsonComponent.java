@@ -1,9 +1,15 @@
 package io.bamboobear.json_editor.component.json;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.util.Objects;
+import java.util.function.Function;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,13 +22,14 @@ import com.google.gson.JsonPrimitive;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.ResourceImageLoader;
 import io.bamboobear.json_editor.component.Button;
+import io.bamboobear.json_editor.component.EditorInputField;
 import io.bamboobear.json_editor.component.EditorInputField.Type;
 import io.bamboobear.json_editor.component.EditorTextField;
 import io.bamboobear.json_editor.component.Label;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
-public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel permits JsonCompositeComponent, JsonPrimitiveComponent{
+public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel permits JsonCompositeComponent, JsonPrimitiveComponent, JsonNullComponent{
 	protected final Label icon;
 	
 	protected final Button removeButton;
@@ -123,7 +130,8 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		case JsonBooleanComponent.TYPE_ID -> new JsonBooleanComponent();
 		case JsonNumberComponent.TYPE_ID -> new JsonNumberComponent();
 		case JsonObjectComponent.TYPE_ID -> new JsonObjectComponent();
-		default -> new JsonStringComponent();
+		case JsonStringComponent.TYPE_ID -> new JsonStringComponent();
+		default -> new JsonNullComponent();
 		};
 	}
 	
@@ -131,8 +139,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		JsonComponent<?> c;
 		String typeID = getTypeIDFromJsonElement(value);
 		if(typeID == null) {
-			c = createDefaultJsonComponent(JsonStringComponent.TYPE_ID);
-			c.setValue(new JsonPrimitive("null"));
+			c = createDefaultJsonComponent(JsonNullComponent.TYPE_ID);
 		} else {
 			c = createDefaultJsonComponent(typeID);
 			c.setValue(value);
@@ -148,8 +155,9 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 			JsonPrimitive jp = json.getAsJsonPrimitive();
 			if(jp.isBoolean()) return JsonBooleanComponent.TYPE_ID;
 			if(jp.isNumber()) return JsonNumberComponent.TYPE_ID;
+			return JsonStringComponent.TYPE_ID;
 		}
-		return JsonStringComponent.TYPE_ID;
+		return JsonNullComponent.TYPE_ID;
 	}
 	
 	public static enum State {
@@ -172,6 +180,83 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		
 		public Color getBackground() {
 			return background;
+		}
+	}
+	
+	static class ComponentLayout implements LayoutManager {
+		final int gap = 1;
+		
+		private final Label icon;
+		private final EditorTextField key;
+		private final EditorInputField value;
+		private final Button removeButton;
+		
+		public ComponentLayout(JsonPrimitiveComponent<?> json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
+			this((JsonComponent<?>)json, icon, key, value, removeButton);
+		}
+		
+		public ComponentLayout(JsonNullComponent json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
+			this((JsonComponent<?>)json, icon, key, value, removeButton);
+		}
+		
+		private ComponentLayout(JsonComponent<?> json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
+			this.icon = Objects.requireNonNull(icon, "icon is null");
+			this.key = Objects.requireNonNull(key, "key is null");
+			this.value = Objects.requireNonNull(value, "value is null");
+			this.removeButton = Objects.requireNonNull(removeButton, "remove button is null");
+			
+			json.add(icon);
+			json.add(key);
+			json.add(value.getAsComponent());
+			json.add(removeButton);
+		}
+		
+		@Override public void addLayoutComponent(String name, Component comp) { throw new UnsupportedOperationException(); }
+		@Override public void removeLayoutComponent(Component comp) { throw new UnsupportedOperationException();}
+		
+		@Override
+		public Dimension minimumLayoutSize(Container parent) {
+			synchronized (parent.getTreeLock()) { return createDimension(parent, Component::getMinimumSize); }
+		}
+		
+		@Override
+		public Dimension preferredLayoutSize(Container parent) {
+			synchronized (parent.getTreeLock()) { return createDimension(parent, Component::getPreferredSize); }
+		}
+		
+		private Dimension createDimension(Container parent, Function<Component, Dimension> factory) {
+			int iconSize = DEFAULT_HEIGHT;
+			
+			int width = iconSize * 2 + gap * 3 + factory.apply(key).width + factory.apply(value.getAsComponent()).width;
+			int height = iconSize;
+			
+			Insets insets = parent.getInsets();
+			width += (insets.left + insets.right);
+			height += (insets.top + insets.bottom);
+			return new Dimension(width, height);
+		}
+		
+		@Override
+		public void layoutContainer(Container parent) {
+			synchronized (parent.getTreeLock()) {
+				Insets insets = parent.getInsets();
+				
+				int top = insets.top;
+				int left = insets.left;
+				int right = parent.getWidth() - insets.right;
+				
+				int iconSize = parent.getHeight() - (insets.top + insets.bottom);
+				
+				icon.setBounds(left, top, iconSize, iconSize);
+				left += iconSize + gap;
+				
+				removeButton.setBounds(right - iconSize, top, iconSize, iconSize);
+				right -= iconSize + gap;
+				
+				int width = (right - left - gap) / 2;
+				value.getAsComponent().setBounds(right - width, top, width, iconSize);
+				key.setBounds(left, top, width, iconSize);
+			}
 		}
 	}
 }
