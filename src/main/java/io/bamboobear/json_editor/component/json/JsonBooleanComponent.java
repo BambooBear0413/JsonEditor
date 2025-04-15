@@ -29,7 +29,6 @@ public final class JsonBooleanComponent extends JsonPrimitiveComponent<Boolean>{
 		return comboBox;
 	}
 
-	@Override
 	public void setValue(Boolean value) {
 		valueComponent.setValue(value.toString());
 	}

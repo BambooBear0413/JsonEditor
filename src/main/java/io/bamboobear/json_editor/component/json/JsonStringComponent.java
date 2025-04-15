@@ -23,7 +23,6 @@ public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
 		return new EditorTextField("", this, Type.VALUE);
 	}
 
-	@Override
 	public void setValue(String value) {
 		valueComponent.setValue(value);
 	}

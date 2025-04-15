@@ -30,8 +30,6 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 		setLayout(new ComponentLayout(valueComponent));
 	}
 	
-	public abstract void setValue(T value);
-	
 	public abstract boolean setValue(JsonPrimitive value);
 	
 	@Override

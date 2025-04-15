@@ -25,7 +25,6 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 		return new EditorTextField("0", this, Type.VALUE);
 	}
 
-	@Override
 	public void setValue(Number value) {
 		valueComponent.setValue(String.valueOf(value));
 	}
