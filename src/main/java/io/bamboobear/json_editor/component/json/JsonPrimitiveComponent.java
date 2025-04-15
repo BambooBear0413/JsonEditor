@@ -27,7 +27,7 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 			}
 		});
 		
-		setLayout(new ComponentLayout(this, this.icon, this.keyField, this.valueComponent, this.removeButton));
+		setLayout(new ComponentLayout(valueComponent));
 	}
 	
 	public abstract void setValue(T value);

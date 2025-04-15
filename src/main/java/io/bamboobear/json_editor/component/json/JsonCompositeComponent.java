@@ -36,7 +36,7 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		
 		elementsPanel = new JPanel(new ElementsPanelLayout());
 		
-		setLayout(new ComponentLayout(this, this.icon, this.keyField, this.elementsPanel, this.addButton, this.removeButton));
+		setLayout(new ComponentLayout());
 		setBorder(new LineBorder(Color.GRAY, 5));
 	}
 	
@@ -126,7 +126,7 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		return getLayout().preferredLayoutSize(this);
 	}
 	
-	private static class ComponentLayout implements LayoutManager {
+	private class ComponentLayout implements LayoutManager {
 		final int gap = 1;
 		
 		private final Label icon;
@@ -135,20 +135,20 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		private final Button addButton;
 		private final Button removeButton;
 		
-		private ComponentLayout(JsonCompositeComponent<?> json, Label icon, EditorTextField key, JPanel elements, Button addButton, Button removeButton) {
-			this.icon = icon;
-			this.key = key;
-			this.elements = elements;
-			this.addButton = addButton;
-			this.removeButton = removeButton;
+		private ComponentLayout() {
+			this.icon = JsonCompositeComponent.this.icon;
+			this.key = JsonCompositeComponent.this.keyField;
+			this.elements = JsonCompositeComponent.this.elementsPanel;
+			this.addButton = JsonCompositeComponent.this.addButton;
+			this.removeButton = JsonCompositeComponent.this.removeButton;
 			
-			json.add(icon);
-			json.add(key);
-			json.add(elements);
-			json.add(addButton);
-			json.add(removeButton);
+			JsonCompositeComponent.this.add(icon);
+			JsonCompositeComponent.this.add(key);
+			JsonCompositeComponent.this.add(elements);
+			JsonCompositeComponent.this.add(addButton);
+			JsonCompositeComponent.this.add(removeButton);
 			
-			if(json.getParentElement() == null) {
+			if(JsonCompositeComponent.this.getParentElement() == null) {
 				icon.setVisible(false);
 				key.setVisible(false);
 				removeButton.setVisible(false);

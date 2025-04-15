@@ -183,7 +183,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		}
 	}
 	
-	static class ComponentLayout implements LayoutManager {
+	class ComponentLayout implements LayoutManager {
 		final int gap = 1;
 		
 		private final Label icon;
@@ -191,24 +191,16 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		private final EditorInputField value;
 		private final Button removeButton;
 		
-		public ComponentLayout(JsonPrimitiveComponent<?> json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
-			this((JsonComponent<?>)json, icon, key, value, removeButton);
-		}
-		
-		public ComponentLayout(JsonNullComponent json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
-			this((JsonComponent<?>)json, icon, key, value, removeButton);
-		}
-		
-		private ComponentLayout(JsonComponent<?> json, Label icon, EditorTextField key, EditorInputField value, Button removeButton) {
-			this.icon = Objects.requireNonNull(icon, "icon is null");
-			this.key = Objects.requireNonNull(key, "key is null");
+		ComponentLayout(EditorInputField value) {
+			this.icon = Objects.requireNonNull(JsonComponent.this.icon, "icon is null");
+			this.key = Objects.requireNonNull(JsonComponent.this.keyField, "key is null");
 			this.value = Objects.requireNonNull(value, "value is null");
-			this.removeButton = Objects.requireNonNull(removeButton, "remove button is null");
+			this.removeButton = Objects.requireNonNull(JsonComponent.this.removeButton, "remove button is null");
 			
-			json.add(icon);
-			json.add(key);
-			json.add(value.getAsComponent());
-			json.add(removeButton);
+			JsonComponent.this.add(icon);
+			JsonComponent.this.add(key);
+			JsonComponent.this.add(value.getAsComponent());
+			JsonComponent.this.add(removeButton);
 		}
 		
 		@Override public void addLayoutComponent(String name, Component comp) { throw new UnsupportedOperationException(); }

@@ -26,7 +26,7 @@ public final class JsonNullComponent extends JsonComponent<JsonNull>{
 		
 		this.valueComponent.setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
 		
-		setLayout(new ComponentLayout(this, icon, keyField, valueComponent, removeButton));
+		setLayout(new ComponentLayout(valueComponent));
 	}
 	
 	@Override public JsonNull getJsonElement() { return JsonNull.INSTANCE; }
