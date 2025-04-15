@@ -86,7 +86,7 @@ public class Main{
 			load(Languages::loadLanguage, plugin, dialog, "Loading language files in plugin \"%s\"...".formatted(plugin.id()));
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
-		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURE.getValue();
+		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURES.getValue();
 		
 		SwingUtilities.invokeLater(() -> {
 			mainWindow = new MainWindow();

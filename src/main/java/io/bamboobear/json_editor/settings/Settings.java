@@ -20,7 +20,7 @@ public class Settings {
 	private static final Properties unknownProperties = new Properties();
 	
 	public static final LanguageSetting LANGUAGE = registerSetting(new LanguageSetting("language", Languages.DEFAULT_LANGUAGE, createTranslatableText("language")));
-	public static final BooleanSetting EXPERIMENTAL_FEATURE = registerSetting(new BooleanSetting("isExperimentalFeaturesEnabled", false, createTranslatableText("experimental_features"), true));
+	public static final BooleanSetting EXPERIMENTAL_FEATURES = registerSetting(new BooleanSetting("isExperimentalFeaturesEnabled", false, createTranslatableText("experimental_features"), true));
 	public static final FontSetting FONT = registerSetting(new FontSetting(Main.getFont("Default", 0, 15)));
 	public static final BooleanSetting PRETTY_PRINTING = registerSetting(new BooleanSetting("enablesPrettyPrinting", false, createTranslatableText("pretty_printing")));
 	public static final BooleanSetting HTML_ESCAPING = registerSetting(new BooleanSetting("enablesHtmlEscaping", false, createTranslatableText("html_escaping")));
@@ -52,7 +52,7 @@ public class Settings {
 		}
 		
 		for(Setting<?> setting : settings) {
-			if(!EXPERIMENTAL_FEATURE.getValue() && setting.getIsExperimentalFeature()) {
+			if(!EXPERIMENTAL_FEATURES.getValue() && setting.getIsExperimentalFeature()) {
 				setting.restoreDefault();
 			}
 		}
