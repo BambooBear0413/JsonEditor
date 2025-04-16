@@ -3,7 +3,10 @@ package io.bamboobear.json_editor.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.function.Function;
+import java.util.function.DoublePredicate;
+import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
+import java.util.function.Predicate;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -70,52 +73,52 @@ public class JsonArrayUtilities {
 		return getStrings(array, (s) -> true);
 	}
 	
-	public static JsonElement[] getJsonElements(JsonArray array, Function<JsonElement, Boolean> condition) {
+	public static JsonElement[] getJsonElements(JsonArray array, Predicate<JsonElement> predicate) {
 		ArrayList<JsonElement> list = new ArrayList<JsonElement>();
 		for(JsonElement element : array) {
-			if(condition.apply(element)) {
+			if(predicate.test(element)) {
 				list.add(element);
 			}
 		}
 		return list.toArray(new JsonPrimitive[list.size()]);
 	}
 	
-	public static JsonPrimitive[] getJsonPrimitives(JsonArray array, Function<JsonPrimitive, Boolean> condition) {
+	public static JsonPrimitive[] getJsonPrimitives(JsonArray array, Predicate<JsonPrimitive> predicate) {
 		ArrayList<JsonPrimitive> list = new ArrayList<JsonPrimitive>();
 		for(JsonElement element : array) {
-			if(element instanceof JsonPrimitive jp && condition.apply(jp)) {
+			if(element instanceof JsonPrimitive jp && predicate.test(jp)) {
 				list.add(jp);
 			}
 		}
 		return list.toArray(new JsonPrimitive[list.size()]);
 	}
 	
-	public static JsonObject[] getJsonObjects(JsonArray array, Function<JsonObject, Boolean> condition) {
+	public static JsonObject[] getJsonObjects(JsonArray array, Predicate<JsonObject> predicate) {
 		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
 		for(JsonElement element : array) {
-			if(element instanceof JsonObject jo && condition.apply(jo)) {
+			if(element instanceof JsonObject jo && predicate.test(jo)) {
 				list.add(jo);
 			}
 		}
 		return list.toArray(new JsonObject[list.size()]);
 	}
 	
-	public static JsonArray[] getJsonArrays(JsonArray array, Function<JsonArray, Boolean> condition) {
+	public static JsonArray[] getJsonArrays(JsonArray array, Predicate<JsonArray> predicate) {
 		ArrayList<JsonArray> list = new ArrayList<JsonArray>();
 		for(JsonElement element : array) {
-			if(element instanceof JsonArray ja && condition.apply(ja)) {
+			if(element instanceof JsonArray ja && predicate.test(ja)) {
 				list.add(ja);
 			}
 		}
 		return list.toArray(new JsonArray[list.size()]);
 	}
 	
-	public static boolean[] getBooleans(JsonArray array, Function<Boolean, Boolean> condition) {
+	public static boolean[] getBooleans(JsonArray array, Predicate<Boolean> predicate) {
 		ArrayList<Boolean> list = new ArrayList<Boolean>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isBoolean()) {
 				Boolean b = jp.getAsBoolean();
-				if(condition.apply(b)) {
+				if(predicate.test(b)) {
 					list.add(b);
 				}
 			}
@@ -127,12 +130,12 @@ public class JsonArrayUtilities {
 		return booleans;
 	}
 	
-	public static Number[] getNumbers(JsonArray array, Function<Number, Boolean> condition) {
+	public static Number[] getNumbers(JsonArray array, Predicate<Number> predicate) {
 		ArrayList<Number> list = new ArrayList<Number>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
 				Number num = jp.getAsNumber();
-				if(condition.apply(num)) {
+				if(predicate.test(num)) {
 					list.add(num);
 				}
 			}
@@ -140,12 +143,12 @@ public class JsonArrayUtilities {
 		return list.toArray(new Number[list.size()]);
 	}
 	
-	public static byte[] getBytes(JsonArray array, Function<Byte, Boolean> condition) {
+	public static byte[] getBytes(JsonArray array, IntPredicate predicate) {
 		ArrayList<Byte> list = new ArrayList<Byte>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Byte b = jp.getAsByte();
-				if(condition.apply(b)) {
+				byte b = jp.getAsByte();
+				if(predicate.test(b)) {
 					list.add(b);
 				}
 			}
@@ -157,12 +160,12 @@ public class JsonArrayUtilities {
 		return bytes;
 	}
 	
-	public static short[] getShorts(JsonArray array, Function<Short, Boolean> condition) {
+	public static short[] getShorts(JsonArray array, IntPredicate predicate) {
 		ArrayList<Short> list = new ArrayList<Short>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Short s = jp.getAsShort();
-				if(condition.apply(s)) {
+				short s = jp.getAsShort();
+				if(predicate.test(s)) {
 					list.add(s);
 				}
 			}
@@ -174,12 +177,12 @@ public class JsonArrayUtilities {
 		return shorts;
 	}
 	
-	public static int[] getIntegers(JsonArray array, Function<Integer, Boolean> condition) {
+	public static int[] getIntegers(JsonArray array, IntPredicate predicate) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Integer i = jp.getAsInt();
-				if(condition.apply(i)) {
+				int i = jp.getAsInt();
+				if(predicate.test(i)) {
 					list.add(i);
 				}
 			}
@@ -191,12 +194,12 @@ public class JsonArrayUtilities {
 		return integers;
 	}
 	
-	public static long[] getLongs(JsonArray array, Function<Long, Boolean> condition) {
+	public static long[] getLongs(JsonArray array, LongPredicate predicate) {
 		ArrayList<Long> list = new ArrayList<Long>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Long l = jp.getAsLong();
-				if(condition.apply(l)) {
+				long l = jp.getAsLong();
+				if(predicate.test(l)) {
 					list.add(l);
 				}
 			}
@@ -208,12 +211,12 @@ public class JsonArrayUtilities {
 		return longs;
 	}
 	
-	public static float[] getFloats(JsonArray array, Function<Float, Boolean> condition) {
+	public static float[] getFloats(JsonArray array, DoublePredicate predicate) {
 		ArrayList<Float> list = new ArrayList<Float>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Float f = jp.getAsFloat();
-				if(condition.apply(f)) {
+				float f = jp.getAsFloat();
+				if(predicate.test(f)) {
 					list.add(f);
 				}
 			}
@@ -225,12 +228,12 @@ public class JsonArrayUtilities {
 		return floats;
 	}
 	
-	public static double[] getDoubles(JsonArray array, Function<Double, Boolean> condition) {
+	public static double[] getDoubles(JsonArray array, DoublePredicate predicate) {
 		ArrayList<Double> list = new ArrayList<Double>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
-				Double d = jp.getAsDouble();
-				if(condition.apply(d)) {
+				double d = jp.getAsDouble();
+				if(predicate.test(d)) {
 					list.add(d);
 				}
 			}
@@ -242,13 +245,13 @@ public class JsonArrayUtilities {
 		return doubles;
 	}
 	
-	public static BigDecimal[] getBigDecimals(JsonArray array, Function<BigDecimal, Boolean> condition) {
+	public static BigDecimal[] getBigDecimals(JsonArray array, Predicate<BigDecimal> predicate) {
 		ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
 				try {
 					BigDecimal bd = jp.getAsBigDecimal();
-					if(condition.apply(bd)) {
+					if(predicate.test(bd)) {
 						list.add(bd);
 					}
 				} catch (NumberFormatException e) {
@@ -258,13 +261,13 @@ public class JsonArrayUtilities {
 		return list.toArray(new BigDecimal[list.size()]);
 	}
 	
-	public static BigInteger[] getBigIntegers(JsonArray array, Function<BigInteger, Boolean> condition) {
+	public static BigInteger[] getBigIntegers(JsonArray array, Predicate<BigInteger> predicate) {
 		ArrayList<BigInteger> list = new ArrayList<BigInteger>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isNumber()) {
 				try {
 					BigInteger bi = jp.getAsBigInteger();
-					if(condition.apply(bi)) {
+					if(predicate.test(bi)) {
 						list.add(bi);
 					}
 				} catch (NumberFormatException e) {
@@ -274,12 +277,12 @@ public class JsonArrayUtilities {
 		return list.toArray(new BigInteger[list.size()]);
 	}
 	
-	public static String[] getStrings(JsonArray array, Function<String, Boolean> condition) {
+	public static String[] getStrings(JsonArray array, Predicate<String> predicate) {
 		ArrayList<String> list = new ArrayList<String>();
 		for(JsonElement element : array) {
 			if(element instanceof JsonPrimitive jp && jp.isString()) {
 				String s = jp.getAsString();
-				if(condition.apply(s)) {
+				if(predicate.test(s)) {
 					list.add(s);
 				}
 			}
