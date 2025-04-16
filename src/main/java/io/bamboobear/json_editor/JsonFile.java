@@ -30,8 +30,7 @@ public final class JsonFile {
 	private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
 	public JsonFile(File file){
-		Objects.requireNonNull(file, "\"file\" is null");
-		this.file = file;
+		this.file = Objects.requireNonNull(file, "file is null");
 	}
 
 	public JsonFile(String fileName){
@@ -166,7 +165,8 @@ public final class JsonFile {
 	}
 	
 	public String getFilePath() {
-		return file.getAbsolutePath();
+		try                   { return file.getCanonicalPath(); }
+		catch (IOException e) { return file.getAbsolutePath(); }
 	}
 	
 	public long lastModified() {
