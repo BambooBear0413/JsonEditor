@@ -109,7 +109,7 @@ public class JsonEditor extends JPanel{
 	}
 	
 	private void load(JsonFile file) {
-		Main.getMainWindow().setTitle(TranslatableText.of("json_editor.loading"));
+		Main.getMainWindow().setTitle(TranslatableText.create("json_editor.loading"));
 		
 		this.file = file;
 		this.lastModified = (this.file == null) ? 0 : this.file.lastModified();
@@ -120,7 +120,8 @@ public class JsonEditor extends JPanel{
 				if(root.isJsonArray() || root.isJsonObject()) {
 					body.setViewportView(JsonComponent.createDefaultJsonComponent(root));
 				} else {
-					OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.of("json_editor.error.invalid_root_element"), TranslatableText.of("json_editor.error.invalid_root_element.title"));
+					OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.invalid_root_element"),
+							TranslatableText.create("json_editor.error.invalid_root_element.title"));
 					body.setViewportView(JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID));
 					this.file = null;
 					this.lastModified = 0;
@@ -177,7 +178,8 @@ public class JsonEditor extends JPanel{
 			lastModified = file.lastModified();
 			result = true;
 		} catch (Exception e) {
-			OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.of("json_editor.error.failed_to_save_file", file.getFilePath()), TranslatableText.of("json_editor.error.failed_to_save_file.title"));
+			OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.failed_to_save_file", file.getFilePath()),
+					TranslatableText.create("json_editor.error.failed_to_save_file.title"));
 			ErrorReport.output(e);
 		}
 		
@@ -222,8 +224,9 @@ public class JsonEditor extends JPanel{
 			return true;
 		}
 		
-		int result = JOptionPane.showConfirmDialog(Main.getMainWindow(), ((this.file == null) ? TranslatableText.of("json_editor.save_file.no_file") : TranslatableText.of("json_editor.save_file.file", file.getFilePath())).getDisplayText()
-				, TranslatableText.of("json_editor.save_file.title").getDisplayText(), JOptionPane.YES_NO_CANCEL_OPTION);
+		int result = JOptionPane.showConfirmDialog(Main.getMainWindow(),
+				((this.file == null) ? TranslatableText.create("json_editor.save_file.no_file") : TranslatableText.create("json_editor.save_file.file", file.getFilePath())).getDisplayText(), 
+				TranslatableText.create("json_editor.save_file.title").getDisplayText(), JOptionPane.YES_NO_CANCEL_OPTION);
 		return switch(result) {
 		case JOptionPane.CANCEL_OPTION -> false;
 		case JOptionPane.YES_OPTION -> saveFile();

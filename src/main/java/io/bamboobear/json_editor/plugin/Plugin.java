@@ -46,12 +46,12 @@ public abstract class Plugin {
 		}
 		this.id = id;
 		
-		name = TranslatableText.of(JsonObjectUtilities.getString(pluginJson, "display_name", String.format("%s.name", id)));
+		name = TranslatableText.create(JsonObjectUtilities.getString(pluginJson, "display_name", String.format("%s.name", id)));
 		authors = loadArrayOrString(pluginJson, "authors");
 		credits = loadArrayOrString(pluginJson, "credits");
 		
 		String desc = JsonObjectUtilities.getString(pluginJson, "description", null);
-		description = desc == null ? TranslatableText.EMPTY : TranslatableText.of(desc);
+		description = desc == null ? TranslatableText.EMPTY : TranslatableText.create(desc);
 		
 		formatVersion = JsonObjectUtilities.getInteger(pluginJson, "plugin_format", Plugin.LATEST_FORMAT_VERSION);
 	}

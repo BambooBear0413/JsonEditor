@@ -23,7 +23,7 @@ public class AboutDialog extends Dialog{
 	private static volatile AboutDialog dialog;
 	
 	private AboutDialog() {
-		super(Main.getMainWindow(), TranslatableText.of("json_editor.about_editor.title"));
+		super(Main.getMainWindow(), TranslatableText.create("json_editor.about_editor.title"));
 		
 		init();
 		
@@ -40,7 +40,7 @@ public class AboutDialog extends Dialog{
 	private void init() {
 		JPanel northPanel = new JPanel(new GridLayout(0, 1));
 		
-		Label name = new Label(TranslatableText.of("json_editor.name"), Label.CENTER);
+		Label name = new Label(TranslatableText.create("json_editor.name"), Label.CENTER);
 		name.setFont(new Font("Default", Font.BOLD, 20));
 		northPanel.add(name);
 		
@@ -52,7 +52,7 @@ public class AboutDialog extends Dialog{
 		centeralPanel.add(createFilePanel("README", Language::hasReadmePath, Language::getReadmePath));
 		centeralPanel.add(createFilePanel("HTML", Language::hasHtmlPath, Language::getHtmlPath));
 		
-		Button issueTrackerButton = new Button(TranslatableText.of("json_editor.about_editor.issue_tracker"));
+		Button issueTrackerButton = new Button(TranslatableText.create("json_editor.about_editor.issue_tracker"));
 		issueTrackerButton.addActionListener(e -> Main.browse("https://github.com/BambooBear0413/JsonEditor/issues"));
 		
 		add(northPanel, BorderLayout.NORTH);

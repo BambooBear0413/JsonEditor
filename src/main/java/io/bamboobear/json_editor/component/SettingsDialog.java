@@ -30,7 +30,7 @@ public class SettingsDialog extends Dialog{
 	private JScrollPane body;
 	
 	private SettingsDialog() {
-		super(Main.getMainWindow(), TranslatableText.of("json_editor.settings.title"));
+		super(Main.getMainWindow(), TranslatableText.create("json_editor.settings.title"));
 				
 		init();
 		
@@ -82,19 +82,19 @@ public class SettingsDialog extends Dialog{
 		JPanel buttons = new JPanel(new GridLayout(1, 4, 1, 1));
 		buttons.setPreferredSize(new Dimension(0, 40));
 		
-		Button applyButton = new Button(TranslatableText.of("json_editor.settings.apply"));
+		Button applyButton = new Button(TranslatableText.create("json_editor.settings.apply"));
 		applyButton.addActionListener(e -> saveSettings());
 		
-		Button applyAndCloseButton = new Button(TranslatableText.of("json_editor.settings.apply_and_close"));
+		Button applyAndCloseButton = new Button(TranslatableText.create("json_editor.settings.apply_and_close"));
 		applyAndCloseButton.addActionListener(e -> {
 			saveSettings();
 			dispose();
 		});
 		
-		Button restoreDefaultsButton = new Button(TranslatableText.of("json_editor.settings.restore_defaults"));
+		Button restoreDefaultsButton = new Button(TranslatableText.create("json_editor.settings.restore_defaults"));
 		restoreDefaultsButton.addActionListener(e -> {
-			int result = JOptionPane.showConfirmDialog(dialog, TranslatableText.of("json_editor.warning.restore_defaults").getDisplayText(),
-					TranslatableText.of("json_editor.warning.restore_defaults.title").getDisplayText(), JOptionPane.OK_CANCEL_OPTION,
+			int result = JOptionPane.showConfirmDialog(dialog, TranslatableText.create("json_editor.warning.restore_defaults").getDisplayText(),
+					TranslatableText.create("json_editor.warning.restore_defaults.title").getDisplayText(), JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.OK_OPTION) {
 				Settings.restoreDefaults();
@@ -105,7 +105,7 @@ public class SettingsDialog extends Dialog{
 			}
 		});
 		
-		Button cancelButton = new Button(TranslatableText.of("json_editor.cancel"));
+		Button cancelButton = new Button(TranslatableText.create("json_editor.cancel"));
 		cancelButton.addActionListener(e -> dispose());
 		
 		buttons.add(applyButton);

@@ -161,6 +161,6 @@ public class Settings {
 	}
 	
 	private static TranslatableText createTranslatableText(String settingId) {
-		return TranslatableText.of("json_editor.settings." + settingId);
+		return TranslatableText.create("json_editor.settings." + settingId);
 	}
 }

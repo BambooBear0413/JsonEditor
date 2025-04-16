@@ -92,7 +92,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 	}
 	
 	public static TranslatableText getTypeDisplayName(String typeID) {
-		return TranslatableText.of("json_editor.type." + typeID);
+		return TranslatableText.create("json_editor.type." + typeID);
 	}
 	
 	public void setRemovable(boolean removable) {

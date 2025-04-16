@@ -91,7 +91,7 @@ public class FontSetting extends Setting<Font>{
 	@SuppressWarnings("serial")
 	@Override
 	public Component createSettingComponent() {
-		var c = new SettingComponent(TranslatableText.of("json_editor.settings.font")) {
+		var c = new SettingComponent(TranslatableText.create("json_editor.settings.font")) {
 			@Override
 			protected Component createValueComponent() {
 				JPanel panel = new JPanel(new GridLayout(1, 2, 5, 5));
@@ -106,7 +106,7 @@ public class FontSetting extends Setting<Font>{
 				panel.add(comboBox);
 				if(!Main.isExperimentalFeaturesEnabled()) {
 					comboBox.setEnabled(false);
-					comboBox.setToolTipText(TranslatableText.of("json_editor.experimental_feature").getDisplayText());
+					comboBox.setToolTipText(TranslatableText.create("json_editor.experimental_feature").getDisplayText());
 				}
 				
 				TextField textField = new TextField(String.valueOf(value.getSize()));

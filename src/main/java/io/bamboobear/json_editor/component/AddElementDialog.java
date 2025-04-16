@@ -21,10 +21,10 @@ public class AddElementDialog extends Dialog{
 	
 //	@Deprecated
 	public AddElementDialog(ComboBox type) {
-		super(Main.getMainWindow(), TranslatableText.of("json_editor.add_element.title"), true);
+		super(Main.getMainWindow(), TranslatableText.create("json_editor.add_element.title"), true);
 		
 		JPanel contentPanel = new JPanel(new GridLayout(2, 2, 2, 2));
-		Label typeLabel = new Label(TranslatableText.of("json_editor.add_element.type"), Label.CENTER);
+		Label typeLabel = new Label(TranslatableText.create("json_editor.add_element.type"), Label.CENTER);
 		ComboBox typeField = Objects.requireNonNull(type);
 		
 		addWindowListener(new WindowAdapter() {
@@ -36,11 +36,11 @@ public class AddElementDialog extends Dialog{
 		contentPanel.add(typeLabel);
 		contentPanel.add(typeField);
 		
-		contentPanel.add(createButton(TranslatableText.of("json_editor.finish"), e -> {
+		contentPanel.add(createButton(TranslatableText.create("json_editor.finish"), e -> {
 			result = typeField.getValue();
 			dispose();
 		}));
-		contentPanel.add(createButton(TranslatableText.of("json_editor.cancel"), e -> dispose()));
+		contentPanel.add(createButton(TranslatableText.create("json_editor.cancel"), e -> dispose()));
 		
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		add(contentPanel);

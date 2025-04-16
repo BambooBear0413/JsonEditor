@@ -9,8 +9,8 @@ import io.bamboobear.json_editor.component.SettingsDialog;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 public class BooleanSetting extends SimpleSetting<Boolean>{
-	public static final TranslatableText DEFAULT_TRUE_TEXT = TranslatableText.of("json_editor.settings.enable");
-	public static final TranslatableText DEFAULT_FALSE_TEXT = TranslatableText.of("json_editor.settings.disable");
+	public static final TranslatableText DEFAULT_TRUE_TEXT = TranslatableText.create("json_editor.settings.enable");
+	public static final TranslatableText DEFAULT_FALSE_TEXT = TranslatableText.create("json_editor.settings.disable");
 	
 	private final TranslatableText trueText;
 	private final TranslatableText falseText;

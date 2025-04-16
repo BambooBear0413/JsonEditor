@@ -37,15 +37,15 @@ public class TextField extends JTextField{
 	private PopupMenu createPopupMenu() {
 		PopupMenu popupMenu = new PopupMenu();
 		
-		MenuItem copyItem = new MenuItem(TranslatableText.of("json_editor.copy"));
+		MenuItem copyItem = new MenuItem(TranslatableText.create("json_editor.copy"));
 		copyItem.addActionListener(e -> copy());
 		popupMenu.add(copyItem);
 		
-		MenuItem cutItem = new MenuItem(TranslatableText.of("json_editor.cut"));
+		MenuItem cutItem = new MenuItem(TranslatableText.create("json_editor.cut"));
 		cutItem.addActionListener(e -> cut());
 		popupMenu.add(cutItem);
 		
-		MenuItem pasteItem = new MenuItem(TranslatableText.of("json_editor.paste"));
+		MenuItem pasteItem = new MenuItem(TranslatableText.create("json_editor.paste"));
 		pasteItem.addActionListener(e -> paste());
 		popupMenu.add(pasteItem);
 		

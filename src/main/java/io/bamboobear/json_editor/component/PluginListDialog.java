@@ -25,7 +25,7 @@ public class PluginListDialog extends Dialog {
 	private static volatile PluginListDialog dialog;
 	
 	private PluginListDialog() {
-		super(Main.getMainWindow(), TranslatableText.of("json_editor.plugin_list.title"));
+		super(Main.getMainWindow(), TranslatableText.create("json_editor.plugin_list.title"));
 		
 		init();
 		
@@ -41,7 +41,7 @@ public class PluginListDialog extends Dialog {
 	private void init() {
 		var plugins = Plugins.getPlugins();
 		if(plugins.length == 0) {
-			Label noPlugin = new Label(TranslatableText.of("json_editor.plugin_list.no_plugin"), Label.CENTER);
+			Label noPlugin = new Label(TranslatableText.create("json_editor.plugin_list.no_plugin"), Label.CENTER);
 			int insets = 10;
 			noPlugin.setBorder(new EmptyBorder(insets, insets, insets, insets));
 			add(noPlugin);
@@ -131,40 +131,40 @@ public class PluginListDialog extends Dialog {
 			GridBagConstraintsBuilder gbcb = new GridBagConstraintsBuilder().setGridLocation(gridxForLabel, gridy).setWeight(weightXForLabel, weightY).setInsets(2, 2, 2, 2).setAnchor(Anchor.NORTHWEST).setFill(Fill.HORIZONTAL);
 			
 			/*======================= Plugin ID =======================*/
-			Label idLabel = new Label(TranslatableText.of("json_editor.plugin_list.plugin_id"));
+			Label idLabel = new Label(TranslatableText.create("json_editor.plugin_list.plugin_id"));
 			add(idLabel, gbcb.clone().setGridy(gridy).build());
 			
 			id = new Label();
 			add(id, gbcb.clone().setGridLocation(gridxForComponent, gridy++).setWeightx(weightXForComponent).build());
 			
 			/*======================= Plugin Format =======================*/
-			Label pluginFormatLabel = new Label(TranslatableText.of("json_editor.plugin_list.plugin_format"));
+			Label pluginFormatLabel = new Label(TranslatableText.create("json_editor.plugin_list.plugin_format"));
 			add(pluginFormatLabel, gbcb.clone().setGridy(gridy).build());
 			
 			pluginFormat = new Label();
 			add(pluginFormat, gbcb.clone().setGridLocation(gridxForComponent, gridy++).setWeightx(weightXForComponent).build());
 			
 			/*======================= Plugin Author =======================*/
-			Label authorsLabel = new Label(TranslatableText.of("json_editor.plugin_list.plugin_authors"));
+			Label authorsLabel = new Label(TranslatableText.create("json_editor.plugin_list.plugin_authors"));
 			add(authorsLabel, gbcb.clone().setGridy(gridy).build());
 			
 			authors = new Label();
 			add(authors, gbcb.clone().setGridLocation(gridxForComponent, gridy++).setWeightx(weightXForComponent).build());
 			
 			/*======================= Plugin Credits =======================*/
-			Label creditsLabel = new Label(TranslatableText.of("json_editor.plugin_list.plugin_credits"));
+			Label creditsLabel = new Label(TranslatableText.create("json_editor.plugin_list.plugin_credits"));
 			add(creditsLabel, gbcb.clone().setGridy(gridy).build());
 			
 			credits = new Label();
 			add(credits, gbcb.clone().setGridLocation(gridxForComponent, gridy++).setWeightx(weightXForComponent).build());
 			
 			/*======================= Plugin File =======================*/
-			pluginFileButton = new Button(TranslatableText.of("json_editor.plugin_list.plugin_file"));
+			pluginFileButton = new Button(TranslatableText.create("json_editor.plugin_list.plugin_file"));
 			pluginFileButton.addActionListener(e -> Main.open(pluginFile));
 			add(pluginFileButton, gbcb.clone().setGridy(gridy++).setGridwidth(gridweightForPluginFileButton).setWeightx(weightXForComponent).build());
 			
 			/*======================= Plugin Description =======================*/
-			Label pluginDescriptionLabel = new Label(TranslatableText.of("json_editor.plugin_list.plugin_description"));
+			Label pluginDescriptionLabel = new Label(TranslatableText.create("json_editor.plugin_list.plugin_description"));
 			add(pluginDescriptionLabel, gbcb.clone().setGridy(gridy).setWeighty(weightYForDescription).build());
 			
 			pluginDescription = new TextArea();

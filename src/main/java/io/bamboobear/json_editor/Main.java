@@ -50,7 +50,7 @@ import io.bamboobear.json_editor.plugin.Plugins;
 import io.bamboobear.json_editor.settings.Settings;
 
 public class Main{
-	public static final TranslatableText NAME = TranslatableText.of("json_editor.name");
+	public static final TranslatableText NAME = TranslatableText.create("json_editor.name");
 	public static final String VERSION = "0.1.0";
 	
 	private static final Gson GSON = new GsonBuilder().serializeNulls().create();
@@ -189,7 +189,8 @@ public class Main{
 	}
 	
 	public static void browse(URI uri) {
-		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.of("json_editor.warning.browse", uri).getDisplayText(), TranslatableText.of("json_editor.warning.browse.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.create("json_editor.warning.browse", uri).getDisplayText(),
+				TranslatableText.create("json_editor.warning.browse.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
 		if(result != JOptionPane.YES_OPTION) {
 			return;
 		}
@@ -206,7 +207,8 @@ public class Main{
 	}
 	
 	public static void open(File file) {
-		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.of("json_editor.warning.open_file", file.getAbsolutePath()).getDisplayText(), TranslatableText.of("json_editor.warning.open_file.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
+		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.create("json_editor.warning.open_file", file.getAbsolutePath()).getDisplayText(),
+				TranslatableText.create("json_editor.warning.open_file.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
 		if(result != JOptionPane.YES_OPTION) {
 			return;
 		}
@@ -214,7 +216,8 @@ public class Main{
 		try {
 			Desktop.getDesktop().open(file);
 		} catch (IllegalArgumentException e) {
-			JOptionPane.showMessageDialog(mainWindow, TranslatableText.of("json_editor.warning.open_file.file_not_exist", file.getAbsolutePath()).getDisplayText(), TranslatableText.of("json_editor.warning.open_file.file_not_exist.title").getDisplayText(), JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(mainWindow, TranslatableText.create("json_editor.warning.open_file.file_not_exist", file.getAbsolutePath()).getDisplayText(),
+					TranslatableText.create("json_editor.warning.open_file.file_not_exist.title").getDisplayText(), JOptionPane.WARNING_MESSAGE);
 		} catch (IOException e) {
 			ErrorReport.output(e);
 		}
@@ -318,7 +321,7 @@ public class Main{
 		@Override
 		public String getTitle() {
 			String title = super.getTitle();
-			return (this.title == null || this.title.isEmpty()) ? title : String.format("%2$s - %1$s", title, this.title.getDisplayText());
+			return (this.title == null || this.title.isEmptyKey()) ? title : String.format("%2$s - %1$s", title, this.title.getDisplayText());
 		}
 	}
 	
@@ -338,21 +341,21 @@ public class Main{
 		}
 		
 		private Menu createFileMenu() {
-			Menu fileMenu = new Menu(TranslatableText.of("json_editor.menu.file"));
+			Menu fileMenu = new Menu(TranslatableText.create("json_editor.menu.file"));
 			
-			fileMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.file.new_file"), e -> {if(editor != null) editor.newFile();}));
-			fileMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.file.open_file"), e -> {if(editor != null) editor.openFile();}));
-			fileMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.file.save_file"), e -> {if(editor != null) editor.saveFile();}));
-			fileMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.file.save_as"), e -> {if(editor != null) editor.saveAsNewFile();}));
+			fileMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.file.new_file"), e -> {if(editor != null) editor.newFile();}));
+			fileMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.file.open_file"), e -> {if(editor != null) editor.openFile();}));
+			fileMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.file.save_file"), e -> {if(editor != null) editor.saveFile();}));
+			fileMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.file.save_as"), e -> {if(editor != null) editor.saveAsNewFile();}));
 			
 			return fileMenu;
 		}
 		
 		private Menu createEditMenu() {
-			Menu editMenu = new Menu(TranslatableText.of("json_editor.menu.edit"));
+			Menu editMenu = new Menu(TranslatableText.create("json_editor.menu.edit"));
 			
-			var undoMenuItem = editMenu.add(createMenuItem(TranslatableText.of("json_editor.undo"), e -> {if(editor != null) editor.undo();}));
-			var redoMenuItem = editMenu.add(createMenuItem(TranslatableText.of("json_editor.redo"), e -> {if(editor != null) editor.redo();}));
+			var undoMenuItem = editMenu.add(createMenuItem(TranslatableText.create("json_editor.undo"), e -> {if(editor != null) editor.undo();}));
+			var redoMenuItem = editMenu.add(createMenuItem(TranslatableText.create("json_editor.redo"), e -> {if(editor != null) editor.redo();}));
 			
 			editMenu.addMenuListener(new MenuListener() {
 				@Override
@@ -373,21 +376,21 @@ public class Main{
 		}
 		
 		private Menu createSettingsMenu() {
-			Menu settingsMenu = new Menu(TranslatableText.of("json_editor.menu.settings"));
+			Menu settingsMenu = new Menu(TranslatableText.create("json_editor.menu.settings"));
 			
-			settingsMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.settings"), e -> SettingsDialog.showDialog()));
+			settingsMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.settings"), e -> SettingsDialog.showDialog()));
 			
 			return settingsMenu;
 		}
 		
 		private Menu createAboutMenu() {
-			Menu aboutMenu = new Menu(TranslatableText.of("json_editor.menu.about"));
+			Menu aboutMenu = new Menu(TranslatableText.create("json_editor.menu.about"));
 			
 			final String JSON_ORG = "https://www.json.org/json-en.html";
-			aboutMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.about.editor"), e -> AboutDialog.showDialog()));
-			aboutMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.about.json"), e -> browse(JSON_ORG)));
+			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.editor"), e -> AboutDialog.showDialog()));
+			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.json"), e -> browse(JSON_ORG)));
 			aboutMenu.addSeparator();
-			aboutMenu.add(createMenuItem(TranslatableText.of("json_editor.menu.about.plugin_list"), e -> PluginListDialog.showDialog()));
+			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.plugin_list"), e -> PluginListDialog.showDialog()));
 			
 			return aboutMenu;
 		}

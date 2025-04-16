@@ -37,7 +37,7 @@ public abstract class SettingComponent extends JComponent{
 	
 	class SettingLabel extends Label {
 		private final boolean needToRestart;
-		private static final TranslatableText NEED_TO_RESTART = TranslatableText.of("json_editor.settings.restart");
+		private static final TranslatableText NEED_TO_RESTART = TranslatableText.create("json_editor.settings.restart");
 		
 		public SettingLabel(TranslatableText text) {
 			this(text, false);
