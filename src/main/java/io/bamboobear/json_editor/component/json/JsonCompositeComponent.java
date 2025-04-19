@@ -26,7 +26,7 @@ import io.bamboobear.json_editor.component.GridBagConstraintsBuilder.Fill;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
-public abstract class JsonCompositeComponent<T extends JsonElement> extends JsonComponent<T>{
+public sealed abstract class JsonCompositeComponent<T extends JsonElement> extends JsonComponent<T> permits JsonArrayComponent, JsonObjectComponent{
 	protected ArrayList<KeyValuePair> content = new ArrayList<KeyValuePair>();
 	
 	protected Button addButton;

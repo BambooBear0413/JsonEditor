@@ -21,7 +21,7 @@ import io.bamboobear.json_editor.component.json.JsonCompositeComponent.KeyValueP
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
-public abstract class JsonComponent<T extends JsonElement> extends JPanel{
+public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel permits JsonCompositeComponent, JsonPrimitiveComponent{
 	protected Label icon;
 	
 	protected final Button removeButton;

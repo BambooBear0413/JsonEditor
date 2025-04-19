@@ -15,7 +15,7 @@ import io.bamboobear.json_editor.component.EditorComboBox;
 import io.bamboobear.json_editor.component.EditorTextField;
 
 @SuppressWarnings("serial")
-public abstract class JsonPrimitiveComponent<T> extends JsonComponent<JsonPrimitive>{
+public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<JsonPrimitive> permits JsonBooleanComponent, JsonNumberComponent, JsonStringComponent{
 	protected JComponent valueComponent;
 	
 	JsonPrimitiveComponent(Icon icon) {
