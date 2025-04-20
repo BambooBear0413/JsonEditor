@@ -259,16 +259,17 @@
 
 		<p>特别注意，如果显示翻译内容的元件不支持换行等行为，那么即使你在语言文件中使用如<code>\n</code>等转义序列，实际于程序内也无法达到期望中的效果。</p>
 
-		<h4 id="parameter_in_translation" class="title">翻译内容中的参数</h4>
-		<p>如果你打算制作“JSON编辑器”本身没支援的语言，就需要特别注意“内容中的参数”。</p>
-		<p>在“JSON编辑器”原版内容中，所有翻译内容都被视为「格式化字串」处理（格式参见<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中纳入参数，而在原版内容中，便有部分翻译内容具有参数（例如文件名称等）。因为翻译内容都是格式化文字，若内容包含<code>%</code>，应使用<code>%%</code>代表（有点像转义序列中的<code>\\</code>），否则可能导致意外问题发生。</p>
-		<p>“JSON编辑器”原版内容中，所有带有参数的翻译键名列表如下：</p>
+		<h4 id="placeholders_in_translations" class="title">翻译内容中的占位符</h4>
+		<p>如果你打算制作“JSON编辑器”本身没支援的语言，就需要特别注意“内容中的占位符”。</p>
+		<p>在“JSON编辑器”中，所有翻译内容都是「格式化字串」（格式参见<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中插入参数，。在原版内容中，部分翻译内容应当包含占位符，以便在“JSON编辑器”中替换为文件名称、网址等。</p>
+		<p>因为翻译内容都是格式化文字，任何不作为占位符的<code>%</code>都应使用<code>%%</code>，否则，同字符串的其他占位符可能无法正常转换。</p>
+		<p>“JSON编辑器”原版内容中，所有应带有占位符的翻译键名列表如下：</p>
 
 		<table>
 			<tr>
 				<th scope="column">翻译键名</th>
-				<th scope="column">参数数量</th>
-				<th scope="column">参数说明</th>
+				<th scope="column">占位符数量</th>
+				<th scope="column">占位符说明</th>
 			</tr>
 			<tr>
 				<td><code>json_editor.save_file.file</code></td>

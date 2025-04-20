@@ -258,16 +258,18 @@
 
 		<p>特別注意，如果顯示翻譯內容的元件不支援換行等行為，那麼即使在語言檔中使用如<code>\n</code>等跳脫序列，實際於程式中也無法達到期望中的效果。</p>
 
-		<h4 id="parameter_in_translation" class="title">翻譯內容中的參數</h4>
-		<p>如果你打算製作「JSON編輯器」本身沒支援的語言，就需要特別注意「內容中的參數」。</p>
-		<p>在「JSON編輯器」中，所有翻譯內容都被視為「格式化字串」處理（格式參見<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文檔</a>，或參考<a href="https://jax-work-archive.blogspot.com/2015/02/java-stringformat.html" target="_blank">這篇文章</a>），以便在翻譯內容中納入參數，而在原版內容中，便有部分翻譯內容具有參數（諸如檔案名稱等）。因為翻譯內容皆為格式化文字，若內容包含<code>%</code>，應使用<code>%%</code>代表（有點像跳脫序列中的<code>\\</code>），否則可能導致意外問題發生。</p>
-		<p>「JSON編輯器」原版內容中，所有帶有參數的翻譯鍵名列表如下：</p>
+		<h4 id="placeholders_in_translations" class="title">翻譯內容中的佔位符號</h4>
+		<p>如果你打算製作「JSON編輯器」本身沒支援的語言，就需要特別注意「內容中的佔位符號」。</p>
+		<p>在「JSON編輯器」中，所有翻譯內容都是「格式化字串」（格式參見<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文檔</a>，或參考<a href="https://jax-work-archive.blogspot.com/2015/02/java-stringformat.html" target="_blank">這篇文章</a>），以便在翻譯內容中插入引數。在原版內容中，部分翻譯內容應當包含佔位符號，以便在「JSON編輯器」中替換為檔案名稱、網址等。</p>
+		<p>因為翻譯內容皆為格式化文字，任何不作為佔位符號的<code>%</code>都應使用<code>%%</code>，否則，同字串中的其他佔位符號可能無法正常轉換。</p>
+		
+		<p>「JSON編輯器」原版內容中，所有應帶有佔位符號的翻譯鍵名列表如下：</p>
 		
 		<table>
 			<tr>
 				<th scope="column">翻譯鍵名</th>
-				<th scope="columm">參數數量</th>
-				<th scope="column">參數說明</th>
+				<th scope="columm">佔位符號數量</th>
+				<th scope="column">佔位符號說明</th>
 			</tr>
 			<tr>
 				<td><code>json_editor.save_file.file</code></td>
