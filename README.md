@@ -31,7 +31,7 @@ The settings of the "JSON Editor" are saved in the file `settings.properties`. A
 |`enablesHtmlEscaping`|Boolean|`false`|After enabling HTML escaping, characters with special meaning in HTML, such as `=`,`>`, and `<`, will be escaped when saving the file.|
 |`enablesUnicodeEscaping`|Boolean|`false`|After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b>|
 
-Most settings listed above can be changed in the "JSON Editor" (some can only be changed when experimental features are enabled) or edited by other application (this is not recommented). For settings that are "experimental features", once that experimental features are disabled and the "JSON Editor" is restarted, the values of these settings will be restored to their default values.
+Most settings listed above can be changed in the "JSON Editor" (some can only be changed when experimental features are enabled) or edited by other application (this is not recommended). For settings that are "experimental features", once that experimental features are disabled and the "JSON Editor" is restarted, the values of these settings will be restored to their default values.
 
 ## Plugins
 Plugins of the "JSON Editor" can either be a directory or an archive file in ZIP format (with a filename extension of `.zip`). Similar to Minecraft datapacks, plugins allow you to add specific features or content to the "JSON Editor" without needing to write any code.
