@@ -31,15 +31,19 @@ public class FontSetting extends Setting<Font>{
 	FontSetting(Font defaultValue) {
 		super(defaultValue);
 	}
+	
+	@Override
+	public Font getValue() {
+		if(!Main.isExperimentalFeaturesEnabled()) {
+			return Main.getFont(defaultValue.getFamily(), 0, value.getSize());
+		}
+		return super.getValue();
+	}
 
 	@Override
 	protected String[] loadValue(Properties properties) {
 		String fontFamily = properties.getProperty(FONT_FAMILY);
 		String fontSize = properties.getProperty(FONT_SIZE);
-		
-		if(!Main.isExperimentalFeaturesEnabled()) {
-			fontFamily = "Dialog";
-		}
 		
 		Font f = getFont(fontFamily, fontSize);
 		if(f != null) {

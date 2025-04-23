@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.SettingComponent;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
@@ -19,6 +20,14 @@ public abstract class SimpleSetting<T> extends Setting<T>{
 		this.key = key;
 		this.text = text;
 		this.needToRestart = needToRestart;
+	}
+	
+	@Override
+	public T getValue() {
+		if(getIsExperimentalFeature() && !Main.isExperimentalFeaturesEnabled()) {
+			return defaultValue;
+		}
+		return super.getValue();
 	}
 	
 	@Override
