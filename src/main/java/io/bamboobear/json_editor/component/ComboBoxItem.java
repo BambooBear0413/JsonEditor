@@ -13,31 +13,21 @@ public class ComboBoxItem {
 		this.id = id;
 	}
 	
-	public String getDisplayText() {
-		String displayText = text.getDisplayText();
-		
-		if(showID) {
-			displayText = String.format("%s (%s)", displayText, id);
-		}
-		
-		return displayText;
-	}
-	
 	public TranslatableText getText() {
 		return text;
 	}
 	
 	public ComboBoxItem showID() {
+		if(showID) {
+			return this;
+		}
+		
 		showID = true;
+		text.append(" (%s)".formatted(id));
 		return this;
 	}
 	
 	public String getId() {
 		return id;
-	}
-	
-	@Override
-	public String toString() {
-		return getDisplayText();
 	}
 }
