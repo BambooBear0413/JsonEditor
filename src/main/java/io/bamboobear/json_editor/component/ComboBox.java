@@ -8,9 +8,8 @@ import javax.swing.JTextField;
 
 import io.bamboobear.json_editor.Main;
 
+@SuppressWarnings("serial")
 public class ComboBox extends JComboBox<ComboBoxItem>{
-	private static final long serialVersionUID = 7938261023039203330L;
-
 	private boolean useCustomFont = false;
 	
 	public ComboBox(ComboBoxItem[] items) {

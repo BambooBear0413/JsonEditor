@@ -10,9 +10,8 @@ import javax.swing.event.PopupMenuListener;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class TextField extends JTextField{
-	private static final long serialVersionUID = 9214015044862797632L;
-
 	private boolean useCustomFont = false;
 	private TranslatableText displayText;
 	private boolean updateTextWhenRepaint;

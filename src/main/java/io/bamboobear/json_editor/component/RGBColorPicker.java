@@ -24,9 +24,8 @@ import javax.swing.event.ChangeListener;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class RGBColorPicker extends JComponent{
-	private static final long serialVersionUID = -2544286064471516473L;
-
 	private final Label redText;
 	private final Label greenText;
 	private final Label blueText;

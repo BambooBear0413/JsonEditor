@@ -4,9 +4,8 @@ import javax.swing.JPopupMenu;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class PopupMenu extends JPopupMenu{
-	private static final long serialVersionUID = 8440284457131156267L;
-	
 	private TranslatableText label;
 	
 	public PopupMenu() { this(null); }

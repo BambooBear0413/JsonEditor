@@ -10,9 +10,8 @@ import javax.swing.event.PopupMenuListener;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class TextArea extends JTextArea{
-	private static final long serialVersionUID = -1038244522175133727L;
-
 	private boolean useCustomFont = false;
 	private TranslatableText displayText;
 	private boolean updateTextWhenRepaint;

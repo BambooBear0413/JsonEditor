@@ -8,9 +8,8 @@ import javax.swing.JLabel;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class Label extends JLabel{
-	private static final long serialVersionUID = 1834615599606614377L;
-
 	private TranslatableText text;
 	private boolean useCustomFont = false;
 	

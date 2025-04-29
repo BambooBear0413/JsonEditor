@@ -9,9 +9,8 @@ import javax.swing.JButton;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class Button extends JButton{
-	private static final long serialVersionUID = 3778328896469590819L;
-
 	private TranslatableText text;
 	private boolean useCustomFont;
 	

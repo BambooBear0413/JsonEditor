@@ -6,9 +6,8 @@ import javax.swing.JDialog;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class Dialog extends JDialog{
-	private static final long serialVersionUID = 2535283717998499406L;
-	
 	private TranslatableText title;
 	
 	public Dialog() {

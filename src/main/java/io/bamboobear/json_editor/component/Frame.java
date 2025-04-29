@@ -4,9 +4,8 @@ import javax.swing.JFrame;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class Frame extends JFrame {
-	private static final long serialVersionUID = -4845753413738634748L;
-	
 	private TranslatableText title;
 	
 	public Frame() {

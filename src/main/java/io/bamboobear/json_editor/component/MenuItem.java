@@ -7,9 +7,8 @@ import javax.swing.JMenuItem;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
+@SuppressWarnings("serial")
 public class MenuItem extends JMenuItem{
-	private static final long serialVersionUID = -1873885405693561439L;
-
 	private TranslatableText text;
 
 	public MenuItem()                      { this(null, null); }
