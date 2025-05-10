@@ -24,8 +24,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -57,6 +59,7 @@ public class Main{
 	
 	private static boolean isExperimentalFeaturesEnabled;
 	private static HashSet<Font> fontCache = new HashSet<Font>();
+	private static LookAndFeelInfo defaultLookAndFellInfo;
 	
 	private static MainWindow mainWindow;
 	private static JsonEditor editor;
@@ -70,6 +73,8 @@ public class Main{
 		} catch (Exception e) {
 			ErrorReport.output(e);
 		}
+		
+		defaultLookAndFellInfo = getDefaultAndFeelInfo(UIManager.getLookAndFeel());
 		
 		ErrorReport.init();
 		
@@ -87,6 +92,14 @@ public class Main{
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
 		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURES.getValue();
+		
+		setLAF: try {
+			LookAndFeelInfo info = Settings.LOOK_AND_FEEL.getValue();
+			if(info.getClassName().equals(defaultLookAndFellInfo.getClassName())) break setLAF;
+			UIManager.setLookAndFeel(Settings.LOOK_AND_FEEL.getValue().getClassName());
+		} catch (Exception e) {
+			ErrorReport.output(e);
+		}
 		
 		SwingUtilities.invokeLater(() -> {
 			mainWindow = new MainWindow();
@@ -178,6 +191,21 @@ public class Main{
 		}
 		
 		return jw;
+	}
+	
+	private static LookAndFeelInfo getDefaultAndFeelInfo(LookAndFeel laf) {
+		String className = laf.getClass().getCanonicalName();
+		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+		for(LookAndFeelInfo info : infos) {
+			if(info.getClassName().equals(className)) {
+				return info;
+			}
+		}
+		throw new IllegalStateException("Unknown Look & Feel: " + className);
+	}
+	
+	public static LookAndFeelInfo getDefaultLookAndFeelInfo() {
+		return defaultLookAndFellInfo;
 	}
 	
 	public static void browse(String uri) {
