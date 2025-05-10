@@ -59,7 +59,7 @@ public class SettingsDialog extends Dialog{
 		gbc.weightx = 1;
 		
 		for(Setting<?> setting : Settings.getSettings()) {
-			if(setting.getIsExperimentalFeature() && !Main.isExperimentalFeaturesEnabled()) {
+			if(!setting.isEnabled()) {
 				continue;
 			}
 			

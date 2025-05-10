@@ -1,22 +1,36 @@
 package io.bamboobear.json_editor.settings;
 
-import java.awt.Component;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.Consumer;
+
+import io.bamboobear.json_editor.Main;
+import io.bamboobear.json_editor.component.SettingComponent;
+import io.bamboobear.json_editor.component.SettingsDialog;
+import io.bamboobear.json_editor.lang.TranslatableText;
 
 public abstract class Setting<T> {
-	
-	protected final T defaultValue;
 	protected T value;
-	private boolean experimentalFeature;
 	
-	Setting(T defaultValue) {
-		this.defaultValue = Objects.requireNonNull(defaultValue, "default value is null");
+	protected final TranslatableText label;
+	protected final T defaultValue;
+	private final boolean experimentalFeature;
+	private final boolean requiresRestart;
+	private final ValueChangeHandler<? super T> valueChangeHandler;
+	private final Consumer<? super T> afterValueChange;
+	
+	Setting(SettingProperties<T> properties) {
+		this.label = properties.label;
+		this.defaultValue = Objects.requireNonNull(properties.defaultValue, "default value is null.");
+		this.experimentalFeature = properties.experimentalFeature;
+		this.requiresRestart = properties.requiresRestart;
+		this.valueChangeHandler = properties.valueChangeHandler;
+		this.afterValueChange = properties.afterValueChange;
 	}
 	
 	public T getValue() {
-		return value;
+		return isEnabled() ? value : defaultValue;
 	}
 	
 	/**
@@ -29,40 +43,88 @@ public abstract class Setting<T> {
 	
 	protected abstract void changeValue(Map<String, String> changes);
 	
-	public final void setValue(T value) {		
-		if(!(this.value.equals(value)) && showWarningDialog()) {
-			this.value = (value == null) ? defaultValue : value;
+	public final void setValue(T value) {
+		if(!(this.value.equals(value)) && canApplyChange(value)) {
+			this.value = (value != null) ? value : defaultValue;
 			doAfterChangeValue();
 		}
 	}
 	
-	protected boolean showWarningDialog() {
-		return true;
+	private final boolean canApplyChange(T newValue) {
+		return valueChangeHandler.shouldApply(newValue);
 	}
 	
-	/**
-	 * When invoking the method {@linkplain #setValue(Object)}, this method is invoked
-	 * after the value changes.<br>
-	 * <br>
-	 * <b>WARNING</b><br>
-	 * It is not recommended to perform repainting in this method because
-	 * if the user changes the value of the setting via {@linkplain SettingsDialog},
-	 * it will usually repaint after saving the setting.
-	 */
-	protected void doAfterChangeValue() {
+	private final void doAfterChangeValue() {
+		afterValueChange.accept(this.value);
 	}
 	
 	protected abstract Map<String, String> saveValue();
 	
-	public abstract Component createSettingComponent();
+	public abstract SettingComponent createSettingComponent();
 	
-	@SuppressWarnings("unchecked")
-	public final <S extends Setting<T>> S isExperimentalFeature() {
-		experimentalFeature = true;
-		return (S) this;
+	public final boolean isExperimentalFeature() {
+		return experimentalFeature;
 	}
 	
-	public final boolean getIsExperimentalFeature() {
-		return experimentalFeature;
+	public final boolean requiresRestart() {
+		return requiresRestart;
+	}
+	
+	/**
+	 * WARNING: Don't use this method during the loading phase.
+	 * */
+	public final boolean isEnabled() {
+		return !isExperimentalFeature() || Main.isExperimentalFeaturesEnabled();
+	}
+	
+	public static final class SettingProperties<T> {
+		private static final TranslatableText REQUIRES_RESTART = TranslatableText.create("json_editor.settings.restart");
+		
+		private TranslatableText label;
+		private T defaultValue;
+		private boolean experimentalFeature;
+		private boolean requiresRestart;
+		private ValueChangeHandler<? super T> valueChangeHandler = newValue -> true;
+		private Consumer<? super T> afterValueChange = value -> {};
+		
+		public SettingProperties(TranslatableText label, T defaultValue) {
+			this.label = Objects.requireNonNull(label, "label is null");
+			this.defaultValue = defaultValue;
+		}
+		
+		public SettingProperties<T> isExperimentalFeature() {
+			if(!experimentalFeature) {
+				this.experimentalFeature = true;
+				this.label.isExperimentalFeature();
+			}
+			return this;
+		}
+		
+		public SettingProperties<T> valueChangeHandler(ValueChangeHandler<? super T> valueChangeHandler) {
+			this.valueChangeHandler = Objects.requireNonNullElse(valueChangeHandler, this.valueChangeHandler);
+			return this;
+		}
+		
+		/**
+		 * WARNING: It is not recommended to perform repaint operations within the {@link Consumer},
+		 * as the {@link SettingsDialog} will typically repaint after the settings are saved.
+		 * */
+		public SettingProperties<T> afterValueChange(Consumer<? super T> afterValueChange) {
+			this.afterValueChange = Objects.requireNonNullElse(afterValueChange, this.afterValueChange);
+			return this;
+		}
+		
+		public SettingProperties<T> requiresRestart() {
+			if(!requiresRestart) {
+				this.requiresRestart = true;
+				label.append(TranslatableText.literal(" (%s)", REQUIRES_RESTART));
+			}
+			return this;
+		}
+	}
+	
+	@FunctionalInterface
+	public static interface ValueChangeHandler<T> {
+		boolean shouldApply(T newValue);
 	}
 }

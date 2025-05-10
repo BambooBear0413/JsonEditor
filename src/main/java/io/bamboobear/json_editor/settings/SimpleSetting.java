@@ -5,29 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.SettingComponent;
-import io.bamboobear.json_editor.lang.TranslatableText;
 
 public abstract class SimpleSetting<T> extends Setting<T>{
 	protected final String key;
-	private final TranslatableText text;
-	private final boolean needToRestart;
 	
-	SimpleSetting(String key, T defaultValue, TranslatableText text, boolean needToRestart) {
-		super(defaultValue);
+	SimpleSetting(String key, SettingProperties<T> properties) {
+		super(properties);
 		
 		this.key = key;
-		this.text = text;
-		this.needToRestart = needToRestart;
-	}
-	
-	@Override
-	public T getValue() {
-		if(getIsExperimentalFeature() && !Main.isExperimentalFeaturesEnabled()) {
-			return defaultValue;
-		}
-		return super.getValue();
 	}
 	
 	@Override
@@ -64,8 +50,8 @@ public abstract class SimpleSetting<T> extends Setting<T>{
 	
 	@SuppressWarnings("serial")
 	@Override
-	public Component createSettingComponent() {
-		var c = new SettingComponent(text, needToRestart) {
+	public SettingComponent createSettingComponent() {
+		var c = new SettingComponent(label) {
 			@Override
 			protected Component createValueComponent() {
 				return SimpleSetting.this.createValueComponent();

@@ -13,18 +13,55 @@ import java.util.Properties;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
+import io.bamboobear.json_editor.settings.Setting.SettingProperties;
 
 public class Settings {
 	private static final File file = new File("settings.properties");
 	private static final ArrayList<Setting<?>> settings = new ArrayList<Setting<?>>();
 	private static final Properties unknownProperties = new Properties();
 	
-	public static final LanguageSetting LANGUAGE = registerSetting(new LanguageSetting("language", Languages.DEFAULT_LANGUAGE, createTranslatableText("language")));
-	public static final BooleanSetting EXPERIMENTAL_FEATURES = registerSetting(new BooleanSetting("isExperimentalFeaturesEnabled", false, createTranslatableText("experimental_features"), true));
-	public static final FontSetting FONT = registerSetting(new FontSetting(Main.getFont("Default", 0, 15)));
-	public static final BooleanSetting PRETTY_PRINTING = registerSetting(new BooleanSetting("enablesPrettyPrinting", false, createTranslatableText("pretty_printing")));
-	public static final BooleanSetting HTML_ESCAPING = registerSetting(new BooleanSetting("enablesHtmlEscaping", false, createTranslatableText("html_escaping")));
-	public static final BooleanSetting UNICODE_ESCAPING = registerSetting(new BooleanSetting("enablesUnicodeEscaping", false, createTranslatableText("unicode_escaping").isExperimentalFeature()).isExperimentalFeature());
+	public static final LanguageSetting LANGUAGE = registerSetting(
+			new LanguageSetting(
+					"language",
+					new SettingProperties<>(createTranslatableText("language"), Languages.DEFAULT_LANGUAGE)
+			)
+	);
+	
+	public static final BooleanSetting EXPERIMENTAL_FEATURES = registerSetting(
+			new BooleanSetting(
+					"isExperimentalFeaturesEnabled",
+					new SettingProperties<>(createTranslatableText("experimental_features"), false)
+							.requiresRestart()
+			)
+	);
+	
+	public static final FontSetting FONT = registerSetting(
+			new FontSetting(
+					new SettingProperties<>(createTranslatableText("font"), Main.getFont("Default", 0, 15))
+			)
+	);
+	
+	public static final BooleanSetting PRETTY_PRINTING = registerSetting(
+			new BooleanSetting(
+					"enablesPrettyPrinting",
+					new SettingProperties<>(createTranslatableText("pretty_printing"), false)
+			)
+	);
+	
+	public static final BooleanSetting HTML_ESCAPING = registerSetting(
+			new BooleanSetting(
+					"enablesHtmlEscaping",
+					new SettingProperties<>(createTranslatableText("html_escaping"), false)
+			)
+	);
+	
+	public static final BooleanSetting UNICODE_ESCAPING = registerSetting(
+			new BooleanSetting(
+					"enablesUnicodeEscaping",
+					new SettingProperties<>(createTranslatableText("unicode_escaping"), false)
+							.isExperimentalFeature()
+			)
+	);
 	
 	public static void loadSettings() {
 		try(FileReader fr = new FileReader(file)) {
@@ -52,7 +89,7 @@ public class Settings {
 		}
 		
 		for(Setting<?> setting : settings) {
-			if(!EXPERIMENTAL_FEATURES.getValue() && setting.getIsExperimentalFeature()) {
+			if(!EXPERIMENTAL_FEATURES.getValue() && setting.isExperimentalFeature()) {
 				setting.restoreDefault();
 			}
 		}

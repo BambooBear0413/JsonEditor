@@ -1,11 +1,9 @@
 package io.bamboobear.json_editor.settings;
 
 import java.awt.Component;
-import java.awt.event.ItemEvent;
 
-import io.bamboobear.json_editor.component.ComboBox;
 import io.bamboobear.json_editor.component.ComboBoxItem;
-import io.bamboobear.json_editor.component.SettingsDialog;
+import io.bamboobear.json_editor.component.SettingComponent.SettingComboBox;
 import io.bamboobear.json_editor.lang.Language;
 import io.bamboobear.json_editor.lang.LanguageLoadingException;
 import io.bamboobear.json_editor.lang.Languages;
@@ -13,23 +11,19 @@ import io.bamboobear.json_editor.lang.TranslatableText;
 
 public class LanguageSetting extends SimpleSetting<Language>{
 
-	LanguageSetting(String key, Language defaultValue, TranslatableText text) {
-		super(key, defaultValue, text, false);
+	LanguageSetting(String key, SettingProperties<Language> properties) {
+		super(key, properties);
 	}
 
 	@Override
 	protected Language getValueFromString(String stringValue) {
-		if(stringValue == null) {
-			return defaultValue;
-		}
-		stringValue = stringValue.toLowerCase();
-		Language lang;
+		if(stringValue == null) return defaultValue;
+		
+		Language lang = null;
 		try {
-			lang = Languages.getLanguage(stringValue);
-		} catch (LanguageLoadingException e) {
-			return defaultValue;
-		}
-		return lang == null ? defaultValue : lang;
+			lang = Languages.getLanguage(stringValue.toLowerCase());
+		} catch (LanguageLoadingException e) {}
+		return (lang == null) ? defaultValue : lang;
 	}
 	
 	@Override
@@ -39,13 +33,7 @@ public class LanguageSetting extends SimpleSetting<Language>{
 
 	@Override
 	protected Component createValueComponent() {
-		ComboBox comboBox = new ComboBox(createComboBoxItems());
-		comboBox.setValue(value.id());
-		comboBox.addItemListener(e -> {
-			if(e.getStateChange() == ItemEvent.SELECTED) {
-				SettingsDialog.addSettingChange(getKey(), comboBox.getValue());
-			}
-		});
+		SettingComboBox comboBox = new SettingComboBox(createComboBoxItems(), getKey(), value.id());
 		return comboBox;
 	}
 	

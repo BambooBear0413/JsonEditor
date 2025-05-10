@@ -52,7 +52,7 @@
 	"json_editor.popup.copy_as_text": "Copy the JSON Element As Plain Text",
 	"json_editor.popup.copy_key_value_pair": "Copy the Key-Value Pair",
 	"json_editor.settings.title": "Settings",
-	"json_editor.settings.restart": "Need to Restart",
+	"json_editor.settings.restart": "Requires Restart",
 	"json_editor.settings.language": "Language",
 	"json_editor.settings.experimental_features": "Experimental Features",
 	"json_editor.settings.font": "Font",

@@ -4,9 +4,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -14,11 +11,8 @@ import java.util.Properties;
 import javax.swing.JPanel;
 
 import io.bamboobear.json_editor.Main;
-import io.bamboobear.json_editor.component.ComboBox;
 import io.bamboobear.json_editor.component.ComboBoxItem;
 import io.bamboobear.json_editor.component.SettingComponent;
-import io.bamboobear.json_editor.component.SettingsDialog;
-import io.bamboobear.json_editor.component.TextField;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 public class FontSetting extends Setting<Font>{
@@ -28,8 +22,8 @@ public class FontSetting extends Setting<Font>{
 	private static final String FONT_FAMILY = "fontFamily";
 	private static final String FONT_SIZE = "fontSize";
 	
-	FontSetting(Font defaultValue) {
-		super(defaultValue);
+	FontSetting(SettingProperties<Font> properties) {
+		super(properties);
 	}
 	
 	@Override
@@ -90,39 +84,33 @@ public class FontSetting extends Setting<Font>{
 
 	@SuppressWarnings("serial")
 	@Override
-	public Component createSettingComponent() {
-		var c = new SettingComponent(TranslatableText.create("json_editor.settings.font")) {
+	public SettingComponent createSettingComponent() {
+		var c = new SettingComponent(label) {
 			@Override
 			protected Component createValueComponent() {
 				JPanel panel = new JPanel(new GridLayout(1, 2, 5, 5));
 				
-				ComboBox comboBox = new ComboBox(createComboBoxItems());
-				comboBox.setValue(value.getFamily());
-				comboBox.addItemListener(e -> {
-					if(e.getStateChange() == ItemEvent.SELECTED) {
-						SettingsDialog.addSettingChange(FONT_FAMILY, comboBox.getValue());
-					}
-				});
-				panel.add(comboBox);
+				SettingComboBox fontFamily = new SettingComboBox(createComboBoxItems(), FONT_FAMILY, value.getFamily());
+				panel.add(fontFamily);
 				if(!Main.isExperimentalFeaturesEnabled()) {
-					comboBox.setEnabled(false);
-					comboBox.setToolTipText(TranslatableText.create("json_editor.experimental_feature").getDisplayText());
+					fontFamily.setEnabled(false);
+					fontFamily.setToolTipText(TranslatableText.create("json_editor.experimental_feature").getDisplayText());
 				}
 				
-				TextField textField = new TextField(String.valueOf(value.getSize()));
-				textField.addFocusListener(new FocusAdapter() {
-					@Override
-					public void focusLost(FocusEvent e) {
-						String text = textField.getText();
-						try {
-							String size = String.valueOf(correctFontSizeValue(Integer.parseInt(text)));
-							textField.setText(size);
-							SettingsDialog.addSettingChange(FONT_SIZE, size);
-						} catch (NumberFormatException exception) {
+				
+				SettingTextField fontSize = new SettingTextField(FONT_SIZE, String.valueOf(value.getSize()),
+						textField -> {
+							String text = textField.getText();
+							try {
+								text = String.valueOf(correctFontSizeValue(Integer.parseInt(text)));
+							} catch (NumberFormatException e) {
+								text = String.valueOf(value.getSize());
+							}
+							textField.setText(text);
+							return text;
 						}
-					}
-				});
-				panel.add(textField);
+				);
+				panel.add(fontSize);
 				
 				return panel;
 			}
