@@ -87,12 +87,6 @@ public class Settings {
 			});
 		} catch (IOException e) {
 		}
-		
-		for(Setting<?> setting : settings) {
-			if(!EXPERIMENTAL_FEATURES.getValue() && setting.isExperimentalFeature()) {
-				setting.restoreDefault();
-			}
-		}
 	}
 	
 	public static boolean save(Map<String, String> changes) {
