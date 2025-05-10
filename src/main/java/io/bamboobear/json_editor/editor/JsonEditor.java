@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -495,7 +494,7 @@ public class JsonEditor extends JPanel{
 		private static void doValueChange(JsonPrimitiveComponent<?> json, String value) {
 			switch(json) {
 			case JsonBooleanComponent jbc -> jbc.setValue(Boolean.valueOf(value));
-			case JsonNumberComponent  jnc -> jnc.setValue(new BigDecimal(value));
+			case JsonNumberComponent  jnc -> jnc.setValueFromString(value);
 			default                       -> json.setValue(new JsonPrimitive(value));
 			}
 		}

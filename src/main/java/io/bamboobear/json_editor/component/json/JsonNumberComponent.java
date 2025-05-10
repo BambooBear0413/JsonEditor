@@ -28,6 +28,10 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 	public void setValue(Number value) {
 		valueComponent.setValue(String.valueOf(value));
 	}
+	
+	public void setValueFromString(String value) {
+		valueComponent.setValue(value);
+	}
 
 	@Override
 	public boolean setValue(JsonPrimitive value) {
