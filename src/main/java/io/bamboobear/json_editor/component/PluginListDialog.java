@@ -170,6 +170,7 @@ public class PluginListDialog extends Dialog {
 			pluginDescription = new TextArea();
 			pluginDescription.setBackground(getBackground());
 			pluginDescription.setLineWrap(true);
+			pluginDescription.setEditable(false);
 			add(pluginDescription, gbcb.clone().setGridLocation(gridxForComponent, gridy++).setWeight(weightXForComponent, weightYForDescription).build());
 		}
 		
