@@ -3,14 +3,19 @@ package io.bamboobear.json_editor.plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -111,6 +116,8 @@ public abstract class Plugin {
 	
 	public abstract Map<String, JsonElement> loadLanguages();
 	
+	public abstract void loadLookAndFeel();
+	
 	static final Plugin createDirectoryPlugin(String id, JsonObject pluginJson, File file) {
 		return new DirectoryPlugin(id, pluginJson, file);
 	}
@@ -189,6 +196,43 @@ public abstract class Plugin {
 			}
 			return map;
 		}
+		
+		@Override
+		public void loadLookAndFeel() {
+			File lafDir = new File(dir, "look_and_feel");
+			if(!lafDir.isDirectory()) return;
+			
+			URL[] urls = Stream.of(lafDir.listFiles())
+					.filter(file -> file.getName() != "look_and_feel.json")
+					.map((file -> {
+						try {
+							return file.toURI().toURL();
+						} catch (MalformedURLException e) {
+							return null;
+						}
+					}))
+					.filter(url -> url != null)
+					.toArray(URL[]::new);
+			
+			URLClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+			
+			JsonFile json = new JsonFile(new File(lafDir, "look_and_feel.json"));
+			JsonArray array = null;
+			try {
+				array = json.load().getAsJsonArray();
+			} catch (Exception e) { //TODO loading warning
+				e.printStackTrace();
+				return;
+			}
+			
+			JsonObject[] objects = JsonArrayUtilities.getJsonObjects(array, object -> JsonObjectUtilities.isString(object, "name") && JsonObjectUtilities.isString(object, "class_name"));
+			for(JsonObject object : objects) {
+				String name = object.get("name").getAsString();
+				String className = object.get("class_name").getAsString();
+				
+				LookAndFeelLoader.installLookAndFeel(name, className, loader);
+			}
+		}
 	}
 	
 	private static class ZipPlugin extends Plugin {
@@ -237,6 +281,11 @@ public abstract class Plugin {
 			}
 			
 			return map;
+		}
+		
+		@Override
+		public void loadLookAndFeel() { // TODO this method currently have no implement 
+			System.err.println("ZipPlugin.loadLookAndFeel() is currently not supported");
 		}
 		
 		private InputStream getEntryInputStream(ZipFile zipFile, ZipEntry entry) throws IOException {

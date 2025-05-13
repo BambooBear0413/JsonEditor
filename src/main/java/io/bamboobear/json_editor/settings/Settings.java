@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.Languages;
@@ -70,15 +69,17 @@ public class Settings {
 			new LookAndFeelSetting(
 					"lookAndFeel",
 					new SettingProperties<>(createTranslatableText("look_and_feel"), Main.getDefaultLookAndFeelInfo())
+							.valueChangeHandler(info -> {
+								// TODO show warning dialog
+								
+								return Main.setLookAndFeel(info.getClassName());
+							})
 							.afterValueChange(info -> {
 								try {
-									UIManager.setLookAndFeel(info.getClassName());
 									var mainWindow = Main.getMainWindow();
 									var dialogs = mainWindow.getOwnedWindows();
 									SwingUtilities.updateComponentTreeUI(mainWindow);
-									for(var dialog : dialogs) {
-										SwingUtilities.updateComponentTreeUI(dialog);
-									}
+									for(var dialog : dialogs) SwingUtilities.updateComponentTreeUI(dialog);
 								} catch (Exception e) {}
 							})
 			)

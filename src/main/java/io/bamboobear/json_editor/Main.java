@@ -26,6 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.MenuEvent;
@@ -46,6 +47,7 @@ import io.bamboobear.json_editor.editor.JsonEditor;
 import io.bamboobear.json_editor.lang.Language;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
+import io.bamboobear.json_editor.plugin.LookAndFeelLoader;
 import io.bamboobear.json_editor.plugin.Plugin;
 import io.bamboobear.json_editor.plugin.PluginLoader;
 import io.bamboobear.json_editor.plugin.Plugins;
@@ -89,14 +91,16 @@ public class Main{
 		load(PluginLoader::loadPlugins, dialog, "Loading plugins...");
 		for(Plugin plugin : Plugins.getPlugins()) {
 			load(Languages::loadLanguage, plugin, dialog, "Loading language files in plugin \"%s\"...".formatted(plugin.id()));
+			load(Plugin::loadLookAndFeel, plugin, dialog, "Loading look and feel in plugin \"%s\"...".formatted(plugin.id()));
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
 		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURES.getValue();
 		
 		setLAF: try {
 			LookAndFeelInfo info = Settings.LOOK_AND_FEEL.getValue();
-			if(info.getClassName().equals(defaultLookAndFellInfo.getClassName())) break setLAF;
-			UIManager.setLookAndFeel(Settings.LOOK_AND_FEEL.getValue().getClassName());
+			String className = info.getClassName();
+			if(className.equals(defaultLookAndFellInfo.getClassName())) break setLAF;
+			Main.setLookAndFeel(className);
 		} catch (Exception e) {
 			ErrorReport.output(e);
 		}
@@ -206,6 +210,33 @@ public class Main{
 	
 	public static LookAndFeelInfo getDefaultLookAndFeelInfo() {
 		return defaultLookAndFellInfo;
+	}
+	
+	public static boolean setLookAndFeel(String className) {
+		Class<?> clazz = LookAndFeelLoader.getLookAndFeelClass(className);
+		if(clazz == null) {
+			try {
+				UIManager.setLookAndFeel(className);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
+		try {
+			LookAndFeel laf = (LookAndFeel) clazz.getConstructor().newInstance();
+			UIManager.setLookAndFeel(laf);
+
+			UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+			if(defaults.get("ClassLoader") == null)
+				defaults.put("ClassLoader", clazz.getClassLoader());
+			
+			return true;
+		} catch (Throwable e) { // TODO show warning dialog
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public static void browse(String uri) {
