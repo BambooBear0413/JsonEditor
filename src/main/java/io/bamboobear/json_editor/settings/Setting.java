@@ -3,6 +3,7 @@ package io.bamboobear.json_editor.settings;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import io.bamboobear.json_editor.Main;
@@ -19,6 +20,7 @@ public abstract class Setting<T> {
 	private final boolean requiresRestart;
 	private final ValueChangeHandler<? super T> valueChangeHandler;
 	private final Consumer<? super T> afterValueChange;
+	private final BooleanSupplier isEnabled;
 	
 	Setting(SettingProperties<T> properties) {
 		this.label = properties.label;
@@ -27,6 +29,7 @@ public abstract class Setting<T> {
 		this.requiresRestart = properties.requiresRestart;
 		this.valueChangeHandler = properties.valueChangeHandler;
 		this.afterValueChange = properties.afterValueChange;
+		this.isEnabled = properties.isEnabled;
 	}
 	
 	public T getValue() {
@@ -74,7 +77,7 @@ public abstract class Setting<T> {
 	 * WARNING: Don't use this method during the loading phase.
 	 * */
 	public final boolean isEnabled() {
-		return !isExperimentalFeature() || Main.isExperimentalFeaturesEnabled();
+		return isEnabled.getAsBoolean() && (!isExperimentalFeature() || Main.isExperimentalFeaturesEnabled());
 	}
 	
 	public static final class SettingProperties<T> {
@@ -86,6 +89,7 @@ public abstract class Setting<T> {
 		private boolean requiresRestart;
 		private ValueChangeHandler<? super T> valueChangeHandler = newValue -> true;
 		private Consumer<? super T> afterValueChange = value -> {};
+		private BooleanSupplier isEnabled = () -> true;
 		
 		public SettingProperties(TranslatableText label, T defaultValue) {
 			this.label = Objects.requireNonNull(label, "label is null");
@@ -119,6 +123,11 @@ public abstract class Setting<T> {
 				this.requiresRestart = true;
 				label.append(TranslatableText.literal(" (%s)", REQUIRES_RESTART));
 			}
+			return this;
+		}
+		
+		public SettingProperties<T> isEnabled(BooleanSupplier isEnabled) {
+			this.isEnabled = Objects.requireNonNullElse(isEnabled, this.isEnabled);
 			return this;
 		}
 	}
