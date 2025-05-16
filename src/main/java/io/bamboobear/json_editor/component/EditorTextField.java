@@ -25,24 +25,15 @@ public final class EditorTextField extends TextField implements EditorInputField
 	private final JsonComponent<?> json;
 	private final Type type;
 	
-	public EditorTextField(JsonComponent<?> json, Type type) {
-		this("", json, type);
-	}
+	public EditorTextField(JsonComponent<?> json, Type type) { this("", json, type); }
 	
 	public EditorTextField(String value, JsonComponent<?> json, Type type) {
 		super(value == null ? "" : value);
 		beforeChange = getText();
 		
 		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				beforeChange = getValue();
-			}
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				fireTextChange(false);
-			}
+			@Override public void focusGained(FocusEvent e) { beforeChange = getValue(); }
+			@Override public void focusLost(FocusEvent e)   { fireTextChange(false); }
 		});
 		this.json = Objects.requireNonNull(json, "json component is null");
 		this.type = Objects.requireNonNull(type, "type is null");
@@ -65,10 +56,7 @@ public final class EditorTextField extends TextField implements EditorInputField
 		}
 	}
 	
-	@Override
-	public JComponent getAsComponent() {
-		return this;
-	}
+	@Override public JComponent getAsComponent() { return this; }
 	
 	@Override
 	public void paste() {
@@ -84,15 +72,10 @@ public final class EditorTextField extends TextField implements EditorInputField
 		fireTextChange(true);
 	}
 	
-	@Override
-	public void setText(String t) {
-		super.setText(translateInputValue(t));
-	}
+	@Override public void setText(String t) { super.setText(translateInputValue(t)); }
 	
 	@Override
-	public void setValue(String value) {
-		this.setText(value);
-	}
+	public void setValue(String value) { this.setText(value); }
 	
 	@Override
 	public String getValue() {
@@ -100,14 +83,9 @@ public final class EditorTextField extends TextField implements EditorInputField
 		return translateOutputValue(str);
 	}
 	
-	@Override
-	public Type getType() {
-		return type;
-	}
+	@Override public Type getType() { return type; }
 	
-	public JsonComponent<?> getJsonComponent() {
-		return json;
-	}
+	public JsonComponent<?> getJsonComponent() { return json; }
 	
 	@Override
 	public Color getBackground() {
@@ -127,10 +105,7 @@ public final class EditorTextField extends TextField implements EditorInputField
 		}
 	}
 	
-	@Override
-	public Color getCaretColor() {
-		return getForeground();
-	}
+	@Override public Color getCaretColor() { return getForeground(); }
 	
 	private State getState() {
 		return switch(type) {
@@ -151,9 +126,7 @@ public final class EditorTextField extends TextField implements EditorInputField
 	
 	private void doParentRepaint() {
 		Container parent = getParent();
-		if(parent != null) {
-			parent.repaint();
-		}
+		if(parent != null) parent.repaint();
 	}
 	
 	private void fireTextChange(boolean repaint) {
@@ -162,11 +135,7 @@ public final class EditorTextField extends TextField implements EditorInputField
 			addChange(json, beforeChange, afterChange);
 			beforeChange = afterChange;
 			
-			if(repaint) {
-				SwingUtilities.invokeLater(() -> {
-					doParentRepaint();
-				});
-			}
+			if(repaint) SwingUtilities.invokeLater(() -> doParentRepaint());
 		}
 	}
 }

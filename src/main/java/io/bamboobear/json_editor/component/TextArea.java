@@ -17,6 +17,7 @@ public class TextArea extends JTextArea{
 	private boolean updateTextWhenRepaint;
 	
 	public TextArea()                      { this(""); }
+	
 	public TextArea(String text)           { this(text, true); }
 	public TextArea(TranslatableText text) { this(text, true); }
 	
@@ -29,9 +30,7 @@ public class TextArea extends JTextArea{
 	
 	protected TextArea(String text, boolean popupMenu) {
 		super(text);
-		if(popupMenu) {
-			setComponentPopupMenu(createPopupMenu());
-		}
+		if(popupMenu) setComponentPopupMenu(createPopupMenu());
 	}
 	
 	private PopupMenu createPopupMenu() {
@@ -57,13 +56,8 @@ public class TextArea extends JTextArea{
 				cutItem.setEnabled(b);
 			}
 			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
+			@Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+			@Override public void popupMenuCanceled(PopupMenuEvent e) {}
 		});
 		
 		return popupMenu;
@@ -77,9 +71,7 @@ public class TextArea extends JTextArea{
 	
 	public void setEditable(boolean b) {
 		super.setEditable(b);
-		if(displayText != null) {
-			updateTextWhenRepaint = !isEditable();
-		}
+		if(displayText != null) updateTextWhenRepaint = !isEditable();
 	}
 	
 	public void setDisplayText(TranslatableText text) {
@@ -87,9 +79,7 @@ public class TextArea extends JTextArea{
 		updateTextWhenRepaint = !isEditable();
 	}
 	
-	public TranslatableText getDisplayText() {
-		return displayText;
-	}
+	public TranslatableText getDisplayText() { return displayText; }
 	
 	@Override
 	public void setFont(Font f) {
@@ -97,18 +87,14 @@ public class TextArea extends JTextArea{
 		super.setFont(f);
 	}
 	
-	@Override
-	public Font getFont() {
-		return useCustomFont ? super.getFont() : Main.getFont();
-	}
+	@Override public Font getFont() { return useCustomFont ? super.getFont() : Main.getFont(); }
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		if(this.displayText != null && updateTextWhenRepaint) {
 			String displayText = this.displayText.getDisplayText();
-			if(!super.getText().equals(displayText)) {
-				super.setText(displayText);
-			}
+			
+			if(!super.getText().equals(displayText)) super.setText(displayText);
 		}
 		super.paintComponent(g);
 	}

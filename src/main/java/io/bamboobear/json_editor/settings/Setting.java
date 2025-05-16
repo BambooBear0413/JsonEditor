@@ -32,46 +32,33 @@ public abstract class Setting<T> {
 		this.isEnabled = properties.isEnabled;
 	}
 	
-	public T getValue() {
-		return isEnabled() ? value : defaultValue;
-	}
+	public T getValue() { return isEnabled() ? value : defaultValue; }
 	
 	/**
 	 * @return the array of string which contains the keys of the properties that just be read.*/
 	protected abstract String[] loadValue(Properties properties);
 	
-	protected final void restoreDefault() {
-		setValue(defaultValue);
-	}
+	protected final void restoreDefault() { setValue(defaultValue); }
 	
 	protected abstract void changeValue(Map<String, String> changes);
 	
 	public final void setValue(T value) {
-		if(!(this.value.equals(value)) && canApplyChange(value)) {
-			this.value = (value != null) ? value : defaultValue;
-			doAfterChangeValue();
-		}
+		if(this.value.equals(value) || !canApplyChange(value)) return;
+		
+		this.value = (value != null) ? value : defaultValue;
+		doAfterChangeValue();
 	}
 	
-	private final boolean canApplyChange(T newValue) {
-		return valueChangeHandler.shouldApply(newValue);
-	}
+	private final boolean canApplyChange(T newValue) { return valueChangeHandler.shouldApply(newValue); }
 	
-	private final void doAfterChangeValue() {
-		afterValueChange.accept(this.value);
-	}
+	private final void doAfterChangeValue() { afterValueChange.accept(this.value); }
 	
 	protected abstract Map<String, String> saveValue();
 	
 	public abstract SettingComponent createSettingComponent();
 	
-	public final boolean isExperimentalFeature() {
-		return experimentalFeature;
-	}
-	
-	public final boolean requiresRestart() {
-		return requiresRestart;
-	}
+	public final boolean isExperimentalFeature() { return experimentalFeature; }
+	public final boolean requiresRestart()       { return requiresRestart;     }
 	
 	/**
 	 * WARNING: Don't use this method during the loading phase.

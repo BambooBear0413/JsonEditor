@@ -10,16 +10,10 @@ import io.bamboobear.json_editor.lang.TranslatableText;
 public class Dialog extends JDialog{
 	private TranslatableText title;
 	
-	public Dialog() {
-	}
+	public Dialog() {}
 	
-	public Dialog(Frame owner) {
-		super(owner);
-	}
-	
-	public Dialog(Frame owner, boolean modal) {
-		super(owner, modal);
-	}
+	public Dialog(Frame owner)                { super(owner);        }
+	public Dialog(Frame owner, boolean modal) { super(owner, modal); }
 	
 	public Dialog(Frame owner, TranslatableText title) {
 		super(owner);
@@ -36,12 +30,7 @@ public class Dialog extends JDialog{
 		refreshTitle();
 	}
 	
-	public void refreshTitle() {
-		super.setTitle(getTitle());
-	}
+	public void refreshTitle() { super.setTitle(getTitle()); }
 	
-	@Override
-	public String getTitle() {
-		return title == null ? super.getTitle() : title.getDisplayText();
-	}
+	@Override public String getTitle() { return title == null ? super.getTitle() : title.getDisplayText(); }
 }

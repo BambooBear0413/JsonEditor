@@ -16,7 +16,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import io.bamboobear.json_editor.Main;
@@ -65,43 +67,27 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		repaint();
 	}
 	
-	public final Label getIconLabel() {
-		return icon;
-	}
+	public final Label getIconLabel() { return icon; }
 	
-	public final String getKey() {
-		return keyField.getValue();
-	}
+	public final String getKey() { return keyField.getValue(); }
 	
 	public abstract T getJsonElement();
 	
-	public final void setKey(String key) {
-		keyField.setValue(key);
-	}
+	public final void setKey(String key) { keyField.setValue(key); }
 	
-	public final void setKeyDisplayText(TranslatableText text) {
-		keyField.setDisplayText(text);
-	}
+	public final void setKeyDisplayText(TranslatableText text) { keyField.setDisplayText(text); }
 	
 	public abstract boolean setValue(JsonElement value);
 	
 	public abstract String getTypeID();
 	
-	public final TranslatableText getTypeDisplayName() {
-		return getTypeDisplayName(getTypeID());
-	}
+	public final TranslatableText getTypeDisplayName() { return getTypeDisplayName(getTypeID()); }
 	
-	public static TranslatableText getTypeDisplayName(String typeID) {
-		return TranslatableText.create("json_editor.type." + typeID);
-	}
+	public static TranslatableText getTypeDisplayName(String typeID) { return TranslatableText.create("json_editor.type." + typeID); }
 	
-	public void setRemovable(boolean removable) {
-		removeButton.setEnabled(removable);
-	}
+	public void setRemovable(boolean removable) { removeButton.setEnabled(removable); }
 	
-	public boolean isRemovable() {
-		return removeButton.isEnabled();
-	}
+	public boolean isRemovable() { return removeButton.isEnabled(); }
 	
 	protected void setParentElement(JsonCompositeComponent<?> parent) {
 		this.parent = parent;
@@ -114,9 +100,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		else if(parent instanceof JsonArrayComponent) keyField.setDisplayText(getTypeDisplayName());
 	}
 	
-	public final JsonCompositeComponent<?> getParentElement() {
-		return parent;
-	}
+	public final JsonCompositeComponent<?> getParentElement() { return parent; }
 	
 	public abstract JsonCompositeComponent<?> getRootElement();
 	
@@ -148,16 +132,16 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 	}
 	
 	public static final String getTypeIDFromJsonElement(JsonElement json) {
-		if(json.isJsonObject()) return JsonObjectComponent.TYPE_ID;
-		if(json.isJsonArray()) return JsonArrayComponent.TYPE_ID;
+		return switch(json) {
+		case JsonObject object -> JsonObjectComponent.TYPE_ID;
+		case JsonArray  array  -> JsonArrayComponent.TYPE_ID;
 		
-		if(json.isJsonPrimitive()) {
-			JsonPrimitive jp = json.getAsJsonPrimitive();
-			if(jp.isBoolean()) return JsonBooleanComponent.TYPE_ID;
-			if(jp.isNumber()) return JsonNumberComponent.TYPE_ID;
-			return JsonStringComponent.TYPE_ID;
-		}
-		return JsonNullComponent.TYPE_ID;
+		case JsonPrimitive jp when jp.isBoolean() -> JsonBooleanComponent.TYPE_ID;
+		case JsonPrimitive jp when jp.isNumber()  -> JsonNumberComponent.TYPE_ID;
+		case JsonPrimitive jp                     -> JsonStringComponent.TYPE_ID;
+		
+		default -> JsonNullComponent.TYPE_ID;
+		};
 	}
 	
 	public static enum State {
@@ -174,13 +158,8 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 			this.background = background;
 		}
 		
-		public Color getForeground() {
-			return foreground;
-		}
-		
-		public Color getBackground() {
-			return background;
-		}
+		public Color getForeground() { return foreground; }
+		public Color getBackground() { return background; }
 	}
 	
 	class ComponentLayout implements LayoutManager {

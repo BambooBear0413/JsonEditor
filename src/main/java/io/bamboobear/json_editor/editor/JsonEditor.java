@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -52,18 +54,20 @@ public class JsonEditor extends JPanel{
 	private static final int ICON_SIZE = 16;
 	private static final int HINTS = Image.SCALE_SMOOTH;
 	
-	private static final ImageIcon undoIcon = ResourceImageLoader.getImageIcon("undo.png", ICON_SIZE, ICON_SIZE, HINTS);
-	private static final ImageIcon redoIcon = ResourceImageLoader.getImageIcon("redo.png", ICON_SIZE, ICON_SIZE, HINTS);
+	private static final ImageIcon UNDO_ICON = ResourceImageLoader.getImageIcon("undo.png", ICON_SIZE, ICON_SIZE, HINTS);
+	private static final ImageIcon REDO_ICON = ResourceImageLoader.getImageIcon("redo.png", ICON_SIZE, ICON_SIZE, HINTS);
+	
+	private static final Executor LOAD_FILE_THREAD = Executors.newSingleThreadExecutor();
 	
 	static {
 		toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		
-		undoButton = new Button(undoIcon);
+		undoButton = new Button(UNDO_ICON);
 		undoButton.addActionListener(e -> Main.getEditor().undo());
 		toolBar.add(undoButton);
 		
-		redoButton = new Button(redoIcon);
+		redoButton = new Button(REDO_ICON);
 		redoButton.addActionListener(e -> Main.getEditor().redo());
 		toolBar.add(redoButton);
 	}
@@ -84,26 +88,20 @@ public class JsonEditor extends JPanel{
 		body.setViewportView(rootComponent);
 	}
 	
-	public void load() {
-		load(null);
-	}
+	public void load() { load(null); }
 	
 	public void openFile() {
-		if(!close()) {
-			return;
-		}
+		if(!close()) return;
+		
 		File selectedFile = chooseFileToBeOpened();
-		if(selectedFile == null || !selectedFile.exists()) {
-			return;
-		}
-		Thread loadFile = new Thread(() -> load(new JsonFile(selectedFile)));
-		loadFile.start();
+		if(selectedFile == null || !selectedFile.exists()) return;
+		
+		LOAD_FILE_THREAD.execute(() -> load(new JsonFile(selectedFile)));
 	}
 	
 	public void newFile() {
-		if(!close()) {
-			return;
-		}
+		if(!close()) return;
+		
 		load();
 	}
 	
@@ -149,25 +147,17 @@ public class JsonEditor extends JPanel{
 		}
 	}
 	
-	public boolean saveFile() {
-		return save(false);
-	}
-	
-	public boolean saveAsNewFile() {
-		return save(true);
-	}
+	public boolean saveFile()      { return save(false); }
+	public boolean saveAsNewFile() { return save(true);  }
 	
 	private boolean save(boolean saveAsNewFile) {
-		boolean result = false;
-		
 		JsonElement root = getRootComponent().getJsonElement();
 		
 		try {
 			if(this.file == null || saveAsNewFile) {
 				File f = chooseFileToBeSaved();
-				if(f == null) {
-					return result;
-				}
+				if(f == null) return false;
+				
 				this.file = new JsonFile(f);
 				updateTitle();
 			}
@@ -175,23 +165,17 @@ public class JsonEditor extends JPanel{
 			file.save(root);
 			changesRecord.save();
 			lastModified = file.lastModified();
-			result = true;
+			return true;
 		} catch (Exception e) {
 			OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.failed_to_save_file", file.getFilePath()),
 					TranslatableText.create("json_editor.error.failed_to_save_file.title"));
 			ErrorReport.output(e);
+			return false;
 		}
-		
-		return result;
 	}
 	
-	public File chooseFileToBeOpened() {
-		return chooseFile(JFileChooser::showOpenDialog);
-	}
-	
-	public File chooseFileToBeSaved() {
-		return chooseFile(JFileChooser::showSaveDialog);
-	}
+	public File chooseFileToBeOpened() { return chooseFile(JFileChooser::showOpenDialog); }
+	public File chooseFileToBeSaved()  { return chooseFile(JFileChooser::showSaveDialog); }
 	
 	private File chooseFile(BiFunction<JFileChooser, Component, Integer> func) {
 		JFileChooser chooser = new JFileChooser();
@@ -208,9 +192,8 @@ public class JsonEditor extends JPanel{
 		
 		int result = func.apply(chooser, Main.getMainWindow());
 		
-		if (result != JFileChooser.APPROVE_OPTION) {
-			return null;
-		}
+		if (result != JFileChooser.APPROVE_OPTION) return null;
+		
 		File selectedFile = chooser.getSelectedFile();
 		if(chooser.getFileFilter() == jsonFileFilter && !selectedFile.getName().endsWith(".json")) {
 			return new File(selectedFile.getPath() + ".json");
@@ -219,9 +202,7 @@ public class JsonEditor extends JPanel{
 	}
 	
 	public boolean close() {
-		if(hasSaved()) {
-			return true;
-		}
+		if(hasSaved()) return true;
 		
 		int result = JOptionPane.showConfirmDialog(Main.getMainWindow(),
 				((this.file == null) ? TranslatableText.create("json_editor.save_file.no_file") : TranslatableText.create("json_editor.save_file.file", file.getFilePath())).getDisplayText(), 
@@ -241,31 +222,18 @@ public class JsonEditor extends JPanel{
 	
 	public JsonCompositeComponent<?> getRootComponent() {
 		Component c = body.getViewport().getView();
-		if(c instanceof JsonCompositeComponent<?> jcc) {
-			return jcc;
-		}
+		if(c instanceof JsonCompositeComponent<?> jcc) return jcc;
+		
 		throw new IllegalStateException();
 	}
 	
-	public void undo() {
-		changesRecord.undo();
-	}
+	public void undo() { changesRecord.undo(); }
+	public void redo() { changesRecord.redo(); }
 	
-	public void redo() {
-		changesRecord.redo();
-	}
+	public boolean canDoUndo() { return changesRecord.canDoUndo(); }
+	public boolean canDoRedo() { return changesRecord.canDoRedo(); }
 	
-	public boolean canDoUndo() {
-		return changesRecord.canDoUndo();
-	}
-	
-	public boolean canDoRedo() {
-		return changesRecord.canDoRedo();
-	}
-	
-	public void removeAllChange() {
-		changesRecord.removeAllRecord();
-	}
+	public void removeAllChange() { changesRecord.removeAllRecord(); }
 	
 	public void addKeyFieldChange(JsonComponent<?> json, String before, String after) {
 		changesRecord.addChange(ChangeType.KEY_FIELD_CHANGE, json, before, after);
@@ -296,25 +264,18 @@ public class JsonEditor extends JPanel{
 		}
 		
 		private void save() {
-			if(!undoChanges.isEmpty()) {
-				savingPoint = undoChanges.getLast();
-			} else {
-				savingPoint = null;
-			}
+			savingPoint = (undoChanges.isEmpty()) ? null : undoChanges.getLast();
 		}
 		
 		public boolean hasUnsavedChanges() {
-			if(savingPoint == null) {
-				return undoChanges.isEmpty();
-			}
-			return savingPoint == undoChanges.getLast();
+			return (savingPoint == null) ? undoChanges.isEmpty() : (savingPoint == undoChanges.getLast());
 		}
 		
 		public synchronized void addChange(ChangeType type, Object...args) throws IllegalArgumentException {
 			Change cr = checkArguments(type, args);
-			if(undoChanges.size() == LIMIT) {
-				undoChanges.removeFirst();
-			}
+			
+			if(undoChanges.size() == LIMIT) undoChanges.removeFirst();
+			
 			undoChanges.add(cr);
 			redoChanges.clear();
 			updateButtons();
@@ -336,13 +297,8 @@ public class JsonEditor extends JPanel{
 			updateButtons();
 		}
 		
-		private boolean canDoUndo() {
-			return !undoChanges.isEmpty();
-		}
-		
-		private boolean canDoRedo() {
-			return !redoChanges.isEmpty();
-		}
+		private boolean canDoUndo() { return !undoChanges.isEmpty(); }
+		private boolean canDoRedo() { return !redoChanges.isEmpty(); }
 		
 		public void removeAllRecord() {
 			undoChanges.clear();
@@ -362,20 +318,13 @@ public class JsonEditor extends JPanel{
 			
 			Class<?>[] argumentTypes = type.argumentTypes;
 			
-			if(args.length != argumentTypes.length) {
-				throw new IllegalArgumentException("the of argument count does not match the argument count required for " + type.name() + ".");
-			}
+			if(args.length != argumentTypes.length) throw new IllegalArgumentException(type.name() + " accepts " + argumentTypes.length + " argument(s), but there are " + args.length + " argument(s)");
 			
 			for(int i = 0; i < args.length; i++) {
 				Object o = args[i];
 				Class<?> argumentType = argumentTypes[i];
-				if(o == null) {
-					throw new IllegalArgumentException(String.format("args[%d] is null", i));
-				}
-				if(!argumentType.isInstance(o)) {
-					throw new IllegalArgumentException(String.format("args[%d] is not an instance of %s", 
-							i, argumentType.getCanonicalName()));
-				}
+				if(o == null) throw new IllegalArgumentException(String.format("args[%d] is null", i));
+				if(!argumentType.isInstance(o)) throw new IllegalArgumentException(String.format("args[%d] is not an instance of %s", i, argumentType.getCanonicalName()));
 			}
 			
 			return new Change(type, args);
@@ -383,13 +332,8 @@ public class JsonEditor extends JPanel{
 	}
 	
 	public static record Change(ChangeType type, Object[] args) {
-		private void undo() {
-			type.undo(args);
-		}
-		
-		private void redo() {
-			type.redo(args);
-		}
+		private void undo() { type.undo(args); }
+		private void redo() { type.redo(args); }
 	}
 	
 	private static enum ChangeType {
@@ -467,13 +411,8 @@ public class JsonEditor extends JPanel{
 			this.argumentTypes = Objects.requireNonNull(argumentTypes);
 		}
 		
-		public void undo(Object[] args) {
-			undo.accept(args);
-		}
-		
-		public void redo(Object[] args) {
-			redo.accept(args);
-		}
+		public void undo(Object[] args) { undo.accept(args); }
+		public void redo(Object[] args) { redo.accept(args); }
 		
 		private static void doRemove(Object[] args) {
 			JsonCompositeComponent<?> parent = (JsonCompositeComponent<?>)args[1];
@@ -495,7 +434,8 @@ public class JsonEditor extends JPanel{
 			switch(json) {
 			case JsonBooleanComponent jbc -> jbc.setValue(Boolean.valueOf(value));
 			case JsonNumberComponent  jnc -> jnc.setValueFromString(value);
-			default                       -> json.setValue(new JsonPrimitive(value));
+			
+			default -> json.setValue(new JsonPrimitive(value));
 			}
 		}
 	}

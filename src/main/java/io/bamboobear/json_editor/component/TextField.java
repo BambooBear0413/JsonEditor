@@ -17,6 +17,7 @@ public class TextField extends JTextField{
 	private boolean updateTextWhenRepaint;
 	
 	public TextField()                      { this(""); }
+	
 	public TextField(String text)           { this(text, true); }
 	public TextField(TranslatableText text) { this(text, true); }
 	
@@ -29,9 +30,7 @@ public class TextField extends JTextField{
 	
 	protected TextField(String text, boolean popupMenu) {
 		super(text);
-		if(popupMenu) {
-			setComponentPopupMenu(createPopupMenu());
-		}
+		if(popupMenu) setComponentPopupMenu(createPopupMenu());
 	}
 	
 	private PopupMenu createPopupMenu() {
@@ -57,13 +56,8 @@ public class TextField extends JTextField{
 				cutItem.setEnabled(b);
 			}
 			
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
+			@Override public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+			@Override public void popupMenuCanceled(PopupMenuEvent e) {}
 		});
 		
 		return popupMenu;
@@ -88,9 +82,7 @@ public class TextField extends JTextField{
 		updateTextWhenRepaint = !isEditable();
 	}
 	
-	public TranslatableText getDisplayText() {
-		return displayText;
-	}
+	public TranslatableText getDisplayText() { return displayText; }
 	
 	@Override
 	public void setFont(Font f) {
@@ -98,18 +90,14 @@ public class TextField extends JTextField{
 		super.setFont(f);
 	}
 	
-	@Override
-	public Font getFont() {
-		return useCustomFont ? super.getFont() : Main.getFont();
-	}
+	@Override public Font getFont() { return useCustomFont ? super.getFont() : Main.getFont(); }
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 		if(this.displayText != null && updateTextWhenRepaint) {
 			String displayText = this.displayText.getDisplayText();
-			if(!super.getText().equals(displayText)) {
-				super.setText(displayText);
-			}
+			
+			if(!super.getText().equals(displayText)) super.setText(displayText);
 		}
 		super.paintComponent(g);
 	}

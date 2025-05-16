@@ -8,9 +8,8 @@ import io.bamboobear.json_editor.lang.TranslatableText;
 public class Frame extends JFrame {
 	private TranslatableText title;
 	
-	public Frame() {
-		this(null);
-	}
+	public Frame() { this(null); }
+	
 	public Frame(TranslatableText title) {
 		setTitle(title);
 	}
@@ -20,12 +19,7 @@ public class Frame extends JFrame {
 		refreshTitle();
 	}
 	
-	public void refreshTitle() {
-		super.setTitle(getTitle());
-	}
+	public void refreshTitle() { super.setTitle(getTitle()); }
 	
-	@Override
-	public String getTitle() {
-		return (title == null) ? super.getTitle() : title.getDisplayText();
-	}
+	@Override public String getTitle() { return (title == null) ? super.getTitle() : title.getDisplayText(); }
 }

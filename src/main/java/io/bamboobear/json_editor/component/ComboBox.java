@@ -1,7 +1,8 @@
 package io.bamboobear.json_editor.component;
 
 import java.awt.Font;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -26,9 +27,8 @@ public class ComboBox extends JComboBox<ComboBoxItem>{
 	}
 	
 	public String getValue() {
-		if(!isEditable()) {
-			return getItemAt(getSelectedIndex()).getId();
-		}
+		if(!isEditable()) return getItemAt(getSelectedIndex()).getId();
+		
 		return ((JTextField) getEditor().getEditorComponent()).getText();
 	}
 	
@@ -40,23 +40,14 @@ public class ComboBox extends JComboBox<ComboBoxItem>{
 				break;
 			}
 		}
-		if(isEditable()) {
-			((JTextField) getEditor().getEditorComponent()).setText(id);
-		}
+		
+		if(isEditable()) ((JTextField) getEditor().getEditorComponent()).setText(id);
 	}
 	
 	private static ComboBoxItem[] filterInputArray(ComboBoxItem[] items) {
-		ArrayList<ComboBoxItem> checkedItems = new ArrayList<ComboBoxItem>();
-		out: for(ComboBoxItem item : items) {
-			String id = item.getId();
-			for(ComboBoxItem checkedItem : checkedItems) {
-				if(checkedItem.getId().equals(id)) {
-					continue out;
-				}
-			}
-			checkedItems.add(item);
-		}
-		return checkedItems.toArray(new ComboBoxItem[checkedItems.size()]);
+		LinkedHashSet<ComboBoxItem> set = new LinkedHashSet<>(items.length);
+		set.addAll(List.of(items));
+		return set.toArray(new ComboBoxItem[set.size()]);
 	}
 	
 	@Override
@@ -65,8 +56,5 @@ public class ComboBox extends JComboBox<ComboBoxItem>{
 		super.setFont(font);
 	}
 	
-	@Override
-	public Font getFont() {
-		return useCustomFont ? super.getFont() : Main.getFont();
-	}
+	@Override public Font getFont() { return useCustomFont ? super.getFont() : Main.getFont(); }
 }

@@ -24,14 +24,9 @@ public class Label extends JLabel{
 		setText(text);
 	}
 	
-	@Override
-	public String getText() {
-		return (text == null) ? super.getText() : text.getDisplayText();
-	}
+	@Override public String getText() { return (text == null) ? super.getText() : text.getDisplayText(); }
 	
-	public void setText(TranslatableText text) {
-		this.text = text;
-	}
+	public void setText(TranslatableText text) { this.text = text; }
 	
 	@Override
 	public void setFont(Font font) {
@@ -39,8 +34,5 @@ public class Label extends JLabel{
 		super.setFont(font);
 	}
 	
-	@Override
-	public Font getFont() {
-		return useCustomFont ? super.getFont() : Main.getFont();
-	}
+	@Override public Font getFont() { return useCustomFont ? super.getFont() : Main.getFont(); }
 }

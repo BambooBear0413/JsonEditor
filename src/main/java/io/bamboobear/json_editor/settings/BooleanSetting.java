@@ -27,9 +27,7 @@ public class BooleanSetting extends SimpleSetting<Boolean>{
 
 	@Override
 	protected Boolean getValueFromString(String stringValue) {
-		if(stringValue == null) {
-			return defaultValue;
-		}
+		if(stringValue == null) return defaultValue;
 		
 		return switch(stringValue.toLowerCase()) {
 		case "true" -> Boolean.TRUE;
@@ -38,10 +36,7 @@ public class BooleanSetting extends SimpleSetting<Boolean>{
 		};
 	}
 	
-	@Override
-	protected String getStringValue() {
-		return value.toString();
-	}
+	@Override protected String getStringValue() { return value.toString(); }
 
 	@Override
 	protected Component createValueComponent() {

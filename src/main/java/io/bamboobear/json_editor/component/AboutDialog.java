@@ -94,9 +94,7 @@ public class AboutDialog extends Dialog{
 		dialog.setVisible(true);
 	}
 	
-	public static AboutDialog getDialog() {
-		return dialog;
-	}
+	public static AboutDialog getDialog() { return dialog; }
 	
 	@Override
 	public void dispose() {

@@ -11,25 +11,19 @@ import io.bamboobear.json_editor.component.SettingComponent.SettingComboBox;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 public class LookAndFeelSetting extends SimpleSetting<LookAndFeelInfo>{
-	LookAndFeelSetting(String key, SettingProperties<LookAndFeelInfo> properties) {
-		super(key, properties.isExperimentalFeature());
-	}
+	
+	LookAndFeelSetting(String key, SettingProperties<LookAndFeelInfo> properties) { super(key, properties.isExperimentalFeature()); }
 
 	@Override
 	protected LookAndFeelInfo getValueFromString(String stringValue) {
 		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
 		for(LookAndFeelInfo info : infos) {
-			if(info.getClassName().equals(stringValue)) {
-				return info;
-			}
+			if(info.getClassName().equals(stringValue)) return info;
 		}
 		return defaultValue;
 	}
 
-	@Override
-	protected String getStringValue() {
-		return value.getClassName();
-	}
+	@Override protected String getStringValue() { return value.getClassName(); }
 
 	@Override
 	protected Component createValueComponent() {

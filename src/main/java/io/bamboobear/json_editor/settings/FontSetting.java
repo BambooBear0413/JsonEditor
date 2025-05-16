@@ -4,9 +4,9 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import javax.swing.JPanel;
 
@@ -22,16 +22,11 @@ public class FontSetting extends Setting<Font>{
 	private static final String FONT_FAMILY = "fontFamily";
 	private static final String FONT_SIZE = "fontSize";
 	
-	FontSetting(SettingProperties<Font> properties) {
-		super(properties);
-	}
+	FontSetting(SettingProperties<Font> properties) { super(properties); }
 	
 	@Override
 	public Font getValue() {
-		if(!Main.isExperimentalFeaturesEnabled()) {
-			return Main.getFont(defaultValue.getFamily(), 0, value.getSize());
-		}
-		return super.getValue();
+		return Main.isExperimentalFeaturesEnabled() ? super.getValue() : Main.getFont(defaultValue.getFamily(), 0, value.getSize());
 	}
 
 	@Override
@@ -40,9 +35,7 @@ public class FontSetting extends Setting<Font>{
 		String fontSize = properties.getProperty(FONT_SIZE);
 		
 		Font f = getFont(fontFamily, fontSize);
-		if(f != null) {
-			value = f;
-		}
+		if(f != null) value = f;
 		
 		return new String[] {FONT_FAMILY, FONT_SIZE};
 	}
@@ -53,15 +46,11 @@ public class FontSetting extends Setting<Font>{
 		String fontSize = changes.get(FONT_SIZE);
 		
 		Font f = getFont(fontFamily, fontSize);
-		if(f != null) {
-			setValue(f); 
-		}
+		if(f != null) setValue(f);
 	}
 	
 	private Font getFont(String fontFamily, String fontSize) {
-		if(fontFamily == null && fontSize == null) {
-			return null;
-		}
+		if(fontFamily == null && fontSize == null) return null;
 		
 		fontFamily = (fontFamily == null) ? value.getFamily() : fontFamily;
 		fontSize = (fontSize == null) ? String.valueOf(value.getSize()) : fontSize;
@@ -69,17 +58,15 @@ public class FontSetting extends Setting<Font>{
 		try {
 			int size = correctFontSizeValue(Integer.parseInt(fontSize));
 			return Main.getFont(fontFamily, 0, size);
-		} catch (NumberFormatException e) {
-			return null;
-		}
+		} catch (NumberFormatException e) { return null; }
 	}
 
 	@Override
 	protected Map<String, String> saveValue() {
-		var map = new HashMap<String, String>();
-		map.put(FONT_FAMILY, value.getFamily());
-		map.put(FONT_SIZE, String.valueOf(value.getSize()));
-		return map;
+		return Map.of(
+				FONT_FAMILY, value.getFamily(),
+				FONT_SIZE, String.valueOf(value.getSize())
+		);
 	}
 
 	@SuppressWarnings("serial")
@@ -97,12 +84,11 @@ public class FontSetting extends Setting<Font>{
 					fontFamily.setToolTipText(TranslatableText.create("json_editor.experimental_feature").getDisplayText());
 				}
 				
-				
 				SettingTextField fontSize = new SettingTextField(FONT_SIZE, String.valueOf(value.getSize()),
 						textField -> {
-							String text = textField.getText();
+							String text;
 							try {
-								text = String.valueOf(correctFontSizeValue(Integer.parseInt(text)));
+								text = String.valueOf(correctFontSizeValue(Integer.parseInt(textField.getText())));
 							} catch (NumberFormatException e) {
 								text = String.valueOf(value.getSize());
 							}
@@ -120,23 +106,13 @@ public class FontSetting extends Setting<Font>{
 	}
 	
 	private ComboBoxItem[] createComboBoxItems() {
-		String[] fontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		ComboBoxItem[] items = new ComboBoxItem[fontFamilyNames.length];
-		for(int i = 0; i < fontFamilyNames.length; i++) {
-			String name = fontFamilyNames[i];
-			items[i] = new ComboBoxItem(TranslatableText.literal(name), name);
-		}
-		
-		return items;
+		return Stream.of(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
+				.map(ComboBoxItem::new).toArray(ComboBoxItem[]::new);
 	}
 
 	private int correctFontSizeValue(int value) {
-		if(value > MAX_FONT_SIZE) {
-			return MAX_FONT_SIZE;
-		}
-		if(value < MIN_FONT_SIZE) {
-			return MIN_FONT_SIZE;
-		}
+		if(value > MAX_FONT_SIZE) return MAX_FONT_SIZE;
+		if(value < MIN_FONT_SIZE) return MIN_FONT_SIZE;
 		return value;
 	}
 }

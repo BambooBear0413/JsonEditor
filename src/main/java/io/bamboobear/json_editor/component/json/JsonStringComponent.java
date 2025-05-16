@@ -14,18 +14,11 @@ public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
 	
 	public static final String TYPE_ID = "string";
 	
-	JsonStringComponent() {
-		super(ICON);
-	}
+	JsonStringComponent() { super(ICON); }
 	
-	@Override
-	protected EditorInputField createValueComponent() {
-		return new EditorTextField("", this, Type.VALUE);
-	}
+	@Override protected EditorInputField createValueComponent() { return new EditorTextField("", this, Type.VALUE); }
 
-	public void setValue(String value) {
-		valueComponent.setValue(value);
-	}
+	public void setValue(String value) { valueComponent.setValue(value); }
 
 	@Override
 	public boolean setValue(JsonPrimitive value) {
@@ -36,18 +29,9 @@ public final class JsonStringComponent extends JsonPrimitiveComponent<String>{
 		return false;
 	}
 
-	@Override
-	public String getValue() {
-		return valueComponent.getValue();
-	}
+	@Override public String getValue() { return valueComponent.getValue(); }
 
-	@Override
-	public JsonPrimitive getJsonElement() {
-		return new JsonPrimitive(getValue());
-	}
+	@Override public JsonPrimitive getJsonElement() { return new JsonPrimitive(getValue()); }
 	
-	@Override
-	public String getTypeID() {
-		return TYPE_ID;
-	}
+	@Override public String getTypeID() { return TYPE_ID; }
 }

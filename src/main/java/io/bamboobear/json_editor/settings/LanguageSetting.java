@@ -1,6 +1,7 @@
 package io.bamboobear.json_editor.settings;
 
 import java.awt.Component;
+import java.util.stream.Stream;
 
 import io.bamboobear.json_editor.component.ComboBoxItem;
 import io.bamboobear.json_editor.component.SettingComponent.SettingComboBox;
@@ -11,9 +12,7 @@ import io.bamboobear.json_editor.lang.TranslatableText;
 
 public class LanguageSetting extends SimpleSetting<Language>{
 
-	LanguageSetting(String key, SettingProperties<Language> properties) {
-		super(key, properties);
-	}
+	LanguageSetting(String key, SettingProperties<Language> properties) { super(key, properties); }
 
 	@Override
 	protected Language getValueFromString(String stringValue) {
@@ -26,25 +25,15 @@ public class LanguageSetting extends SimpleSetting<Language>{
 		return (lang == null) ? defaultValue : lang;
 	}
 	
-	@Override
-	protected String getStringValue() {
-		return value.id();
-	}
+	@Override protected String getStringValue() { return value.id(); }
 
 	@Override
 	protected Component createValueComponent() {
-		SettingComboBox comboBox = new SettingComboBox(createComboBoxItems(), getKey(), value.id());
+		SettingComboBox comboBox = new SettingComboBox(
+				Stream.of(Languages.getLanguages())
+						.map(lang -> new ComboBoxItem(TranslatableText.literal(lang.getName()), lang.id()).showID())
+						.toArray(ComboBoxItem[]::new),
+				getKey(), value.id());
 		return comboBox;
 	}
-	
-	private ComboBoxItem[] createComboBoxItems() {
-		Language[] languages = Languages.getLanguages();
-		ComboBoxItem[] items = new ComboBoxItem[languages.length];
-		for(int i = 0; i < languages.length; i++) {
-			Language lang = languages[i];
-			items[i] = new ComboBoxItem(TranslatableText.literal(lang.getName()), lang.id()).showID();
-		}
-		return items;
-	}
-
 }

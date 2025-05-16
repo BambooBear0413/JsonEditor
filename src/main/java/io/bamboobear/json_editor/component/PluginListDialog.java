@@ -94,9 +94,7 @@ public class PluginListDialog extends Dialog {
 		dialog.setVisible(true);
 	}
 	
-	public static PluginListDialog getDialog() {
-		return dialog;
-	}
+	public static PluginListDialog getDialog() { return dialog; }
 	
 	@Override
 	public void dispose() {
@@ -191,9 +189,8 @@ public class PluginListDialog extends Dialog {
 		public String getStringFromArray(String[] array) {
 			StringBuilder sb = new StringBuilder();
 			for(String str : array) {
-				if(sb.length() != 0) {
-					sb.append(", ");
-				}
+				if(sb.length() != 0) sb.append(", ");
+				
 				sb.append(str);
 			}
 			return sb.toString();

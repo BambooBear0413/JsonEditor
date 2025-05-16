@@ -8,26 +8,22 @@ public class ComboBoxItem {
 	
 	private boolean showID;
 	
+	public ComboBoxItem(String id) { this(TranslatableText.literal(id), id); }
+	
 	public ComboBoxItem(TranslatableText text, String id) {
 		this.text = text;
 		this.id = id;
 	}
 	
-	public TranslatableText getText() {
-		return text;
-	}
+	public TranslatableText getText() { return text; }
 	
 	public ComboBoxItem showID() {
-		if(showID) {
-			return this;
-		}
+		if(showID) return this;
 		
 		showID = true;
 		text.append(" (%s)".formatted(id));
 		return this;
 	}
 	
-	public String getId() {
-		return id;
-	}
+	public String getId() { return id; }
 }

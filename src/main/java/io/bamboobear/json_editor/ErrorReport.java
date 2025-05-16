@@ -28,20 +28,11 @@ public final class ErrorReport {
 				"Failed to Create the Directory", JOptionPane.WARNING_MESSAGE);
 	}
 	
-	private ErrorReport() {
-	}
+	private ErrorReport() {}
 	
-	public static void output(Throwable throwable) {
-		output(Thread.currentThread(), throwable);
-	}
-	
-	public static void output(Thread thread, Throwable throwable) {
-		output(thread, throwable, true);
-	}
-	
-	public static void output(Throwable throwable, boolean showDialog) {
-		output(Thread.currentThread(), throwable, showDialog);
-	}
+	public static void output(Throwable throwable)                     { output(Thread.currentThread(), throwable); }
+	public static void output(Throwable throwable, boolean showDialog) { output(Thread.currentThread(), throwable, showDialog); }
+	public static void output(Thread thread, Throwable throwable)      { output(thread, throwable, true); }
 	
 	public static void output(Thread thread, Throwable throwable, boolean showDialog) {
 		throwable.printStackTrace();
@@ -120,9 +111,7 @@ public final class ErrorReport {
 		dialog.setVisible(true);
 	}
 	
-	private static String getDateTime() {
-		return new SimpleDateFormat("yyyyMMdd'T'HHmmss").format(new Date());
-	}
+	private static String getDateTime() { return new SimpleDateFormat("yyyyMMdd'T'HHmmss").format(new Date()); }
 	
 	private static String createReportContent(Thread thread, Throwable throwable) {
 		StringBuilder sb = new StringBuilder();

@@ -16,9 +16,7 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 	
 	public static final String TYPE_ID = "array";
 	
-	JsonArrayComponent() {
-		super(ICON);
-	}
+	JsonArrayComponent() { super(ICON); }
 
 	@Override
 	public JsonArray getJsonElement() {
@@ -31,9 +29,7 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 
 	@Override
 	public synchronized boolean setValue(JsonElement value) {
-		if(!value.isJsonArray()) {
-			return false;
-		}
+		if(!value.isJsonArray()) return false;
 		
 		JsonArray array = value.getAsJsonArray();
 
@@ -74,8 +70,5 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 		return new ComboBoxItem(JsonComponent.getTypeDisplayName(typeID), typeID);
 	}
 	
-	@Override
-	public String getTypeID() {
-		return TYPE_ID;
-	}
+	@Override public String getTypeID() { return TYPE_ID; }
 }

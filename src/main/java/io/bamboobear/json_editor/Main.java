@@ -66,23 +66,18 @@ public class Main{
 	private static MainWindow mainWindow;
 	private static JsonEditor editor;
 	
-	private Main() {
-	}
+	private Main() {}
 	
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			ErrorReport.output(e);
-		}
+		} catch (Exception e) { ErrorReport.output(e); }
 		
 		defaultLookAndFellInfo = getDefaultAndFeelInfo(UIManager.getLookAndFeel());
 		
 		ErrorReport.init();
 		
-		Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-			ErrorReport.output(thread, throwable);
-		});
+		Thread.setDefaultUncaughtExceptionHandler(ErrorReport::output);
 		
 		LoadingDialog dialog = new LoadingDialog();
 		
@@ -94,6 +89,7 @@ public class Main{
 			load(Plugin::loadLookAndFeel, plugin, dialog, "Loading look and feel in plugin \"%s\"...".formatted(plugin.id()));
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
+		
 		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURES.getValue();
 		
 		setLAF: try {
@@ -101,9 +97,7 @@ public class Main{
 			String className = info.getClassName();
 			if(className.equals(defaultLookAndFellInfo.getClassName())) break setLAF;
 			Main.setLookAndFeel(className);
-		} catch (Exception e) {
-			ErrorReport.output(e);
-		}
+		} catch (Exception e) { ErrorReport.output(e); }
 		
 		SwingUtilities.invokeLater(() -> {
 			mainWindow = new MainWindow();
@@ -127,12 +121,11 @@ public class Main{
 	}
 	
 	public synchronized static void setEditor(JsonEditor newEditor) {
-		Objects.requireNonNull(newEditor, "\"newEditor\" is null");
+		Objects.requireNonNull(newEditor, "newEditor is null");
 		
 		if (editor != null) {
-			if (!editor.close()) {
-				return;
-			}
+			if (!editor.close()) return;
+			
 			mainWindow.remove(editor);
 		}
 		
@@ -144,27 +137,17 @@ public class Main{
 	}
 	
 	public static JsonEditor getEditor() {
-		if(editor == null) {
-			throw new IllegalStateException("the editor of the \"JSON Editor\" is null");
-		}
+		if(editor == null) throw new IllegalStateException("the editor is null");
 		return editor;
 	}
 	
-	public static MainWindow getMainWindow() {		
-		return mainWindow;
-	}
+	public static MainWindow getMainWindow() { return mainWindow; }
 	
-	public static Language getLanguage() {
-		return Settings.LANGUAGE.getValue();
-	}
+	public static Language getLanguage() { return Settings.LANGUAGE.getValue(); }
 	
-	public static boolean isExperimentalFeaturesEnabled() {
-		return isExperimentalFeaturesEnabled;
-	}
+	public static boolean isExperimentalFeaturesEnabled() { return isExperimentalFeaturesEnabled; }
 	
-	public static Font getFont() {
-		return Settings.FONT.getValue();
-	}
+	public static Font getFont() { return Settings.FONT.getValue(); }
 	
 	public static Font getFont(String fontFamily, int style, int size) {
 		for(Font f : fontCache) {
@@ -201,16 +184,12 @@ public class Main{
 		String className = laf.getClass().getCanonicalName();
 		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
 		for(LookAndFeelInfo info : infos) {
-			if(info.getClassName().equals(className)) {
-				return info;
-			}
+			if(info.getClassName().equals(className)) return info;
 		}
 		throw new IllegalStateException("Unknown Look & Feel: " + className);
 	}
 	
-	public static LookAndFeelInfo getDefaultLookAndFeelInfo() {
-		return defaultLookAndFellInfo;
-	}
+	public static LookAndFeelInfo getDefaultLookAndFeelInfo() { return defaultLookAndFellInfo; }
 	
 	public static boolean setLookAndFeel(String className) {
 		Class<?> clazz = LookAndFeelLoader.getLookAndFeelClass(className);
@@ -229,8 +208,7 @@ public class Main{
 			UIManager.setLookAndFeel(laf);
 
 			UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-			if(defaults.get("ClassLoader") == null)
-				defaults.put("ClassLoader", clazz.getClassLoader());
+			if(defaults.get("ClassLoader") == null) defaults.put("ClassLoader", clazz.getClassLoader());
 			
 			return true;
 		} catch (Throwable e) { // TODO show warning dialog
@@ -250,9 +228,8 @@ public class Main{
 	public static void browse(URI uri) {
 		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.create("json_editor.warning.browse", uri).getDisplayText(),
 				TranslatableText.create("json_editor.warning.browse.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
-		if(result != JOptionPane.YES_OPTION) {
-			return;
-		}
+		
+		if(result != JOptionPane.YES_OPTION) return;
 		
 		try {
 			Desktop.getDesktop().browse(uri);
@@ -261,16 +238,13 @@ public class Main{
 		}
 	}
 	
-	public static void open(String filePath) {
-		open(new File(filePath));
-	}
+	public static void open(String filePath) { open(new File(filePath)); }
 	
 	public static void open(File file) {
 		int result = JOptionPane.showConfirmDialog(mainWindow, TranslatableText.create("json_editor.warning.open_file", file.getAbsolutePath()).getDisplayText(),
 				TranslatableText.create("json_editor.warning.open_file.title").getDisplayText(), JOptionPane.YES_NO_OPTION);
-		if(result != JOptionPane.YES_OPTION) {
-			return;
-		}
+		
+		if(result != JOptionPane.YES_OPTION) return;
 		
 		try {
 			Desktop.getDesktop().open(file);
@@ -295,9 +269,7 @@ public class Main{
 			setVisible(true);
 		}
 		
-		private void setText(String text) {
-			label.setText(text);
-		}
+		private void setText(String text) { label.setText(text); }
 	}
 	
 	@SuppressWarnings("serial")

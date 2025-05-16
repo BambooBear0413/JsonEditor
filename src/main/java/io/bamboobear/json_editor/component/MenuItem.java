@@ -13,7 +13,7 @@ public class MenuItem extends JMenuItem{
 
 	public MenuItem()                      { this(null, null); }
 	public MenuItem(TranslatableText text) { this(text, null); }
-	public MenuItem(Icon icon)              {this(null, icon); }
+	public MenuItem(Icon icon)             { this(null, icon); }
 	
 	public MenuItem(TranslatableText text, Icon icon) {
 		super(icon);
@@ -22,12 +22,7 @@ public class MenuItem extends JMenuItem{
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	
-	@Override
-	public String getText() {
-		return (text == null) ? super.getText() : text.getDisplayText();
-	}
+	@Override public String getText() { return (text == null) ? super.getText() : text.getDisplayText(); }
 	
-	public void setText(TranslatableText text) {
-		this.text = text;
-	}
+	public void setText(TranslatableText text) { this.text = text; }
 }

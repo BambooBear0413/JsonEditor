@@ -16,22 +16,16 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 	
 	public static final String TYPE_ID = "number";
 	
-	JsonNumberComponent() {
-		super(ICON);
-	}
+	JsonNumberComponent() { super(ICON); }
 	
 	@Override
 	protected EditorInputField createValueComponent() {
 		return new EditorTextField("0", this, Type.VALUE);
 	}
 
-	public void setValue(Number value) {
-		valueComponent.setValue(String.valueOf(value));
-	}
+	public void setValue(Number value) { valueComponent.setValue(String.valueOf(value)); }
 	
-	public void setValueFromString(String value) {
-		valueComponent.setValue(value);
-	}
+	public void setValueFromString(String value) { valueComponent.setValue(value); }
 
 	@Override
 	public boolean setValue(JsonPrimitive value) {
@@ -42,12 +36,12 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 		return false;
 	}
 	
-	private static Number getAsNumber(String value) throws NumberFormatException{
+	private static Number getAsNumber(String value) throws NumberFormatException {
 		return new BigDecimal(value);
 	}
 
 	@Override
-	public Number getValue() throws NumberFormatException {
+	public Number getValue() {
 		try {
 			return getAsNumber(valueComponent.getValue());
 		} catch (NumberFormatException e) {
@@ -55,17 +49,12 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 		}
 	}
 
-	@Override
-	public JsonPrimitive getJsonElement() {
-		return new JsonPrimitive(getValue());
-	}
+	@Override public JsonPrimitive getJsonElement() { return new JsonPrimitive(getValue()); }
 	
 	@Override
 	public State getValueComponentState() {		
 		try {
-			if(valueComponent.isEditable()) {
-				getAsNumber(valueComponent.getValue());
-			}
+			if(valueComponent.isEditable()) getAsNumber(valueComponent.getValue());
 		} catch (NumberFormatException e) {
 			return State.ERROR;
 		}
@@ -73,8 +62,5 @@ public final class JsonNumberComponent extends JsonPrimitiveComponent<Number>{
 		return State.NORMAL;
 	}
 	
-	@Override
-	public String getTypeID() {
-		return TYPE_ID;
-	}
+	@Override public String getTypeID() { return TYPE_ID; }
 }

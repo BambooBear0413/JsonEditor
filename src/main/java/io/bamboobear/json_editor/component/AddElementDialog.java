@@ -28,9 +28,7 @@ public class AddElementDialog extends Dialog{
 		ComboBox typeField = Objects.requireNonNull(type);
 		
 		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				dispose();
-			};
+			@Override public void windowClosing(WindowEvent e) { dispose(); }
 		});
 
 		contentPanel.add(typeLabel);

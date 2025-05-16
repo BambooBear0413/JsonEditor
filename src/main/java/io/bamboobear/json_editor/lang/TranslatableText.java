@@ -28,14 +28,10 @@ public final class TranslatableText{
 		this.siblings = new ArrayList<>();
 	}
 	
-	public static TranslatableText create(String key) {
-		return new TranslatableText(key);
-	}
+	public static TranslatableText create(String key) { return new TranslatableText(key); }
 	
 	public static TranslatableText create(String key, Object... args) {
-		if(args == null || args.length == 0) {
-			return create(key);
-		}
+		if(args == null || args.length == 0) return create(key);
 		return new TranslatableText(key, args);
 	}
 	
@@ -46,18 +42,15 @@ public final class TranslatableText{
 	}
 	
 	public static TranslatableText literal(String key, Object... args) {
-		if(args == null || args.length == 0) {
-			return TranslatableText.literal(key);
-		}
+		if(args == null || args.length == 0) return TranslatableText.literal(key);
+		
 		TranslatableText text = new TranslatableText(key, args);
 		text.nonTranslatable = true;
 		return text;
 	}
 	
 	public TranslatableText append(TranslatableText text) {
-		if(text != null) {
-			siblings.add(text);
-		}
+		if(text != null) siblings.add(text);
 		return this;
 	}
 	
@@ -70,9 +63,7 @@ public final class TranslatableText{
 		return append(TranslatableText.create(" (%s)", EXPERIMENTAL_FEATURE));
 	}
 	
-	public String getDisplayText() {
-		return getDisplayText(Main.getLanguage());
-	}
+	public String getDisplayText() { return getDisplayText(Main.getLanguage()); }
 	
 	public String getDisplayText(Language lang) {
 		String displayText = (!nonTranslatable) ? getValue(lang, key) : key;
@@ -147,13 +138,8 @@ public final class TranslatableText{
 		};
 	}
 	
-	public boolean isNonTranslatable() {
-		return nonTranslatable;
-	}
-	
-	public boolean isEmptyKey() {
-		return key.isEmpty();
-	}
+	public boolean isNonTranslatable() { return nonTranslatable; }
+	public boolean isEmptyKey()        { return key.isEmpty();   }
 	
 	@Override
 	public String toString() {

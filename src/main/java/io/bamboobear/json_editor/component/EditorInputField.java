@@ -110,6 +110,8 @@ public sealed interface EditorInputField permits EditorTextField, EditorComboBox
 		}
 		
 		@FunctionalInterface
-		private interface ChangeAdder {void addChange(JsonComponent<?> json, String before, String after);}
+		private interface ChangeAdder {
+			void addChange(JsonComponent<?> json, String before, String after);
+		}
 	}
 }

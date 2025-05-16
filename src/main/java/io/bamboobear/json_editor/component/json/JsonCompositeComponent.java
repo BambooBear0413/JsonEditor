@@ -40,28 +40,16 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		setBorder(new LineBorder(Color.GRAY, 5));
 	}
 	
-	public final void addElement(JsonComponent<?> element) {
-		addElement(null, element);
-	}
+	public final void addElement(JsonComponent<?> element)            { addElement(null, element);        }
+	public final void addElement(JsonComponent<?> element, int index) { addElement(null, element, index); }
+	
+	public final void addElement(String key, JsonComponent<?> element)            { addElement(key, element, -1);          }
+	public final void addElement(String key, JsonComponent<?> element, int index) { addElement(key, null, element, index); }
 
-	public final void addElement(String key, JsonComponent<?> element) {
-		addElement(key, element, -1);
-	}
-	
-	public final void addElement(String key, TranslatableText text, JsonComponent<?> element) {
-		addElement(key, text, element, -1);
-	}
-	
-	public final void addElement(JsonComponent<?> element, int index) {
-		addElement(null, element, index);
-	}
-	
-	public final void addElement(String key, JsonComponent<?> element, int index) {
-		addElement(key, null, element, index);
-	}
+	public final void addElement(String key, TranslatableText text, JsonComponent<?> element) { addElement(key, text, element, -1); }
 	
 	public synchronized final void addElement(String key, TranslatableText text, JsonComponent<?> element, int index) {
-		if(element.getParentElement() != null) { return; }
+		if(element.getParentElement() != null) return;
 		
 		if(key != null) element.setKey(key);
 		if(text != null) element.setKeyDisplayText(text);
@@ -93,9 +81,7 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		return elements;
 	}
 	
-	public final boolean containsElement(JsonComponent<?> element) {
-		return indexOf(element) > 0;
-	}
+	public final boolean containsElement(JsonComponent<?> element) { return indexOf(element) > 0; }
 	
 	public final int indexOf(JsonComponent<?> element) {
 		int elementsCount = elementsPanel.getComponentCount();
@@ -105,13 +91,9 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 		return -1;
 	}
 	
-	public final JsonComponent<?> getElement(int index) {
-		return (JsonComponent<?>)elementsPanel.getComponent(index);
-	}
+	public final JsonComponent<?> getElement(int index) { return (JsonComponent<?>)elementsPanel.getComponent(index); }
 	
-	public final int getElementCount() {
-		return elementsPanel.getComponentCount();
-	}
+	public final int getElementCount() { return elementsPanel.getComponentCount(); }
 	
 	@Override
 	public final JsonCompositeComponent<?> getRootElement() {
@@ -121,10 +103,7 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 	
 	public abstract void fireAddElement();
 	
-	@Override
-	public Dimension getPreferredSize() {
-		return getLayout().preferredLayoutSize(this);
-	}
+	@Override public Dimension getPreferredSize() { return getLayout().preferredLayoutSize(this); }
 	
 	private class ComponentLayout implements LayoutManager {
 		final int gap = 1;

@@ -43,12 +43,9 @@ public abstract class Plugin {
 	 * @throws PluginLoadingException 
 	 */
 	protected Plugin(String id, JsonObject pluginJson) throws PluginLoadingException{
-		if(id == null) {
-			throw new PluginLoadingException("\"id\" is null");
-		}
-		if(!id.matches("^" + PLUGIN_ID_REGEX + "$")) {
-			throw new PluginLoadingException("\"id=\"" + id + ", \"id\" must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long.");
-		}
+		if(id == null) throw new PluginLoadingException("\"id\" is null");
+		if(!id.matches("^" + PLUGIN_ID_REGEX + "$")) throw new PluginLoadingException("id=" + id + ", id must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long.");
+		
 		this.id = id;
 		
 		name = TranslatableText.create(JsonObjectUtilities.getString(pluginJson, "display_name", String.format("%s.name", id)));
@@ -56,61 +53,40 @@ public abstract class Plugin {
 		credits = loadArrayOrString(pluginJson, "credits");
 		
 		String desc = JsonObjectUtilities.getString(pluginJson, "description", null);
-		description = desc == null ? TranslatableText.EMPTY : TranslatableText.create(desc);
+		description = (desc == null) ? TranslatableText.EMPTY : TranslatableText.create(desc);
 		
 		formatVersion = JsonObjectUtilities.getInteger(pluginJson, "plugin_format", Plugin.LATEST_FORMAT_VERSION);
 	}
 	
-	public String id() {
-		return id;
-	}
+	public String id() { return id; }
 	
-	public TranslatableText getName() {
-		return name;
-	}
+	public TranslatableText getName()        { return name;        }
+	public TranslatableText getDescription() { return description; }
 	
-	public TranslatableText getDescription() {
-		return description;
-	}
+	public String[] getAuthors() { return authors; }
+	public String[] getCredits() { return credits; }
 	
-	public String[] getAuthors() {
-		return authors;
-	}
-	
-	public String[] getCredits() {
-		return credits;
-	}
-	
-	public int getFormatVersion() {
-		return formatVersion;
-	}
+	public int getFormatVersion() { return formatVersion; }
 	
 	private String[] loadArrayOrString(JsonObject object, String name) {
 		var array = JsonObjectUtilities.getJsonArray(object, name);
 		if(array == null) {
 			String str = JsonObjectUtilities.getString(object, name, null);
-			return str == null ? new String[0] : new String[] {str};
+			return (str == null) ? new String[0] : new String[] {str};
 		}
 		
-		if(array.size() == 0) {
-			return new String[0];
-		}
+		if(array.size() == 0) return new String[0];
 		
 		return JsonArrayUtilities.getStrings(array);
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Plugin plugin) {
-			return this.id.equals(plugin.id);
-		}
-		return false;
+		if(!(obj instanceof Plugin plugin)) return false;
+		return this.id.equals(plugin.id);
 	}
 	
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
+	@Override public int hashCode() { return id.hashCode(); }
 
 	public abstract File getFile();
 	
@@ -138,9 +114,7 @@ public abstract class Plugin {
 			this.creator = creator;
 		}
 		
-		public String getName() {
-			return name;
-		}
+		public String getName() { return name; }
 		
 		public Plugin createPlugin(String id, JsonObject pluginJson, File file) {
 			return creator.create(id, pluginJson, file);
@@ -155,7 +129,7 @@ public abstract class Plugin {
 	private static class DirectoryPlugin extends Plugin {
 		private final File dir;
 		
-		protected DirectoryPlugin(String id, JsonObject pluginJson, File dir) {
+		DirectoryPlugin(String id, JsonObject pluginJson, File dir) {
 			super(id, pluginJson);
 			if(!dir.isDirectory()) { //TODO loading warning
 				throw new PluginLoadingException(String.format("%s was not found.", dir.getAbsolutePath()));
@@ -163,10 +137,7 @@ public abstract class Plugin {
 			this.dir = dir;
 		}
 
-		@Override
-		public File getFile() {
-			return dir;
-		}
+		@Override public File getFile() { return dir; }
 
 		@Override
 		public Map<String, JsonElement> loadLanguages() {
@@ -238,41 +209,32 @@ public abstract class Plugin {
 	private static class ZipPlugin extends Plugin {
 		private final File file;
 		
-		protected ZipPlugin(String id, JsonObject pluginJson, File zipFile) {
+		ZipPlugin(String id, JsonObject pluginJson, File zipFile) {
 			super(id, pluginJson);
 			this.file = zipFile;
-			try (ZipFile test = new ZipFile(this.file)){
-			} catch (Exception e) { //TODO loading warning
-				throw new PluginLoadingException(e);
-			}
 		}
 
-		@Override
-		public File getFile() {
-			return file;
-		}
+		@Override public File getFile() { return file; }
 
 		@Override
 		public Map<String, JsonElement> loadLanguages() {
 			Map<String, JsonElement> map = new HashMap<String, JsonElement>();
 			
 			try (ZipFile zipFile = new ZipFile(file)) {
-				Pattern pattern = Pattern.compile(".*[/](" + Language.LANGUAGE_ID_REGEX + ")\\.json");
+				Pattern pattern = Pattern.compile("lang/(" + Language.LANGUAGE_ID_REGEX + ")\\.json");
 				
 				Enumeration<? extends ZipEntry> entries = zipFile.entries();
 				ZipEntry entry;
 				while(entries.hasMoreElements()) {
 					entry = entries.nextElement();
-					if(entry.getName().startsWith("lang/")) {
-						Matcher matcher = pattern.matcher(entry.getName());
-						if(matcher.find()) {
-							String id = matcher.group(1);
-							try {
-								JsonElement root = JsonFile.loadByInputStream(getEntryInputStream(zipFile, entry));
-								map.put(id, root);
-							} catch (Exception e) { //TODO loading warning
-								e.printStackTrace();
-							}
+					Matcher matcher = pattern.matcher(entry.getName());
+					if(matcher.find()) {
+						String id = matcher.group(1);
+						try {
+							JsonElement root = JsonFile.loadByInputStream(getEntryInputStream(zipFile, entry));
+							map.put(id, root);
+						} catch (Exception e) { //TODO loading warning
+							e.printStackTrace();
 						}
 					}
 				}

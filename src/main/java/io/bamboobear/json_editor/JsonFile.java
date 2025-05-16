@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -29,12 +28,10 @@ public final class JsonFile {
 	
 	private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
+	public JsonFile(String filePath){ this(new File(filePath)); }
+
 	public JsonFile(File file){
 		this.file = Objects.requireNonNull(file, "file is null");
-	}
-
-	public JsonFile(String fileName){
-		this(new File(fileName));
 	}
 
 	public JsonElement load() throws IOException, JsonParseException {
@@ -49,9 +46,8 @@ public final class JsonFile {
 	
 	public static JsonElement loadResource(String name) throws IOException, JsonParseException {
 		try (InputStream is = ClassLoader.getSystemResourceAsStream(name)){
-			if(is == null) {
-				throw new NullPointerException("Resource \"" + name + "\" was not found.");
-			}
+			if(is == null) throw new NullPointerException("Resource \"" + name + "\" was not found.");
+			
 			return loadByInputStream(is);
 		}
 	}
@@ -67,65 +63,53 @@ public final class JsonFile {
 	}
 
 	public void save(JsonElement root) throws IOException {
-		if (!file.isFile()) {
-			file.createNewFile();
-		}
-		
 		try (FileWriter fw = new FileWriter(file, UTF_8);
 			JsonWriter jw = Main.createJsonWriter(fw)) {
 			writeJsonElement(jw, root);
 		}
 	}
 	
-	private void writeJsonElement(JsonWriter jw, JsonElement je) throws IOException {
+	private void writeJsonElement(JsonWriter writer, JsonElement json) throws IOException {
 		try {
-			if(je instanceof JsonPrimitive jp) {
-				if(jp.isBoolean()) {
-					jw.value(jp.getAsBoolean());
-				} else if(jp.isNumber()) {
-					jw.value(jp.getAsNumber());
+			switch(json) {
+			case JsonPrimitive primitive when primitive.isBoolean() -> writer.value(primitive.getAsBoolean());
+			case JsonPrimitive primitive when primitive.isNumber() -> writer.value(primitive.getAsNumber());
+			case JsonPrimitive primitive -> {
+				if(Settings.UNICODE_ESCAPING.getValue()) {
+					writeStringWithUnicodeEscape(writer, json.getAsString());
 				} else {
-					if(Settings.UNICODE_ESCAPING.getValue()) {
-						writeStringWithUnicodeEscape(jw, je.getAsString());
-					} else {
-						jw.value(jp.getAsString());
-					}
+					writer.value(json.getAsString());
 				}
-			} else if (je instanceof JsonObject jo) {
-				Map<String, JsonElement> map = jo.asMap();
+			}
+			
+			case JsonObject object -> {
+				Map<String, JsonElement> map = object.asMap();
 				
-				jw.beginObject();
+				writer.beginObject();
 				
 				map.forEach((key, value) -> {
 					try {
-						jw.name(key);
-						writeJsonElement(jw, value);
-					} catch (IOException e) {
-						throw new UncheckedIOException(e);
-					}
+						writer.name(key);
+						writeJsonElement(writer, value);
+					} catch (IOException e) { throw new UncheckedIOException(e); }
 				});
 				
-				jw.endObject();
-			} else if (je instanceof JsonArray ja) {
-				List<JsonElement> list = ja.asList();
-				
-				jw.beginArray();
-				
-				list.forEach((e) -> {
-					try {
-						writeJsonElement(jw, e);
-					} catch (IOException exception) {
-						throw new UncheckedIOException(exception);
-					}
-				});
-				
-				jw.endArray();
-			} else {
-				jw.nullValue();
+				writer.endObject();
 			}
-		} catch (UncheckedIOException e) {
-			throw e.getCause();
-		}
+			
+			case JsonArray array -> {
+				writer.beginArray();
+				
+				for(JsonElement value : array) {
+					writeJsonElement(writer, value);
+				}
+				
+				writer.endArray();
+			}
+			
+			default -> writer.nullValue();
+			}
+		} catch (UncheckedIOException e) { throw e.getCause(); }
 	}
 	
 	private void writeStringWithUnicodeEscape(JsonWriter jw, String str) throws IOException {
@@ -169,7 +153,5 @@ public final class JsonFile {
 		catch (IOException e) { return file.getAbsolutePath(); }
 	}
 	
-	public long lastModified() {
-		return file.lastModified();
-	}
+	public long lastModified() { return file.lastModified(); }
 }

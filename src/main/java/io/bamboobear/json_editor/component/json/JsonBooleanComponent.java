@@ -15,9 +15,7 @@ public final class JsonBooleanComponent extends JsonPrimitiveComponent<Boolean>{
 	
 	public static final String TYPE_ID = "boolean";
 	
-	JsonBooleanComponent() {
-		super(ICON);
-	}
+	JsonBooleanComponent() { super(ICON); }
 	
 	@Override
 	protected EditorInputField createValueComponent() {
@@ -29,9 +27,7 @@ public final class JsonBooleanComponent extends JsonPrimitiveComponent<Boolean>{
 		return comboBox;
 	}
 
-	public void setValue(Boolean value) {
-		valueComponent.setValue(value.toString());
-	}
+	public void setValue(Boolean value) { valueComponent.setValue(value.toString()); }
 	
 	@Override
 	public boolean setValue(JsonPrimitive value) {
@@ -42,18 +38,9 @@ public final class JsonBooleanComponent extends JsonPrimitiveComponent<Boolean>{
 		return false;
 	}
 
-	@Override
-	public Boolean getValue() {
-		return Boolean.valueOf(valueComponent.getValue());
-	}
+	@Override public Boolean getValue() { return Boolean.valueOf(valueComponent.getValue()); }
 
-	@Override
-	public JsonPrimitive getJsonElement() {
-		return new JsonPrimitive(getValue());
-	}
+	@Override public JsonPrimitive getJsonElement() { return new JsonPrimitive(getValue()); }
 	
-	@Override
-	public String getTypeID() {
-		return TYPE_ID;
-	}
+	@Override public String getTypeID() { return TYPE_ID; }
 }

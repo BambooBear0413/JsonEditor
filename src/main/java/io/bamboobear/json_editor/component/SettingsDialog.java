@@ -59,9 +59,7 @@ public class SettingsDialog extends Dialog{
 		gbc.weightx = 1;
 		
 		for(Setting<?> setting : Settings.getSettings()) {
-			if(!setting.isEnabled()) {
-				continue;
-			}
+			if(!setting.isEnabled()) continue;
 			
 			Component component = setting.createSettingComponent();
 			
@@ -128,14 +126,10 @@ public class SettingsDialog extends Dialog{
 	}
 	
 	public static void addSettingChange(String key, String value) {
-		if(dialog != null) {
-			dialog.changeSettings.put(key, value);
-		}
+		if(dialog != null) dialog.changeSettings.put(key, value);
 	}
 	
-	public static SettingsDialog getDialog() {
-		return dialog;
-	}
+	public static SettingsDialog getDialog() { return dialog; }
 
 	@Override
 	public void dispose() {
@@ -162,7 +156,5 @@ public class SettingsDialog extends Dialog{
 		removeAllChanges();
 	}
 	
-	private void removeAllChanges() {
-		changeSettings.clear();
-	}
+	private void removeAllChanges() { changeSettings.clear(); }
 }

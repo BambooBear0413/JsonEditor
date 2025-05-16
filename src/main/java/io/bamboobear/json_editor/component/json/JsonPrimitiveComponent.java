@@ -21,10 +21,7 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 		
 		this.valueComponent.getAsComponent().setPreferredSize(new Dimension(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
 		this.valueComponent.getAsComponent().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				repaint();
-			}
+			@Override public void keyTyped(KeyEvent e) { repaint(); }
 		});
 		
 		setLayout(new ComponentLayout(valueComponent));
@@ -34,9 +31,8 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 	
 	@Override
 	public boolean setValue(JsonElement value) {
-		if(!value.isJsonPrimitive()) {
-			return false;
-		}
+		if(!value.isJsonPrimitive()) return false;
+		
 		JsonPrimitive jp = value.getAsJsonPrimitive();
 		return setValue(jp);
 	}
@@ -46,16 +42,12 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 	@Override
 	public final JsonCompositeComponent<?> getRootElement() {
 		JsonCompositeComponent<?> parent = getParentElement();
-		if (parent == null) {
-			throw new IllegalStateException("parent is null");
-		} else {
-			return parent.getRootElement();
-		}
+		if (parent == null) throw new IllegalStateException("parent is null");
+		
+		return parent.getRootElement();
 	}
 
 	protected abstract EditorInputField createValueComponent();
 	
-	public State getValueComponentState() {
-		return State.NORMAL;
-	}
+	public State getValueComponentState() { return State.NORMAL; }
 }

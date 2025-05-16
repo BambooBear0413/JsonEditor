@@ -17,12 +17,7 @@ public class Menu extends JMenu{
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	
-	@Override
-	public String getText() {
-		return (text == null) ? super.getText() : text.getDisplayText();
-	}
+	@Override public String getText() { return (text == null) ? super.getText() : text.getDisplayText(); }
 		
-	public void setText(TranslatableText text) {
-		this.text = text;
-	}
+	public void setText(TranslatableText text) { this.text = text; }
 }

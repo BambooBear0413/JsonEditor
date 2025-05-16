@@ -28,32 +28,16 @@ public final class EditorComboBox extends ComboBox implements EditorInputField{
 		setEditable(isEditable);
 		
 		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				beforeChange = getValue();
-			}
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				fireValueChange();
-			}
+			@Override public void focusGained(FocusEvent e) { beforeChange = getValue(); }
+			@Override public void focusLost(FocusEvent e)   { fireValueChange(); }
 		});
 	}
 	
-	@Override
-	public JComponent getAsComponent() {
-		return this;
-	}
+	@Override public JComponent getAsComponent() { return this; }
 	
-	@Override
-	public void setValue(String str) {
-		super.setValue(translateInputValue(str));
-	}
+	@Override public void setValue(String str) { super.setValue(translateInputValue(str)); }
 	
-	@Override
-	public String getValue() {
-		return translateOutputValue(super.getValue());
-	}
+	@Override public String getValue() { return translateOutputValue(super.getValue()); }
 
 	private void fireValueChange() {
 		String afterChange = getValue();
@@ -88,8 +72,5 @@ public final class EditorComboBox extends ComboBox implements EditorInputField{
 		throw new IllegalStateException();
 	}
 	
-	@Override
-	public Type getType() {
-		return Type.VALUE;
-	}
+	@Override public Type getType() { return Type.VALUE; }
 }

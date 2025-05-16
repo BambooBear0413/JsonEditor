@@ -11,9 +11,7 @@ public class LookAndFeelLoader {
 	
 	private LookAndFeelLoader() {}
 	
-	public static Class<?> getLookAndFeelClass(String className) {
-		return MAP.get(className);
-	}
+	public static Class<?> getLookAndFeelClass(String className) { return MAP.get(className); }
 	
 	static void installLookAndFeel(String name, String className, ClassLoader loader) {
 		if(MAP.containsKey(className)) return; // TODO loading warning

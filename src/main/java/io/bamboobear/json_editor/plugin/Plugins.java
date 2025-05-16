@@ -8,40 +8,31 @@ import com.google.gson.JsonObject;
 import io.bamboobear.json_editor.plugin.Plugin.PluginType;
 
 public final class Plugins {
-	private static final ArrayList<Plugin> plugins = new ArrayList<Plugin>();
+	private static final ArrayList<Plugin> PLUGINS = new ArrayList<>();
 	
-	private Plugins() {
-	}
+	private Plugins() {}
 	
 	static Plugin addPlugin(PluginType type, String id, JsonObject pluginJson, File file) {
 		return addPlugin(type.createPlugin(id, pluginJson, file));
 	}
 	
 	private static Plugin addPlugin(Plugin plugin) {
-		if(plugins.contains(plugin)) {
-			throw new PluginLoadingException(String.format("Plugin ID conflict encountered: %s", plugin.id()));
-		}
-		plugins.add(plugin);
+		if(PLUGINS.contains(plugin)) throw new PluginLoadingException(String.format("Plugin ID conflict encountered: %s", plugin.id()));
+		PLUGINS.add(plugin);
 		return plugin;
-	}
-	
-	public static Plugin[] getPlugins() {
-		return plugins.toArray(new Plugin[plugins.size()]);
 	}
 	
 	/**
 	 * @return the plugin; {@code null} if not found*/
 	public static Plugin getPlugin(String id) {
-		for(Plugin plugin : plugins) {
-			if(id.equals(plugin.id())) {
-				return plugin;
-			}
+		for(Plugin plugin : PLUGINS) {
+			if(id.equals(plugin.id())) return plugin;
 		}
 		
 		return null;
 	}
+
+	public static Plugin[] getPlugins() { return PLUGINS.toArray(new Plugin[PLUGINS.size()]); }
 	
-	public static int getPluginCount() {
-		return plugins.size();
-	}
+	public static int getPluginCount() { return PLUGINS.size(); }
 }

@@ -18,9 +18,7 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 	
 	public static final String TYPE_ID = "object";
 	
-	public JsonObjectComponent() {
-		super(ICON);
-	}
+	public JsonObjectComponent() { super(ICON); }
 
 	@Override
 	public JsonObject getJsonElement() {
@@ -33,9 +31,7 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 
 	@Override
 	public boolean setValue(JsonElement value) {
-		if(!value.isJsonObject()) {
-			return false;
-		}
+		if(!value.isJsonObject()) return false;
 		
 		removeAllElements();
 		
@@ -79,30 +75,21 @@ public final class JsonObjectComponent extends JsonCompositeComponent<JsonObject
 		boolean hasFound = false;
 		for(JsonComponent<?> element : getElements()) {
 			if(element.getKey().equals(key)) {
-				if(hasFound) {
-					return true;
-				} else {
-					hasFound = true;
-				}
+				if(hasFound) return true;
+				
+				hasFound = true;
 			}
 		}
 		return false;
 	}
 	
-	@Override
-	public String getTypeID() {
-		return TYPE_ID;
-	}
+	@Override public String getTypeID() { return TYPE_ID; }
 	
-	public boolean containsElement(String key) {
-		return indexOf(key) != -1;
-	}
+	public boolean containsElement(String key) { return indexOf(key) != -1; }
 	
 	public int indexOf(String key) {
 		for(int i = 0; i < getElementCount(); i++) {
-			if(getElement(i).getKey().equals(key)) {
-				return i;
-			}
+			if(getElement(i).getKey().equals(key)) return i;
 		}
 		return -1;
 	}

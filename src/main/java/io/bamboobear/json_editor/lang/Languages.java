@@ -10,7 +10,7 @@ import io.bamboobear.json_editor.JsonFile;
 import io.bamboobear.json_editor.plugin.Plugin;
 
 public final class Languages {
-	private static final ArrayList<Language> languages = new ArrayList<Language>();
+	private static final ArrayList<Language> LANGUAGES = new ArrayList<>();
 	
 	public static final Language ENGLISH = getLanguage("en_us", "README.md", "Bamboo Bear's JSON Editor.html");
 	public static final Language TRADITIONAL_CHINESE = getLanguage("zh_tw", "README (zh_tw).md", "竹子熊的JSON編輯器 (繁體中文).html");
@@ -29,7 +29,7 @@ public final class Languages {
 	}
 	
 	private static void loadVanillaLanguage() {
-		for(Language lang : languages) {
+		for(Language lang : LANGUAGES) {
 			try {
 				String fileName = String.format("lang/%s.json", lang.id());
 				JsonElement root = JsonFile.loadResource(fileName);
@@ -52,26 +52,20 @@ public final class Languages {
 		});
 	}
 	
-	public static Language getLanguage(String id) throws LanguageLoadingException{
+	public static Language getLanguage(String id) throws LanguageLoadingException {
 		return getLanguage(id, null, null);
 	}
 	
 	private static Language getLanguage(String id, String readme, String html) {
-		for(Language lang : languages) {
-			if(lang.id().equals(id)) {
-				return lang;
-			}
+		for(Language lang : LANGUAGES) {
+			if(lang.id().equals(id)) return lang;
 		}
 		Language lang = new Language(id, readme, html);
-		languages.add(lang);
+		LANGUAGES.add(lang);
 		return lang;
 	}
 		
-	public static Language[] getLanguages() {
-		return languages.toArray(new Language[languages.size()]);
-	}
+	public static Language[] getLanguages() { return LANGUAGES.toArray(new Language[LANGUAGES.size()]); }
 	
-	public static int getLanguageCount() {
-		return languages.size();
-	}
+	public static int getLanguageCount() { return LANGUAGES.size(); }
 }
