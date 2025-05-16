@@ -5,13 +5,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import io.bamboobear.json_editor.component.SettingComponent;
+import io.bamboobear.json_editor.lang.TranslatableText;
 
 public abstract class SimpleSetting<T> extends Setting<T>{
 	protected final String key;
 	
-	SimpleSetting(String key, SettingProperties<T> properties) {
-		super(properties);
-		this.key = key;
+	<S extends SimpleSetting<T>, B extends SimpleSettingBuilder<T, S, B>> SimpleSetting(SimpleSettingBuilder<T, S ,B> builder) {
+		super(builder);
+		this.key = builder.key;
 	}
 	
 	@Override
@@ -48,4 +49,13 @@ public abstract class SimpleSetting<T> extends Setting<T>{
 	protected abstract Component createValueComponent();
 	
 	public String getKey() { return key; }
+	
+	public static abstract class SimpleSettingBuilder<T, S extends SimpleSetting<T>, B extends SimpleSettingBuilder<T, S, B>> extends SettingBuilder<T, S, B> {
+		private String key;
+		
+		SimpleSettingBuilder(String key, TranslatableText label, T defaultValue) {
+			super(label, defaultValue);
+			this.key = key;
+		}
+	}
 }

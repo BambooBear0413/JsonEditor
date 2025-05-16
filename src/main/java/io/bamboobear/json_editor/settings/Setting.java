@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.SettingComponent;
-import io.bamboobear.json_editor.component.SettingsDialog;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 public abstract class Setting<T> {
@@ -22,14 +21,14 @@ public abstract class Setting<T> {
 	private final Consumer<? super T> afterValueChange;
 	private final BooleanSupplier isEnabled;
 	
-	Setting(SettingProperties<T> properties) {
-		this.label = properties.label;
-		this.defaultValue = Objects.requireNonNull(properties.defaultValue, "default value is null.");
-		this.experimentalFeature = properties.experimentalFeature;
-		this.requiresRestart = properties.requiresRestart;
-		this.valueChangeHandler = properties.valueChangeHandler;
-		this.afterValueChange = properties.afterValueChange;
-		this.isEnabled = properties.isEnabled;
+	<S extends Setting<T>, B extends SettingBuilder<T, S, B>> Setting(SettingBuilder<T, S, B> builder) {
+		this.label               = builder.label;
+		this.defaultValue        = builder.defaultValue;
+		this.experimentalFeature = builder.experimentalFeature;
+		this.requiresRestart     = builder.requiresRestart;
+		this.valueChangeHandler  = builder.valueChangeHandler;
+		this.afterValueChange    = builder.afterValueChange;
+		this.isEnabled           = builder.isEnabled;
 	}
 	
 	public T getValue() { return isEnabled() ? value : defaultValue; }
@@ -67,7 +66,7 @@ public abstract class Setting<T> {
 		return isEnabled.getAsBoolean() && (!isExperimentalFeature() || Main.isExperimentalFeaturesEnabled());
 	}
 	
-	public static final class SettingProperties<T> {
+	public static abstract class SettingBuilder<T, S extends Setting<T>, B extends SettingBuilder<T, S, B>> {
 		private static final TranslatableText REQUIRES_RESTART = TranslatableText.create("json_editor.settings.restart");
 		
 		private TranslatableText label;
@@ -78,44 +77,48 @@ public abstract class Setting<T> {
 		private Consumer<? super T> afterValueChange = value -> {};
 		private BooleanSupplier isEnabled = () -> true;
 		
-		public SettingProperties(TranslatableText label, T defaultValue) {
+		SettingBuilder(TranslatableText label, T defaultValue) {
 			this.label = Objects.requireNonNull(label, "label is null");
 			this.defaultValue = defaultValue;
 		}
 		
-		public SettingProperties<T> isExperimentalFeature() {
+		protected abstract B getThis();
+		
+		protected abstract S build();
+		
+		public final B isExperimentalFeature() {
 			if(!experimentalFeature) {
 				this.experimentalFeature = true;
 				this.label.isExperimentalFeature();
 			}
-			return this;
+			return getThis();
 		}
 		
-		public SettingProperties<T> valueChangeHandler(ValueChangeHandler<? super T> valueChangeHandler) {
-			this.valueChangeHandler = Objects.requireNonNullElse(valueChangeHandler, this.valueChangeHandler);
-			return this;
+		public final B valueChangeHandler(ValueChangeHandler<? super T> valueChangeHandler) {
+			this.valueChangeHandler = Objects.requireNonNullElse(valueChangeHandler, this.valueChangeHandler);;
+			return getThis();
 		}
 		
 		/**
-		 * WARNING: It is not recommended to perform repaint operations within the {@link Consumer},
-		 * as the {@link SettingsDialog} will typically repaint after the settings are saved.
+		 * WARNING: It is not recommended to perform repaint within the {@link Consumer},
+		 * as the {@link SettingDialog} will usually repaint after the settings are saved.
 		 * */
-		public SettingProperties<T> afterValueChange(Consumer<? super T> afterValueChange) {
+		public final B afterValueChange(Consumer<? super T> afterValueChange) {
 			this.afterValueChange = Objects.requireNonNullElse(afterValueChange, this.afterValueChange);
-			return this;
+			return getThis();
 		}
 		
-		public SettingProperties<T> requiresRestart() {
+		public final B requiresRestart() {
 			if(!requiresRestart) {
 				this.requiresRestart = true;
 				label.append(TranslatableText.literal(" (%s)", REQUIRES_RESTART));
 			}
-			return this;
+			return getThis();
 		}
 		
-		public SettingProperties<T> isEnabled(BooleanSupplier isEnabled) {
+		public final B isEnabled(BooleanSupplier isEnabled) {
 			this.isEnabled = Objects.requireNonNullElse(isEnabled, this.isEnabled);
-			return this;
+			return getThis();
 		}
 	}
 	

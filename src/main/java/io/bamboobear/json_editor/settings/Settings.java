@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
-import io.bamboobear.json_editor.settings.Setting.SettingProperties;
 
 public class Settings {
 	private static final File file = new File("settings.properties");
@@ -23,66 +22,45 @@ public class Settings {
 	private static final Properties unknownProperties = new Properties();
 	
 	public static final LanguageSetting LANGUAGE = registerSetting(
-			new LanguageSetting(
-					"language",
-					new SettingProperties<>(createTranslatableText("language"), Languages.DEFAULT_LANGUAGE)
-			)
+			LanguageSetting.builder("language", createTranslatableText("language"), Languages.DEFAULT_LANGUAGE).build()
 	);
 	
 	public static final BooleanSetting EXPERIMENTAL_FEATURES = registerSetting(
-			new BooleanSetting(
-					"isExperimentalFeaturesEnabled",
-					new SettingProperties<>(createTranslatableText("experimental_features"), false)
-							.requiresRestart()
-			)
+			BooleanSetting.builder("isExperimentalFeaturesEnabled", createTranslatableText("experimental_features"), false).build()
 	);
 	
 	public static final FontSetting FONT = registerSetting(
-			new FontSetting(
-					new SettingProperties<>(createTranslatableText("font"), Main.getFont("Default", 0, 15))
-			)
+			FontSetting.builder(createTranslatableText("font"), Main.getFont("Dialog", 0, 15)).build()
 	);
 	
 	public static final BooleanSetting PRETTY_PRINTING = registerSetting(
-			new BooleanSetting(
-					"enablesPrettyPrinting",
-					new SettingProperties<>(createTranslatableText("pretty_printing"), false)
-			)
+			BooleanSetting.builder("enablesPrettyPrinting", createTranslatableText("pretty_printing"), false).build()
 	);
 	
 	public static final BooleanSetting HTML_ESCAPING = registerSetting(
-			new BooleanSetting(
-					"enablesHtmlEscaping",
-					new SettingProperties<>(createTranslatableText("html_escaping"), false)
-			)
+			BooleanSetting.builder("enablesHtmlEscaping", createTranslatableText("html_escaping"), false).build()
 	);
 	
 	public static final BooleanSetting UNICODE_ESCAPING = registerSetting(
-			new BooleanSetting(
-					"enablesUnicodeEscaping",
-					new SettingProperties<>(createTranslatableText("unicode_escaping"), false)
-							.isExperimentalFeature()
-			)
+			BooleanSetting.builder("enablesUnicodeEscaping", createTranslatableText("unicode_escaping"), false)
+					.isExperimentalFeature().build()
 	);
 	
 	public static final LookAndFeelSetting LOOK_AND_FEEL = registerSetting(
-			new LookAndFeelSetting(
-					"lookAndFeel",
-					new SettingProperties<>(createTranslatableText("look_and_feel"), Main.getDefaultLookAndFeelInfo())
-							.valueChangeHandler(info -> {
-								// TODO show warning dialog
-								
-								return Main.setLookAndFeel(info.getClassName());
-							})
-							.afterValueChange(info -> {
-								try {
-									var mainWindow = Main.getMainWindow();
-									var dialogs = mainWindow.getOwnedWindows();
-									SwingUtilities.updateComponentTreeUI(mainWindow);
-									for(var dialog : dialogs) SwingUtilities.updateComponentTreeUI(dialog);
-								} catch (Exception e) {}
-							})
-			)
+			LookAndFeelSetting.builder("lookAndFeel", createTranslatableText("look_and_feel"), Main.getDefaultLookAndFeelInfo())
+					.valueChangeHandler(info -> {
+						// TODO show warning dialog
+						return Main.setLookAndFeel(info.getClassName());
+					})
+					.afterValueChange(info -> {
+						try {
+							var mainWindow = Main.getMainWindow();
+							var dialogs = mainWindow.getOwnedWindows();
+							SwingUtilities.updateComponentTreeUI(mainWindow);
+							for(var dialog : dialogs) SwingUtilities.updateComponentTreeUI(dialog);
+						} catch (Throwable e) {}
+					})
+					.build()
 	);
 	
 	public static void loadSettings() {

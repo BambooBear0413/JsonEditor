@@ -15,14 +15,14 @@ import io.bamboobear.json_editor.component.ComboBoxItem;
 import io.bamboobear.json_editor.component.SettingComponent;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
-public class FontSetting extends Setting<Font>{
+public final class FontSetting extends Setting<Font>{
 	public static final int MAX_FONT_SIZE = 28;
 	public static final int MIN_FONT_SIZE = 8;
 	
 	private static final String FONT_FAMILY = "fontFamily";
 	private static final String FONT_SIZE = "fontSize";
 	
-	FontSetting(SettingProperties<Font> properties) { super(properties); }
+	private FontSetting(FontSettingBuilder builder) { super(builder); }
 	
 	@Override
 	public Font getValue() {
@@ -114,5 +114,17 @@ public class FontSetting extends Setting<Font>{
 		if(value > MAX_FONT_SIZE) return MAX_FONT_SIZE;
 		if(value < MIN_FONT_SIZE) return MIN_FONT_SIZE;
 		return value;
+	}
+	
+	public static FontSettingBuilder builder(TranslatableText label, Font defaultValue) {
+		return new FontSettingBuilder(label, defaultValue);
+	}
+	
+	public static final class FontSettingBuilder extends SettingBuilder<Font, FontSetting, FontSettingBuilder> {
+		private FontSettingBuilder(TranslatableText label, Font defaultValue) { super(label, defaultValue); }
+
+		@Override protected FontSettingBuilder getThis() { return this; }
+
+		@Override protected FontSetting build() { return new FontSetting(this); }
 	}
 }
