@@ -32,8 +32,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -56,8 +54,6 @@ import io.bamboobear.json_editor.settings.Settings;
 public class Main{
 	public static final TranslatableText NAME = TranslatableText.create("json_editor.name");
 	public static final String VERSION = "0.1.0";
-	
-	private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 	
 	private static boolean isExperimentalFeaturesEnabled;
 	private static HashSet<Font> fontCache = new HashSet<Font>();
@@ -162,13 +158,13 @@ public class Main{
 	}
 
 	public static JsonReader createJsonReader(Reader reader) {
-		JsonReader jr = GSON.newJsonReader(reader);
+		JsonReader jr = new JsonReader(reader);
 		
 		return jr;
 	}
 	
 	public static JsonWriter createJsonWriter(Writer writer) throws IOException{
-		JsonWriter jw = GSON.newJsonWriter(writer);
+		JsonWriter jw = new JsonWriter(writer);
 		
 		if(Settings.PRETTY_PRINTING.getValue()) {
 			jw.setIndent("    ");;
