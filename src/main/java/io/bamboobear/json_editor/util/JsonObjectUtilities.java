@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
@@ -12,20 +11,17 @@ public class JsonObjectUtilities {
 	private JsonObjectUtilities() {}
 	
 	public static JsonPrimitive getJsonPrimitive(JsonObject object, String key) {
-		JsonElement element = object.get(key);
-		if(element.isJsonPrimitive()) return element.getAsJsonPrimitive();
+		if(isJsonPrimitive(object, key)) return object.get(key).getAsJsonPrimitive();
 		return null;
 	}
 	
 	public static JsonObject getJsonObject(JsonObject object, String key) {
-		JsonElement element = object.get(key);
-		if(element.isJsonObject()) return element.getAsJsonObject();
+		if(isJsonObject(object, key)) return object.get(key).getAsJsonObject();
 		return null;
 	}
 	
 	public static JsonArray getJsonArray(JsonObject object, String key) {
-		JsonElement element = object.get(key);
-		if(element.isJsonArray()) return element.getAsJsonArray();
+		if(isJsonArray(object, key)) return object.get(key).getAsJsonArray();
 		return null;
 	}
 	
@@ -78,26 +74,26 @@ public class JsonObjectUtilities {
 	}
 	
 	public static boolean isJsonPrimitive(JsonObject object, String key) {
-		return object.get(key).isJsonPrimitive();
+		return object.has(key) && object.get(key).isJsonPrimitive();
 	}
 	
 	public static boolean isJsonObject(JsonObject object, String key) {
-		return object.get(key).isJsonObject();
+		return object.has(key) && object.get(key).isJsonObject();
 	}
 	
 	public static boolean isJsonArray(JsonObject object, String key) {
-		return object.get(key).isJsonArray();
+		return object.has(key) && object.get(key).isJsonArray();
 	}
 	
 	public static boolean isBoolean(JsonObject object, String key) {
-		return isJsonPrimitive(object, key) || getJsonPrimitive(object, key).isBoolean();
+		return isJsonPrimitive(object, key) && getJsonPrimitive(object, key).isBoolean();
 	}
 	
 	public static boolean isNumber(JsonObject object, String key) {
-		return isJsonPrimitive(object, key) || getJsonPrimitive(object, key).isNumber();
+		return isJsonPrimitive(object, key) && getJsonPrimitive(object, key).isNumber();
 	}
 	
 	public static boolean isString(JsonObject object, String key) {
-		return isJsonPrimitive(object, key) || getJsonPrimitive(object, key).isString();
+		return isJsonPrimitive(object, key) && getJsonPrimitive(object, key).isString();
 	}
 }
