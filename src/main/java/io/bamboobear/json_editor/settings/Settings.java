@@ -26,7 +26,9 @@ public class Settings {
 	);
 	
 	public static final BooleanSetting EXPERIMENTAL_FEATURES = registerSetting(
-			BooleanSetting.builder("isExperimentalFeaturesEnabled", createTranslatableText("experimental_features"), false).build()
+			BooleanSetting.builder("isExperimentalFeaturesEnabled", createTranslatableText("experimental_features"), false)
+					.requiresRestart()
+					.build()
 	);
 	
 	public static final FontSetting FONT = registerSetting(
