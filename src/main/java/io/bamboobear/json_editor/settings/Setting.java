@@ -29,6 +29,8 @@ public abstract class Setting<T> {
 		this.valueChangeHandler  = builder.valueChangeHandler;
 		this.afterValueChange    = builder.afterValueChange;
 		this.isEnabled           = builder.isEnabled;
+		
+		this.value = defaultValue;
 	}
 	
 	public T getValue() { return isEnabled() ? value : defaultValue; }

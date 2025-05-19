@@ -19,7 +19,7 @@ public abstract class SimpleSetting<T> extends Setting<T>{
 	protected final String[] loadValue(Properties properties) {
 		String value = properties.getProperty(key);
 		
-		super.value = (value != null) ? getValueFromString(value) : defaultValue;
+		if(value != null) this.value = getValueFromString(value);
 		
 		return new String[] {key};
 	}
