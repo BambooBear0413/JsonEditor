@@ -36,8 +36,6 @@ public abstract class SimpleSetting<T> extends Setting<T>{
 		
 		if(value != null) {
 			super.value = getValueFromString(value);
-		} else {
-			super.value = defaultValue;
 		}
 		
 		return new String[] {key};

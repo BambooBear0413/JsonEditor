@@ -13,6 +13,7 @@ public abstract class Setting<T> {
 	
 	Setting(T defaultValue) {
 		this.defaultValue = Objects.requireNonNull(defaultValue, "default value is null");
+		this.value = this.defaultValue;
 	}
 	
 	public T getValue() {
