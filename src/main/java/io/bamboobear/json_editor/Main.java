@@ -82,7 +82,7 @@ public class Main{
 		load(PluginLoader::loadPlugins, dialog, "Loading plugins...");
 		for(Plugin plugin : Plugins.getPlugins()) {
 			load(Languages::loadLanguage, plugin, dialog, "Loading language files in plugin \"%s\"...".formatted(plugin.id()));
-			load(Plugin::loadLookAndFeel, plugin, dialog, "Loading look and feel in plugin \"%s\"...".formatted(plugin.id()));
+			load(Plugin::loadLookAndFeels, plugin, dialog, "Loading looks and feels in plugin \"%s\"...".formatted(plugin.id()));
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
 		

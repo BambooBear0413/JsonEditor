@@ -92,7 +92,7 @@ public abstract class Plugin {
 	
 	public abstract Map<String, JsonElement> loadLanguages();
 	
-	public abstract void loadLookAndFeel();
+	public abstract void loadLookAndFeels();
 	
 	static final Plugin createDirectoryPlugin(String id, JsonObject pluginJson, File file) {
 		return new DirectoryPlugin(id, pluginJson, file);
@@ -169,12 +169,12 @@ public abstract class Plugin {
 		}
 		
 		@Override
-		public void loadLookAndFeel() {
-			File lafDir = new File(dir, "look_and_feel");
+		public void loadLookAndFeels() {
+			File lafDir = new File(dir, "looks_and_feels");
 			if(!lafDir.isDirectory()) return;
 			
 			URL[] urls = Stream.of(lafDir.listFiles())
-					.filter(file -> file.getName() != "look_and_feel.json")
+					.filter(file -> file.getName() != "looks_and_feels.json")
 					.map((file -> {
 						try {
 							return file.toURI().toURL();
@@ -187,7 +187,7 @@ public abstract class Plugin {
 			
 			URLClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
 			
-			JsonFile json = new JsonFile(new File(lafDir, "look_and_feel.json"));
+			JsonFile json = new JsonFile(new File(lafDir, "looks_and_feels.json"));
 			JsonArray array = null;
 			try {
 				array = json.load().getAsJsonArray();
@@ -246,8 +246,8 @@ public abstract class Plugin {
 		}
 		
 		@Override
-		public void loadLookAndFeel() { // TODO this method currently have no implement 
-			System.err.println("ZipPlugin.loadLookAndFeel() is currently not supported");
+		public void loadLookAndFeels() { // TODO this method currently have no implement 
+			System.err.println("ZipPlugin.loadLookAndFeels() is currently not supported");
 		}
 		
 		private InputStream getEntryInputStream(ZipFile zipFile, ZipEntry entry) throws IOException {
