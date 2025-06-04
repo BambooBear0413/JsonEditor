@@ -44,13 +44,15 @@ public abstract class Setting<T> {
 	protected abstract void changeValue(Map<String, String> changes);
 	
 	public final void setValue(T value) {
-		if(this.value.equals(value) || !canApplyChange(value)) return;
+		value = Objects.requireNonNullElse(value, defaultValue);
 		
-		this.value = (value != null) ? value : defaultValue;
+		if(this.value.equals(value) || !applyChange(value)) return;
+
+		this.value = value;
 		doAfterChangeValue();
 	}
 	
-	private final boolean canApplyChange(T newValue) { return valueChangeHandler.shouldApply(newValue); }
+	private final boolean applyChange(T newValue) { return valueChangeHandler.applyChange(newValue); }
 	
 	private final void doAfterChangeValue() { afterValueChange.accept(this.value); }
 	
@@ -126,6 +128,6 @@ public abstract class Setting<T> {
 	
 	@FunctionalInterface
 	public static interface ValueChangeHandler<T> {
-		boolean shouldApply(T newValue);
+		boolean applyChange(T newValue);
 	}
 }
