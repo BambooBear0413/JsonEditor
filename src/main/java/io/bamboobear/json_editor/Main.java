@@ -83,6 +83,12 @@ public class Main{
 		for(Plugin plugin : Plugins.getPlugins()) {
 			load(Languages::loadLanguage, plugin, dialog, "Loading language files in plugin \"%s\"...".formatted(plugin.id()));
 			load(Plugin::loadLookAndFeels, plugin, dialog, "Loading looks and feels in plugin \"%s\"...".formatted(plugin.id()));
+			
+			try {
+				plugin.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
 		

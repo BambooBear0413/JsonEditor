@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import com.google.gson.JsonArray;
@@ -93,6 +94,8 @@ public abstract class Plugin {
 	public abstract Map<String, JsonElement> loadLanguages();
 	
 	public abstract void loadLookAndFeels();
+	
+	public abstract void close() throws IOException;
 	
 	static final Plugin createDirectoryPlugin(String id, JsonObject pluginJson, File file) {
 		return new DirectoryPlugin(id, pluginJson, file);
@@ -204,10 +207,13 @@ public abstract class Plugin {
 				LookAndFeelLoader.installLookAndFeel(name, className, loader);
 			}
 		}
+		
+		@Override public void close() {} // Nothing to close
 	}
 	
 	private static class ZipPlugin extends Plugin {
 		private final File file;
+		private ZipFile zipFile;
 		
 		ZipPlugin(String id, JsonObject pluginJson, File zipFile) {
 			super(id, pluginJson);
@@ -220,7 +226,8 @@ public abstract class Plugin {
 		public Map<String, JsonElement> loadLanguages() {
 			Map<String, JsonElement> map = new HashMap<String, JsonElement>();
 			
-			try (ZipFile zipFile = new ZipFile(file)) {
+			try {
+				ZipFile zipFile = getZipFile();
 				Pattern pattern = Pattern.compile("lang/(" + Language.LANGUAGE_ID_REGEX + ")\\.json");
 				
 				Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -252,6 +259,23 @@ public abstract class Plugin {
 		
 		private InputStream getEntryInputStream(ZipFile zipFile, ZipEntry entry) throws IOException {
 			return zipFile.getInputStream(entry);
+		}
+		
+		private ZipFile getZipFile() throws IOException {
+			if(zipFile != null) return zipFile;
+			try {
+				return zipFile = new ZipFile(file);
+			} catch (ZipException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
+		@Override
+		public void close() throws IOException {
+			if(zipFile == null) return;
+			
+			zipFile.close();
+			zipFile = null;
 		}
 	}
 }
