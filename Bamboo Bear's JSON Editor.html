@@ -98,7 +98,7 @@
 		<p><b>Java 21</b> is required to run the "JSON Editor", If your computer hasn't installed Java 21 or a later version, you can obtain it from one of the sources listed below. (Java obtained from different sources may have slight differences, but these differences will not affect the functionality of the "JSON Editor".)</p>
 		<ul>
 			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
-			<li><a herf="https://www.adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a> (If you don't want to do Java development, you can install JRE only.)</li>
+			<li><a herf="https://www.adoptium.net/temurin/releases/?version=21" target="_blank">Eclipse Temurin (Adoptium)</a> (If you don't want to do Java development, you can install JRE only.)</li>
 		</ul>
 		<p>If your computer already has Java installed, or you have just installed it, you can open a command line tool, such as Command Prompt (cmd) in Windows, and run the command <code>java --version</code> to check the Java version.</p>
 
@@ -112,55 +112,65 @@
 		<h2 id="settings" class="title">Settings (<code>settings.properties</code>)</h2>
 		<p>The settings of the "JSON Editor" are saved in the file <code>settings.properties</code>. They can be changed through the settings dialog in the "JSON Editor" or edited by another application (this is not recommended).</p>
 		<p>All settings in <code>settings.properties</code> are listed below, and each of them can be changed in the "JSON Editor" (some can only be changed when experimental features are enabled).</p>
-		<table>
-			<tr>
-				<th scope="column">Key</th>
-				<th scope="column">Type</th>
-				<th scope="column">Default Value</th>
-				<th scope="column">Notes</th>
-			</tr>
-			<tr>
-				<td><code>language</code></td>
-				<td>language code</td>
-				<td style="text-align:center"><code>en_us</code></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><code>isExperimentalFeaturesEnabled</code></td>
-				<td>Boolean</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>Enable experimental features. The change will take effect after restarting the program.</td>
-			</tr>
-			<tr>
-				<td><code>fontFamily</code></td>
-				<td>font family name</td>
-				<td style="text-align:center"><code>Dialog</code></td>
-				<td><code>Dialog</code> is the name of the Java default font family. <b style="color:red">Experimental Feature</b></td>
-			</tr>
-			<tr>
-				<td><code>fontSize</code></td>
-				<td>integer</td>
-				<td style="text-align:center"><code>15</code></td>
-				<td>Font size. The minimum value is <code>8</code>, and the maximum value is <code>28</code>.</td>
-			</tr>
-			<tr>
-				<td><code>enablesPrettyPrinting</code></td>
-				<td>Boolean</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled.</td>
-			</tr>
-			<tr>
-				<td><code>enablesHtmlEscaping</code></td>
-				<td>Boolean</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>After enabling HTML escaping, characters with special meaning in HTML, such as <code>=</code>, <code>&gt;</code>, and <code>&lt;</code>, will be escaped when saving the file.</td>
-			</tr>
-			<tr>
-				<td><code>enablesUnicodeEscaping</code></td>
-				<td>Boolean</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b></td>
-			</tr>
+		<table class="settings">
+			<thead>
+				<tr>
+					<th scope="column">Key</th>
+					<th scope="column">Type</th>
+					<th scope="column">Default Value</th>
+					<th scope="column">Notes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>language</code></td>
+					<td>language code</td>
+					<td><code>en_us</code></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><code>isExperimentalFeaturesEnabled</code></td>
+					<td>Boolean</td>
+					<td><code>false</code></td>
+					<td>Enable experimental features. The change will take effect after restarting the program.</td>
+				</tr>
+				<tr>
+					<td><code>fontFamily</code></td>
+					<td>font family name</td>
+					<td><code>Dialog</code></td>
+					<td><code>Dialog</code> is the name of the Java default font family. <b style="color:red">Experimental Feature</b></td>
+				</tr>
+				<tr>
+					<td><code>fontSize</code></td>
+					<td>integer</td>
+					<td><code>15</code></td>
+					<td>Font size. The minimum value is <code>8</code>, and the maximum value is <code>28</code>.</td>
+				</tr>
+				<tr>
+					<td><code>enablesPrettyPrinting</code></td>
+					<td>Boolean</td>
+					<td><code>false</code></td>
+					<td>After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled.</td>
+				</tr>
+				<tr>
+					<td><code>enablesHtmlEscaping</code></td>
+					<td>Boolean</td>
+					<td><code>false</code></td>
+					<td>After enabling HTML escaping, characters with special meaning in HTML, such as <code>=</code>, <code>&gt;</code>, and <code>&lt;</code>, will be escaped when saving the file.</td>
+				</tr>
+				<tr>
+					<td><code>enablesUnicodeEscaping</code></td>
+					<td>Boolean</td>
+					<td><code>false</code></td>
+					<td>After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b></td>
+				</tr>
+				<tr>
+					<td><code>lookAndFeel</code></td>
+					<td>look and feel class name</td>
+					<td>(Depending on operanting system)</td>
+					<td><b style="color:red">Experimental Feature</b></td>
+				</tr>
+			</tbody>
 		</table>
 		<p>When the "JSON Editor" starts, if it detects any "unknown settings" in the <code>settings.properties</code>, it will store them in memory. When the user changes and applies settings in the "JSON Editor", the program will rewrite the file, and the "unknown settings" will be written back into the file (under the "Unknown Properties" comment). However, the original comment in the <code>setting.properties</code> will be removed after the rewrite.</p>
 
@@ -177,6 +187,11 @@
 				<li><code>lang</code></li>
 				<ul>
 					<li><code>&lt;Language ID&gt;.json</code></li>
+				</ul>
+				<li><code>looks_and_feels</code></li>
+				<ul>
+					<li><code>looks_and_feels.json</code></li>
+					<li>Look and Feel JAR files...</li>
 				</ul>
 				<li><code>plugin.json</code></li>
 			</ul>
@@ -217,7 +232,7 @@
 			</tr>
 		</table>
 
-		<h3 id="language_file" class="title">Langauge File</h3>
+		<h3 id="language_file" class="title">Langauge Files</h3>
 		<p>Language files are used to add translation to the "JSON Editor", whether to improve incomplete vanilla translations, add new languages for vanilla content, or provide translations for plugin content.</p>
 		<p>All language files (including vanilla translations) are <b>in JSON format with the <code>.json</code> extension</b> and <b>are placed in the <code>lang</code> directory</b>. <b>The filename will be used as the "language ID"</b> for the "JSON Editor" to identify the language.<br>
 			The language ID must start with a lowercase letter (<code>a</code>-<code>z</code>), and can only contain lowercase letters (<code>a</code>-<code>z</code>), numbers (<code>0</code>-<code>9</code>), and underscores (<code>_</code>). Its length must be between 2 and 64 characters (inclusive). <span style="color:red">An illegal language ID will prevent the language file from being loaded!</span></p>
@@ -254,7 +269,8 @@
 
 		<h4 id="placeholders_in_translations" class="title">Placeholders in Translations</h4>
 		<p>If you want to create a language file for a language that is not currently supported by the "JSON Editor", you must pay attention to "parameters in translations".</p>
-		<p>In the "JSON Editor", all translation entries are "format strings" (see the format in the <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java SE API Documentation</a>, or see <a href="https://medium.com/@AlexanderObregon/javas-string-format-method-explained-82707214c953" target="_blank">this article</a>), which allow arguments to be inserted into the content. Some translations in vanilla content should include placeholders which will be replaced with filenames, website addresses, etc. in the "JSON Editor".</p>
+		<p>In the "JSON Editor", all translation entries are "format strings" (see the format in the <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java SE API Documentation</a>, or see <a href="https://medium.com/@AlexanderObregon/javas-string-format-method-explained-82707214c953" target="_blank">this article</a>), which allow arguments to be inserted into the content. Some translations in vanilla content should include placeholders which will be replaced with filenames, website addresses, etc. in the "JSON Editor".<br>
+			The format of placeholders only allows either <code>%s</code> or <code>%n$s</code>, where <code>n</code> is a positive integer.</p>
 		<p>Since all the translations are format strings, any <code>%</code> characters that are not part of translation placeholders should be escaped by using <code>%%</code>; otherwise, the "JSON Editor" may fail to parse other placeholders within that string.</p>
 
 		<p>All the translation keys of the "JSON Editor" vanilla content that should include placeholders are listed below:</p>
@@ -312,7 +328,7 @@
 			</tr>
 		</table>
 
-		<h4 id="language_file_suggestion" class="title">Suggestions for Language File</h4>
+		<h4 id="language_file_suggestion" class="title">Suggestions for Language Files</h4>
 		<p>Following the suggestions below or not does not affect the loading of language files; it is only for reference when making language files.</p>
 		<p>The language ID is recommended to consist of two parts: <b>"language"</b> and <b>country or region</b>. For some languages, an additional <b>script</b> part, such as Latin or Cyrillic, can be added. <b>Each part is separated by underscore (<code>_</code>)</b>. Although the maximum length of the language ID is 64 characters, it is recommended that the "language" and "country or region" parts <b>be between 2 and 4 characters (inclusive)</b>.</p>
 		<ul>
@@ -329,12 +345,32 @@
 			<li>In the "JSON Editor", there is a translation key named <code>json_editor.settings.language</code>, where <code>json_editor</code> represents that the key is used by vanilla content (for plugin content, this part can be replaced by the plugin id), <code>settings</code> represents that the key is related to the settings, and <code>language</code> represents that the key is related to "language". In fact, the translation key <code>json_editor.settings.langauge</code> is used for the label of the "Language" option in the settings screen.</li>
 		</ul>
 
+		<h3 id="looks_and_feels" class="title">Looks and Feels</h2>
+		<p>The "JSON Editor" is built with Java Swing, a GUI widget toolkit included in the Java SE API.<br>
+			In Swing, one common way to change the overall style of the UI is by switching the "look and feel". Hence, the "JSON Editor" provides an setting (<code>lookAndFeel</code>) to switch the "look and feel" (<b style="color:red">Experimental features</b>).</p>
+		<p>However, the looks and feels provided by Java may not be enough to satisfy everyone. Therefore, the "JSON Editor" also offers a mechanism for adding third-party Java Swing looks and feels via plugins.<br>
+			Note: This is currently only supported by directory plugin.</p>
+
+		<p>To add third-party looks and feels to the "JSON Editor", the first step is to place all JAR files containing the Java Swing look and feel classes into the <code>looks_and_feels</code> directory. Then, create a JSON file named <code>looks_and_feels.json</code> in the same directory.</p>
+		<p>The structure of the <code>looks_and_feels.json</code> file is as follows. <b style="color:red">Text in bold red</b> represents required JSON elements.</p>
+		<ul>
+			<li>The root element (Array)</li>
+			<ul>
+				<li>(A look and feel) (Object)</li>
+				<ul>
+					<li><b style="color:red">name</b> (String): The name of the look and feel. Translation is not supported.</li>
+					<li><b style="color:red">class_name</b> (String): The name of the look and feel class. (See the format in the <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ClassLoader.html#binary-name" target="_blank">Java SE API Documentation</a>).</li>
+				</ul>
+			</ul>
+		</ul>
+		<p>The "JSON Editor" will scan all JAR files under the <code>looks_and_feels</code> directory to find the classes specified in the <code>looks_and_feels.json</code> file. If specified classes exists, it should still have to satisfy the following conditions to be recongnized as a look and feel class: it extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/javax/swing/LookAndFeel.html" target="_blank"><code>javax.swing.LookAndFeel</code></a>, is not <code>abstract</code>, and has a no-argument constructor. Classes that does not satisfy all of the conditions will be ignored.</p>
+
 		<h2 id="open_source_libraries" class="title">Third-Party Open Source Libraries</h2>
 		<h3 id="gson" class="title">Gson</h3>
 		<p>Version: 2.13.0<br>
 			Copyright 2008 Google Inc.</p>
 		
-		<p>A Java library developed by Google that serializes Java objects to JSON, and deserializes JSON to Java objects (Java objects <-> JSON)</p>
+		<p>A Java library developed by Google that serializes Java objects to JSON, and deserializes JSON to Java objects (Java objects &lt;-&gt; JSON)</p>
 		
 		<p>License: <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License Version 2.0</a><br>
 			See also: <a href="https://github.com/google/gson" target="_blank">https://github.com/google/gson</a></p>

@@ -98,7 +98,7 @@
 		<p>“JSON编辑器”需要<b>Java 21</b>以上版本才能运行，如果你的计算机没有安装Java 21或更高版本，可以考虑从以下两个地方取得（两者可能略有不同，但不影响“JSON编辑器”运行）：</p>
 		<ul>
 			<li><a href="https://www.oracle.com/java/technologies/downloads" target="_blank">Oracle</a></li>
-			<li><a href="https://adoptium.net/temurin/releases/?version=17" target="_blank">Eclipse Temurin (Adoptium)</a>（若不打算进行Java开发，可只安装JRE。）</li>
+			<li><a href="https://adoptium.net/temurin/releases/?version=21" target="_blank">Eclipse Temurin (Adoptium)</a>（若不打算进行Java开发，可只安装JRE。）</li>
 		</ul>
 		<p>如果计算机已经有安装Java，或者刚安装完，可以打开<ruby>命令行<rp>(</rp><rt>Command Line</rt><rp>)</rp></ruby>（如Windows系统中的cmd），输入命令<code>java --version</code>，即可检查Java版本。</p>
 
@@ -112,55 +112,65 @@
 		<h2 id="settings" class="title">设置（<code>settings.properties</code>）</h2>
 		<p>“JSON编辑器”的设置保存于<code>settings.properties</code>文件中，可以在程序内透过设置页面更改，也可以从外部更改（不建议这么做）。</p>
 		<p>目前<code>settings.properties</code>中的所有设置如下表，当中所有设置皆可于程序内更改（有些设置需要“启用实验性内容”才能于程序内更改）。</p>
-		<table>
-			<tr>
-				<th scope="column">键</th>
-				<th scope="column">类型</th>
-				<th scope="column">默认值</th>
-				<th scope="column">备注</th>
-			</tr>
-			<tr>
-				<td><code>language</code></td>
-				<td>语言代码</td>
-				<td style="text-align:center"><code>en_us</code></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td><code>isExperimentalFeaturesEnabled</code></td>
-				<td>布尔值</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>是否启用实验性内容。须重启程序，变更才会生效。</td>
-			</tr>
-			<tr>
-				<td><code>fontFamily</code></td>
-				<td>字族名称</td>
-				<td style="text-align:center"><code>Dialog</code></td>
-				<td><code>Dialog</code>是Java默认字族的名称。<b style="color:red">实验性内容</b></td>
-			</tr>
-			<tr>
-				<td><code>fontSize</code></td>
-				<td>整数值</td>
-				<td style="text-align:center"><code>15</code></td>
-				<td>字体大小。最小值为<code>8</code>，最大值为<code>28</code>。</td>
-			</tr>
-			<tr>
-				<td><code>enablesPrettyPrinting</code></td>
-				<td>布尔值</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>相较于禁用时，启用此项后保存的JSON文件可读性较高（经过排版），但文件大小会稍大。</td>
-			</tr>
-			<tr>
-				<td><code>enablesHtmlEscaping</code></td>
-				<td>布尔值</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>启用此项后，保存JSON文件时，会将<code>=</code>、<code>&gt;</code>、<code>&lt;</code>等于HTML中有特殊功能的字符转成转义序列。</td>
-			</tr>
-			<tr>
-				<td><code>enablesUnicodeEscaping</code></td>
-				<td>布尔值</td>
-				<td style="text-align:center"><code>false</code></td>
-				<td>启用此项后，保存JSON文件时，会将“非ASCII字符”转成Unicode转义序列。<b style="color:red">实验性内容</b></td>
-			</tr>
+		<table class="settings">
+			<thead>
+				<tr>
+					<th scope="column">键</th>
+					<th scope="column">类型</th>
+					<th scope="column">默认值</th>
+					<th scope="column">备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>language</code></td>
+					<td>语言代码</td>
+					<td><code>en_us</code></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><code>isExperimentalFeaturesEnabled</code></td>
+					<td>布尔值</td>
+					<td><code>false</code></td>
+					<td>是否启用实验性内容。须重启程序，变更才会生效。</td>
+				</tr>
+				<tr>
+					<td><code>fontFamily</code></td>
+					<td>字族名称</td>
+					<td><code>Dialog</code></td>
+					<td><code>Dialog</code>是Java默认字族的名称。<b style="color:red">实验性内容</b></td>
+				</tr>
+				<tr>
+					<td><code>fontSize</code></td>
+					<td>整数值</td>
+					<td><code>15</code></td>
+					<td>字体大小。最小值为<code>8</code>，最大值为<code>28</code>。</td>
+				</tr>
+				<tr>
+					<td><code>enablesPrettyPrinting</code></td>
+					<td>布尔值</td>
+					<td><code>false</code></td>
+					<td>相较于禁用时，启用此项后保存的JSON文件可读性较高（经过排版），但文件大小会稍大。</td>
+				</tr>
+				<tr>
+					<td><code>enablesHtmlEscaping</code></td>
+					<td>布尔值</td>
+					<td><code>false</code></td>
+					<td>启用此项后，保存JSON文件时，会将<code>=</code>、<code>&gt;</code>、<code>&lt;</code>等于HTML中有特殊功能的字符转成转义序列。</td>
+				</tr>
+				<tr>
+					<td><code>enablesUnicodeEscaping</code></td>
+					<td>布尔值</td>
+					<td><code>false</code></td>
+					<td>启用此项后，保存JSON文件时，会将“非ASCII字符”转成Unicode转义序列。<b style="color:red">实验性内容</b></td>
+				</tr>
+				<tr>
+					<td><code>lookAndFeel</code></td>
+					<td>look and feel 类名</td>
+					<td>（依操作系统而定）</td>
+					<td><b style="color:red">实验性内容</b></td>
+				</tr>
+			</tbody>
 		</table>
 		<p>如果“JSON编辑器”启动时在<code>settings.properties</code>文件中发现“未知设置”，会特别纪录。当使用者于程序内更改设置并应用时，程序会覆写该文件，而先前特别保存的“位置设定”便可保留在文件中（位于注释“Unknown properties”之下）。<code>settings.properties</code>文件中的“注释”则无此机制（会与覆写后消失）。</p>
 
@@ -178,13 +188,17 @@
 				<ul>
 					<li><code>&lt;语言ID&gt;.json</code></li>
 				</ul>
+				<ul>
+					<li><code>looks_and_feels.json</code></li>
+					<li>Look and Feel JAR 文件</li>
+				</ul>
 				<li><code>plugin.json</code></li>
 			</ul>
 		</ul>
 
 		<h3 id="plugin_json" class="title"><code>plugin.json</code></h3>
 		<p><code>plugin.json</code>是每个插件必有的文件，文件中包含“插件ID”等资讯，并作为“JSON编辑器”识别插件的主要依据。</p>
-		<p><code>plugin.json</code>文件的结构如下。<b style="color:red">红色粗体字</b>代表必须包含的JSON元素（必须项）。</p>
+		<p><code>plugin.json</code>文件的结构如下。<b style="color:red">红色粗体字</b>代表必须包含的JSON元素（必选项）。</p>
 
 		<ul>
 			<li>根元素（对象）</li>
@@ -254,7 +268,8 @@
 
 		<h4 id="placeholders_in_translations" class="title">翻译内容中的占位符</h4>
 		<p>如果你打算制作“JSON编辑器”本身没支援的语言，就需要特别注意“内容中的占位符”。</p>
-		<p>在“JSON编辑器”中，所有翻译内容都是「格式化字串」（格式参见<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中插入参数，。在原版内容中，部分翻译内容应当包含占位符，以便在“JSON编辑器”中替换为文件名称、网址等。</p>
+		<p>在“JSON编辑器”中，所有翻译内容都是「格式化字串」（格式参见<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html" target="_blank">Java文档</a>，或参考<a href="https://www.iteye.com/blog/kgd1120-1293633" target="_blank">这篇文章</a>），以便在翻译内容中插入参数，。在原版内容中，部分翻译内容应当包含占位符，以便在“JSON编辑器”中替换为文件名称、网址等。<br>
+			占位符只允许<code>%s</code>或<code>%n$s</code>（<code>n是正整数</code>）两种形式。</p>
 		<p>因为翻译内容都是格式化文字，任何不作为占位符的<code>%</code>都应使用<code>%%</code>，否则，同字符串的其他占位符可能无法正常转换。</p>
 		<p>“JSON编辑器”原版内容中，所有应带有占位符的翻译键名列表如下：</p>
 
@@ -327,6 +342,26 @@
 		<ul>
 			<li>例：“JSON编辑器”中，有个翻译键名为<code>json_editor.settings.language</code>，其中<code>json_editor</code>代表“JSON编辑器”本身用到的翻译键名（对于插件内容的翻译，可替换为“插件ID”），<code>settings</code>代表他与设置有关，<code>language</code>代表他与“语言”有关。而<code>json_editor.settings.language</code>事实上就是设置视窗中，“语言”选项的“名称”所使用的翻译键名。</li>
 		</ul>
+
+		<h3 id="looks_and_feels">Look and Feel</h3>
+		<p>“JSON编辑器”是使用Java SE API提供的Java Swing GUI工具箱编写的程序。在Swing中，切换UI整体风格的其中一种常见方式是切换“Look and Feel”。因此，“JSON编辑器”提供一项设定（<code>lookAndFeel</code>）来切换“Look and Feel”（实验性内容）。</p>
+		<p>然而，Java本身提供的“Look and Feel”可能无法满足所有人。因此，“JSON编辑器”也提供了透过插件加载第三方“Java Swing Look and Feel”的机制。<br>
+			备注：目前仅文件夹插件支援。</p>
+		<p>添加第三方“Look and Feel”到“JSON编辑器”中，首先要将所有包含“Java Swing Look and Feel”类的JAR文件放到<code>looks_and_feels</code>中，接着在同个文件夹中建立<code>looks_and_feels.json</code>文件</p>
+		<p><code>looks_and_feels.json</code>的结构如下。<b style="color:red">红色粗体字</b>代表必须包含的JSON元素（必选项）。</p>
+
+		<ul>
+			<li>根元素（数组）</li>
+			<ul>
+				<li>（一个“Look and Feel”）（对象）</li>
+				<ul>
+					<li><b style="color:red">name</b>（字符串）：“Look and Feel”的名称。不提供翻译。</li>
+					<li><b style="color:red">class_name</b>（字符串）：“Look and Feel”类名（格式参见<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ClassLoader.html#binary-name" target="_blank">Java文档</a>）。</li>
+				</ul>
+			</ul>
+		</ul>
+
+		<p>“JSON编辑器”会扫描所有位于<code>looks_and_feels</code>文件夹下的JAR文件，并寻找<code>looks_and_feels</code>中指定的类。如果指定类存在，它仍必须符合以下条件，才会被视为“Look and Feel”类：继承<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/javax/swing/LookAndFeel.html" target="_blank"><code>javax.swing.LookAndFeel</code></a>、非抽象（<code>abstract</code>）类、拥有不接受任何参数的构造函数。有任一条件不符合的类将被忽略。</p>
 
 		<h2 id="open_source_libraries" class="title">第三方开源函式库</h2>
 		<h3 id="gson">Gson</h3>

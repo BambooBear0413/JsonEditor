@@ -43,6 +43,11 @@ th, td {
     border: 1px solid;
     padding: 5px 8px;
 }
+
+table.settings > tbody > tr > td:nth-child(3) {
+    text-align: center;
+}
+
 code {
     background: var(--code-background);
     padding: 0px 5px;

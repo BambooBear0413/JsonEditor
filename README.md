@@ -28,8 +28,9 @@ The settings of the "JSON Editor" are saved in the file `settings.properties`. A
 |`enablesPrettyPrinting`|Boolean|`false`|After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled.|
 |`enablesHtmlEscaping`|Boolean|`false`|After enabling HTML escaping, characters with special meaning in HTML, such as `=`,`>`, and `<`, will be escaped when saving the file.|
 |`enablesUnicodeEscaping`|Boolean|`false`|After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b>|
+|`lookAndFeel`|look and feel class name|(Depending on OS)|<b style="color:red">Experimental Feature</b>|
 
-Most settings listed above can be changed in the "JSON Editor" (some can only be changed when experimental features are enabled) or edited by other application (this is not recommented).
+All settings listed above can be changed in the "JSON Editor" (some cannot only be changed if experimental features are disabled) or edited by other application (not recommended).
 
 ## Plugins
 Plugins of the "JSON Editor" can either be a directory or an archive file in ZIP format (with a filename extension of `.zip`). Similar to Minecraft datapacks, plugins allow you to add specific features or content to the "JSON Editor" without needing to write any code.

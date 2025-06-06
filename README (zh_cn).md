@@ -28,8 +28,9 @@
 |`enablesPrettyPrinting`|布尔值|`false`|相较于禁用时，启用此项后保存的JSON文件可读性较高（经过排版），但文件大小会稍大。|
 |`enablesHtmlEscaping`|布尔值|`false`|启用此项后，保存JSON文件时，会将`=`、`>`、`<`等于HTML中有特殊功能的字符转成转义序列。|
 |`enablesUnicodeEscaping`|布尔值|`false`|启用此项后，保存JSON文件时，会将“非ASCII字符”转成Unicode转义序列。<b style="color:red">实验性内容</b>|
+|`lookAndFeel`|Look and Feel类名|（依系统而定）|<b style="color:red">实验性内容</b>|
 
-这些设置大多都能在“JSON编辑器”中设置（有些设置需要”启用实验性内容“才能于程序内修改，也可透过直接修改`settings.properties`设置（不建议）。
+这些设置都能在“JSON编辑器”中设置（有些设置需要”启用实验性内容“才能于程序内修改，也可透过直接修改`settings.properties`设置（不建议）。
 
 ## 插件
 “JSON编辑器”的“插件”可以是一个文件夹，或是一个压缩文件（ZIP格式，且扩展名必须是`.zip`），插件类似于Minecraft中的数据包，可以透过不需撰写任何代码的情况下，添加部分功能或内容到“JSON编辑器”中。
