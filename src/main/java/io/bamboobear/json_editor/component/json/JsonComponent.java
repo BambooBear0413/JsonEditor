@@ -102,7 +102,18 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 	
 	public final JsonCompositeComponent<?> getParentElement() { return parent; }
 	
-	public abstract JsonCompositeComponent<?> getRootElement();
+	public final JsonCompositeComponent<?> getRootElement() {
+		JsonComponent<?> component = this;
+		JsonCompositeComponent<?> parent = getParentElement(); // is equivalent to component.getParentElement();
+		
+		while(parent != null) {
+			component = parent;
+			parent = component.getParentElement();
+		}
+		
+		if(component instanceof JsonCompositeComponent<?> root) return root;
+		throw new IllegalStateException("unexpected root element: " + component.getClass().getCanonicalName());
+	}
 	
 	protected static final ImageIcon getImageIcon(String name) {
 		return ResourceImageLoader.getImageIcon(String.format("json/%s.png", name), DEFAULT_HEIGHT, DEFAULT_HEIGHT, Image.SCALE_SMOOTH);

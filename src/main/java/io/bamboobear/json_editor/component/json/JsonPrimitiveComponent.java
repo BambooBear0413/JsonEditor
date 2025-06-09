@@ -39,14 +39,6 @@ public sealed abstract class JsonPrimitiveComponent<T> extends JsonComponent<Jso
 	
 	public abstract T getValue();
 	
-	@Override
-	public final JsonCompositeComponent<?> getRootElement() {
-		JsonCompositeComponent<?> parent = getParentElement();
-		if (parent == null) throw new IllegalStateException("parent is null");
-		
-		return parent.getRootElement();
-	}
-
 	protected abstract EditorInputField createValueComponent();
 	
 	public State getValueComponentState() { return State.NORMAL; }

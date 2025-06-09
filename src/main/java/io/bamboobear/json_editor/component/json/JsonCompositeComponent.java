@@ -95,12 +95,6 @@ public sealed abstract class JsonCompositeComponent<T extends JsonElement> exten
 	
 	public final int getElementCount() { return elementsPanel.getComponentCount(); }
 	
-	@Override
-	public final JsonCompositeComponent<?> getRootElement() {
-		JsonCompositeComponent<?> parent = getParentElement();
-		return (parent == null) ? this : parent.getRootElement();
-	}
-	
 	public abstract void fireAddElement();
 	
 	@Override public Dimension getPreferredSize() { return getLayout().preferredLayoutSize(this); }

@@ -34,14 +34,4 @@ public final class JsonNullComponent extends JsonComponent<JsonNull>{
 	@Override public boolean setValue(JsonElement value) { return true; }
 	
 	@Override public String getTypeID() { return TYPE_ID; }
-	
-	@Override
-	public JsonCompositeComponent<?> getRootElement() {
-		JsonCompositeComponent<?> parent = getParentElement();
-		if (parent == null) {
-			throw new IllegalStateException("parent is null");
-		} else {
-			return parent.getRootElement();
-		}
-	}
 }
