@@ -36,7 +36,6 @@
 	"json_editor.save_file.no_file": "Save File?",
 	"json_editor.save_file.file": "Save File \"%s\"?",
 	"json_editor.save_file.title": "Save File",
-	"json_editor.color_picker.title": "Color Picker",
 	"json_editor.error.failed_to_save_file.title": "Failed to Save File",
 	"json_editor.error.failed_to_save_file": "An error occurred when saving the file \"%s\"!",
 	"json_editor.error.invalid_root_element.title": "Invalid Root Element",

@@ -36,7 +36,6 @@
 	"json_editor.save_file.no_file": "儲存檔案？",
 	"json_editor.save_file.file": "儲存檔案「%s」？",
 	"json_editor.save_file.title": "儲存檔案",
-	"json_editor.color_picker.title": "選色器",
 	"json_editor.error.failed_to_save_file.title": "存檔失敗",
 	"json_editor.error.failed_to_save_file": "儲存檔案「%s」時發生錯誤！",
 	"json_editor.error.invalid_root_element.title": "無效的根元素",
