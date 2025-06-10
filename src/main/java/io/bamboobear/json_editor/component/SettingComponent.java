@@ -6,9 +6,11 @@ import java.awt.GridLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 
 import io.bamboobear.json_editor.lang.TranslatableText;
 
@@ -35,39 +37,62 @@ public abstract class SettingComponent extends JComponent{
 	
 	protected abstract Component createValueComponent();
 	
-	public static class SettingTextField extends TextField {
+	public static final class SettingTextField extends TextField {
 		private String key;
 		
 		public SettingTextField(String key, String value) {
-			this(key, value, SettingTextField::getText);
+			this(key, value, str -> str);
 		}
 		
-		public SettingTextField(String key, String value, Function<SettingTextField, String> valueGetter) {
+		public SettingTextField(String key, String value, Function<String, String> valueHandler) {
+			this(key, value, valueHandler, (textField, newValue) -> {});
+		}
+		
+		public SettingTextField(String key, String value, Function<String, String> valueHandler, BiConsumer<SettingTextField, String> updater) {
 			super(value);
 			this.key = key;
 			addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
-					SettingsDialog.addSettingChange(SettingTextField.this.key, valueGetter.apply(SettingTextField.this));
+					String value = valueHandler.apply(SettingTextField.this.getText());
+					SettingsDialog.addSettingChange(SettingTextField.this.key, value);
+					updater.accept(SettingTextField.this, value);
 				}
 			});
 		}
 	}
 	
-	public static class SettingComboBox extends ComboBox {
+	public static final class SettingComboBox extends ComboBox {
 		private String key;
 		
 		public SettingComboBox(ComboBoxItem[] items, String key, String value) {
-			this(items, key, value, SettingComboBox::getValue);
+			this(items, key, value, str -> str);
 		}
 		
-		public SettingComboBox(ComboBoxItem[] items, String key, String value, Function<SettingComboBox, String> valueGetter) {
+		public SettingComboBox(ComboBoxItem[] items, String key, String value, Function<String, String> valueHandler) {
+			this(items, key, value, valueHandler, (comboBox, newValue) -> {});
+		}
+		
+		public SettingComboBox(ComboBoxItem[] items,
+				String key, String value, Function<String, String> valueHandler, BiConsumer<SettingComboBox, String> updater) {
+			
 			super(items);
 			this.key = key;
 			setValue(value);
 			addItemListener(e -> {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-					SettingsDialog.addSettingChange(SettingComboBox.this.key, valueGetter.apply(SettingComboBox.this));
+					SettingsDialog.addSettingChange(SettingComboBox.this.key, valueHandler.apply(SettingComboBox.this.getValue()));
+				}
+			});
+			
+			addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(SettingComboBox.this.isEditable()) {
+						String value = valueHandler.apply(SettingComboBox.this.getValue());
+						SettingsDialog.addSettingChange(SettingComboBox.this.key, value);
+						((JTextField)(SettingComboBox.this.getEditor().getEditorComponent())).setText(value);
+					}
 				}
 			});
 		}

@@ -85,16 +85,15 @@ public final class FontSetting extends Setting<Font>{
 				}
 				
 				SettingTextField fontSize = new SettingTextField(FONT_SIZE, String.valueOf(value.getSize()),
-						textField -> {
+						value -> {
 							String text;
 							try {
-								text = String.valueOf(correctFontSizeValue(Integer.parseInt(textField.getText())));
+								text = String.valueOf(correctFontSizeValue(Integer.parseInt(value)));
 							} catch (NumberFormatException e) {
-								text = String.valueOf(value.getSize());
+								text = String.valueOf(FontSetting.this.value.getSize());
 							}
-							textField.setText(text);
 							return text;
-						}
+						}, SettingTextField::setText
 				);
 				panel.add(fontSize);
 				
