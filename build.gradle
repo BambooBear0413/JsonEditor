@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'application'
+}
+
+group = 'dev.bamboobear'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.13.0'
+}
+
+application {
+    mainClass = 'io.bamboobear.json_editor.Main'
+}
+
+jar {
+    archiveBaseName = project.app_name
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+processResources {}
+
+tasks.register('copyDependencies', Copy.class) {
+    from project.configurations.runtimeClasspath
+    into layout.buildDirectory.dir("lib")
+}
+
+tasks.build.dependsOn('copyDependencies')

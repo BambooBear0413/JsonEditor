@@ -1,27 +1,49 @@
-test*
-
-target/
-src/test/
-
-plugins/
-report/
+test*.json
 reports/
+!**/src/main/**/reports/
+!**/src/test/**/reports/
+plugins/
+!**/src/main/**/plugins/
+!**/src/test/**/plugins/
 settings.properties
 
-# Eclipse Project
-.project
-.classpath
-.settings/
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# IDEA
+# IntelliJ IDEA
 .idea/
+*.iws
 *.iml
 *.ipr
-*.iws
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
 # VS Code
 .vscode/
-bin/
 
-# MacOS
-*.DS_Store
+# Mac OS
+.DS_Store
