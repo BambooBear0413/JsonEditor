@@ -13,15 +13,11 @@ repositories {
 }
 
 dependencies {
-    api 'com.google.code.gson:gson:2.13.0'
+    api 'com.google.code.gson:gson:2.13.0' exclude(group: 'com.google.errorprone', module: 'error_prone_annotations')
 }
 
 application {
     mainClass = 'io.bamboobear.json_editor.Main'
-}
-
-jar {
-    archiveBaseName = project.app_name
 }
 
 java {
@@ -30,11 +26,25 @@ java {
     }
 }
 
-processResources {}
+jar {
+    archiveBaseName = project.app_name
+    destinationDirectory = layout.buildDirectory
+
+    manifest {
+        attributes (
+                'Main-Class': application.mainClass,
+                'Class-Path': project.configurations.runtimeClasspath.files
+                        .collect {"libs/${it.name}" }
+                        .join(' '),
+                'Implementation-Title': project.app_name,
+                'Implementation-Version': project.version
+        )
+    }
+}
 
 tasks.register('copyDependencies', Copy.class) {
     from project.configurations.runtimeClasspath
-    into layout.buildDirectory.dir("lib")
+    into layout.buildDirectory.dir("libs")
 }
 
 tasks.build.dependsOn('copyDependencies')
