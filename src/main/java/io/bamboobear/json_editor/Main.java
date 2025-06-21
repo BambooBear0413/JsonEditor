@@ -17,18 +17,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -39,16 +35,11 @@ import io.bamboobear.json_editor.component.AboutDialog;
 import io.bamboobear.json_editor.component.Frame;
 import io.bamboobear.json_editor.component.Menu;
 import io.bamboobear.json_editor.component.MenuItem;
-import io.bamboobear.json_editor.component.PluginListDialog;
 import io.bamboobear.json_editor.component.SettingsDialog;
 import io.bamboobear.json_editor.editor.JsonEditor;
 import io.bamboobear.json_editor.lang.Language;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
-import io.bamboobear.json_editor.plugin.LookAndFeelLoader;
-import io.bamboobear.json_editor.plugin.Plugin;
-import io.bamboobear.json_editor.plugin.PluginLoader;
-import io.bamboobear.json_editor.plugin.Plugins;
 import io.bamboobear.json_editor.settings.Settings;
 
 public class Main{
@@ -57,7 +48,6 @@ public class Main{
 	
 	private static boolean isExperimentalFeaturesEnabled;
 	private static HashSet<Font> fontCache = new HashSet<Font>();
-	private static LookAndFeelInfo defaultLookAndFellInfo;
 	
 	private static MainWindow mainWindow;
 	private static JsonEditor editor;
@@ -69,37 +59,17 @@ public class Main{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) { ErrorReport.output(e); }
 		
-		defaultLookAndFellInfo = getDefaultAndFeelInfo(UIManager.getLookAndFeel());
-		
 		ErrorReport.init();
 		
 		Thread.setDefaultUncaughtExceptionHandler(ErrorReport::output);
 		
 		LoadingDialog dialog = new LoadingDialog();
 		
-		load(Languages::loadLanguage, null, dialog, "Loading vanilla language files...");
+		load(Languages::loadLanguage, dialog, "Loading language files...");
 		load(ResourceImageLoader::loadImages, dialog, "Loading resource images...");
-		load(PluginLoader::loadPlugins, dialog, "Loading plugins...");
-		for(Plugin plugin : Plugins.getPlugins()) {
-			load(Languages::loadLanguage, plugin, dialog, "Loading language files in plugin \"%s\"...".formatted(plugin.id()));
-			load(Plugin::loadLookAndFeels, plugin, dialog, "Loading looks and feels in plugin \"%s\"...".formatted(plugin.id()));
-			
-			try {
-				plugin.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		load(Settings::loadSettings, dialog, "Loading settings...");
 		
 		isExperimentalFeaturesEnabled = Settings.EXPERIMENTAL_FEATURES.getValue();
-		
-		setLAF: try {
-			LookAndFeelInfo info = Settings.LOOK_AND_FEEL.getValue();
-			String className = info.getClassName();
-			if(className.equals(defaultLookAndFellInfo.getClassName())) break setLAF;
-			Main.setLookAndFeel(className);
-		} catch (Exception e) { ErrorReport.output(e); }
 		
 		SwingUtilities.invokeLater(() -> {
 			mainWindow = new MainWindow();
@@ -115,11 +85,6 @@ public class Main{
 	private static void load(Runnable action, LoadingDialog dialog, String loadingText) {
 		dialog.setText(loadingText);
 		action.run();
-	}
-	
-	private static <T> void load(Consumer<T> action, T arg, LoadingDialog dialog, String loadingText) {
-		dialog.setText(loadingText);
-		action.accept(arg);
 	}
 	
 	public synchronized static void setEditor(JsonEditor newEditor) {
@@ -180,43 +145,6 @@ public class Main{
 		}
 		
 		return jw;
-	}
-	
-	private static LookAndFeelInfo getDefaultAndFeelInfo(LookAndFeel laf) {
-		String className = laf.getClass().getCanonicalName();
-		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		for(LookAndFeelInfo info : infos) {
-			if(info.getClassName().equals(className)) return info;
-		}
-		throw new IllegalStateException("Unknown Look & Feel: " + className);
-	}
-	
-	public static LookAndFeelInfo getDefaultLookAndFeelInfo() { return defaultLookAndFellInfo; }
-	
-	public static boolean setLookAndFeel(String className) {
-		Class<?> clazz = LookAndFeelLoader.getLookAndFeelClass(className);
-		if(clazz == null) {
-			try {
-				UIManager.setLookAndFeel(className);
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		
-		try {
-			LookAndFeel laf = (LookAndFeel) clazz.getConstructor().newInstance();
-			UIManager.setLookAndFeel(laf);
-
-			UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-			if(defaults.get("ClassLoader") == null) defaults.put("ClassLoader", clazz.getClassLoader());
-			
-			return true;
-		} catch (Throwable e) { // TODO show warning dialog
-			e.printStackTrace();
-			return false;
-		}
 	}
 	
 	public static void browse(String uri) {
@@ -422,8 +350,6 @@ public class Main{
 			final String JSON_ORG = "https://www.json.org/json-en.html";
 			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.editor"), e -> AboutDialog.showDialog()));
 			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.json"), e -> browse(JSON_ORG)));
-			aboutMenu.addSeparator();
-			aboutMenu.add(createMenuItem(TranslatableText.create("json_editor.menu.about.plugin_list"), e -> PluginListDialog.showDialog()));
 			
 			return aboutMenu;
 		}

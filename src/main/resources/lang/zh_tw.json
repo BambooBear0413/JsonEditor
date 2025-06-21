@@ -23,7 +23,6 @@
 	"json_editor.menu.about": "關於",
 	"json_editor.menu.about.editor": "關於 竹子熊的JSON編輯器",
 	"json_editor.menu.about.json": "關於 JSON",
-	"json_editor.menu.about.plugin_list": "插件列表",
 	"json_editor.type.string": "JSON字串",
 	"json_editor.type.number": "JSON數值",
 	"json_editor.type.boolean": "JSON布林值",
@@ -65,13 +64,5 @@
 	"json_editor.settings.html_escaping":"HTML跳脫序列",
 	"json_editor.settings.unicode_escaping": "Unicode跳脫序列",
 	"json_editor.about_editor.title": "關於 竹子熊的JSON編輯器",
-	"json_editor.about_editor.issue_tracker": "問題追蹤器",
-	"json_editor.plugin_list.title": "插件列表",
-	"json_editor.plugin_list.no_plugin": "噢！沒有發現任何插件耶",
-	"json_editor.plugin_list.plugin_id": "插件ID",
-	"json_editor.plugin_list.plugin_format": "格式版本",
-	"json_editor.plugin_list.plugin_authors": "作者",
-	"json_editor.plugin_list.plugin_credits": "製作人員",
-	"json_editor.plugin_list.plugin_file": "插件檔案",
-	"json_editor.plugin_list.plugin_description": "描述"
+	"json_editor.about_editor.issue_tracker": "問題追蹤器"
 }]

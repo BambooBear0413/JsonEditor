@@ -23,7 +23,6 @@
 	"json_editor.menu.about": "About",
 	"json_editor.menu.about.editor": "About Bamboo Bear's JSON Editor",
 	"json_editor.menu.about.json": "About JSON",
-	"json_editor.menu.about.plugin_list": "Plugin List",
 	"json_editor.type.string": "JSON String",
 	"json_editor.type.number": "JSON Number",
 	"json_editor.type.boolean": "JSON Boolean",
@@ -64,15 +63,6 @@
 	"json_editor.settings.pretty_printing": "Pretty Printing",
 	"json_editor.settings.html_escaping": "HTML Escaping",
 	"json_editor.settings.unicode_escaping": "Unicode Escaping",
-	"json_editor.settings.look_and_feel": "Look and Feel",
 	"json_editor.about_editor.title": "About Bamboo Bear's JSON Editor",
-	"json_editor.about_editor.issue_tracker": "Issue Tracker",
-	"json_editor.plugin_list.title": "Plugin List",
-	"json_editor.plugin_list.no_plugin": "Oops! No plugins were found.",
-	"json_editor.plugin_list.plugin_id": "Plugin ID",
-	"json_editor.plugin_list.plugin_format": "Format Version",
-	"json_editor.plugin_list.plugin_authors": "Authors",
-	"json_editor.plugin_list.plugin_credits": "Credits",
-	"json_editor.plugin_list.plugin_file": "Plugin File",
-	"json_editor.plugin_list.plugin_description": "Description"
+	"json_editor.about_editor.issue_tracker": "Issue Tracker"
 }

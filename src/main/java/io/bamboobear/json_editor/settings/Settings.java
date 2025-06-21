@@ -10,8 +10,6 @@ import java.util.HexFormat;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.SwingUtilities;
-
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
@@ -46,23 +44,6 @@ public class Settings {
 	public static final BooleanSetting UNICODE_ESCAPING = registerSetting(
 			BooleanSetting.builder("enablesUnicodeEscaping", createTranslatableText("unicode_escaping"), false)
 					.isExperimentalFeature().build()
-	);
-	
-	public static final LookAndFeelSetting LOOK_AND_FEEL = registerSetting(
-			LookAndFeelSetting.builder("lookAndFeel", createTranslatableText("look_and_feel"), Main.getDefaultLookAndFeelInfo())
-					.valueChangeHandler(info -> {
-						// TODO show warning dialog
-						return Main.setLookAndFeel(info.getClassName());
-					})
-					.afterValueChange(info -> {
-						try {
-							var mainWindow = Main.getMainWindow();
-							var dialogs = mainWindow.getOwnedWindows();
-							SwingUtilities.updateComponentTreeUI(mainWindow);
-							for(var dialog : dialogs) SwingUtilities.updateComponentTreeUI(dialog);
-						} catch (Throwable e) {}
-					})
-					.build()
 	);
 	
 	public static void loadSettings() {

@@ -1,13 +1,11 @@
 package io.bamboobear.json_editor.lang;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import com.google.gson.JsonElement;
 
 import io.bamboobear.json_editor.ErrorReport;
 import io.bamboobear.json_editor.JsonFile;
-import io.bamboobear.json_editor.plugin.Plugin;
 
 public final class Languages {
 	private static final ArrayList<Language> LANGUAGES = new ArrayList<>();
@@ -20,36 +18,16 @@ public final class Languages {
 	
 	private Languages() {}
 	
-	public static void loadLanguage(Plugin plugin) {		
-		if(plugin == null) {
-			loadVanillaLanguage();
-		} else {
-			loadPluginLanguage(plugin);
-		}
-	}
-	
-	private static void loadVanillaLanguage() {
+	public static void loadLanguage() {		
 		for(Language lang : LANGUAGES) {
 			try {
 				String fileName = String.format("lang/%s.json", lang.id());
 				JsonElement root = JsonFile.loadResource(fileName);
 				lang.load(root);
 			} catch (Exception e) {
-				ErrorReport.output(new LanguageLoadingException("An error occurred when loading the vanilla language file for \"" + lang.id() + "\".", e));
+				ErrorReport.output(new LanguageLoadingException("An error occurred when loading the language file for \"" + lang.id() + "\".", e));
 			}
 		}
-	}
-	
-	private static void loadPluginLanguage(Plugin plugin) {
-		Map<String, JsonElement> map = plugin.loadLanguages();
-		map.forEach((id, element) -> {
-			try {
-				Language lang = getLanguage(id);
-				lang.load(element);
-			} catch (LanguageLoadingException e) { //TODO loading warning
-				e.printStackTrace();
-			}
-		});
 	}
 	
 	public static Language getLanguage(String id) throws LanguageLoadingException {
