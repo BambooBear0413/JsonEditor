@@ -52,7 +52,7 @@ import io.bamboobear.json_editor.settings.Settings;
 
 public class Main{
 	public static final TranslatableText NAME = TranslatableText.of("json_editor.name");
-	public static final String VERSION = "0.0.0";
+	public static final String VERSION = "0.0.1 Alpha 1";
 	
 	private static final Gson GSON = new GsonBuilder().create();
 	
