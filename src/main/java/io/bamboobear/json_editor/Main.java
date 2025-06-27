@@ -44,7 +44,7 @@ import io.bamboobear.json_editor.settings.Settings;
 
 public class Main{
 	public static final TranslatableText NAME = TranslatableText.create("json_editor.name");
-	public static final String VERSION = "0.1.0";
+	public static final Version VERSION = Version.parse("@app_version@");
 	
 	private static boolean isExperimentalFeaturesEnabled;
 	private static HashSet<Font> fontCache = new HashSet<Font>();

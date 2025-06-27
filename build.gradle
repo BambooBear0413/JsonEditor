@@ -3,10 +3,11 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'application'
+    id 'io.github.crimix.replace-placeholders' version '3.0'
 }
 
 group = 'dev.bamboobear'
-version = '0.1.0'
+version = project.app_version
 
 repositories {
     mavenCentral()
@@ -40,6 +41,12 @@ jar {
                 'Implementation-Version': project.version
         )
     }
+}
+
+replaceSourcePlaceholders {
+    enabled true
+    filesToExpand "${application.mainClass.get().replace('.', '/')}.java"
+    extraProperties 'app_version'
 }
 
 tasks.register('copyDependencies', Copy.class) {

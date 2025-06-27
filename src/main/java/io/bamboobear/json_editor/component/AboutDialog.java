@@ -44,7 +44,7 @@ public class AboutDialog extends Dialog{
 		name.setFont(new Font("Default", Font.BOLD, 20));
 		northPanel.add(name);
 		
-		Label version = new Label(TranslatableText.literal(Main.VERSION), Label.CENTER);
+		Label version = new Label(TranslatableText.literal("%s", Main.VERSION), Label.CENTER);
 		northPanel.add(version);
 		
 		JPanel centeralPanel = new JPanel(new GridLayout(0, 1));
