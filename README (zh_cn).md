@@ -19,15 +19,16 @@
 
 ## 设置（`settings.properties`）
 “JSON编辑器”的设置保存于`settings.properties`文件中，目前设置文件中的所有设置如下：
-|键|类型|默认值|备注|
-|--|--|:--:|--|
-|`language`|语言代码|`en_us`||
-|`isExperimentalFeaturesEnabled`|布尔值|`false`|是否启用实验性内容。须重启程序，变更才会生效。|
-|`fontFamily`|字族名称|`Dialog`|`Dialog`是Java默认字族的名称。<b style="color:red">实验性内容</b>|
-|`fontSize`|整数值|`15`|字体大小，最小值为`8`，最大值为`28`。|
-|`enablesPrettyPrinting`|布尔值|`false`|相较于禁用时，启用此项后保存的JSON文件可读性较高（经过排版），但文件大小会稍大。|
-|`enablesHtmlEscaping`|布尔值|`false`|启用此项后，保存JSON文件时，会将`=`、`>`、`<`等于HTML中有特殊功能的字符转成转义序列。|
-|`enablesUnicodeEscaping`|布尔值|`false`|启用此项后，保存JSON文件时，会将“非ASCII字符”转成Unicode转义序列。<b style="color:red">实验性内容</b>|
+
+| 键                               | 类型   |   默认值    | 备注                                                                       |
+|---------------------------------|------|:--------:|--------------------------------------------------------------------------|
+| `language`                      | 语言代码 | `en_us`  |                                                                          |
+| `isExperimentalFeaturesEnabled` | 布尔值  | `false`  | 是否启用实验性内容。须重启程序，变更才会生效。                                                  |
+| `fontFamily`                    | 字族名称 | `Dialog` | `Dialog`是Java默认字族的名称。<b style="color:red">实验性内容</b>                      |
+| `fontSize`                      | 整数值  |   `15`   | 字体大小，最小值为`8`，最大值为`28`。                                                   |
+| `enablesPrettyPrinting`         | 布尔值  | `false`  | 相较于禁用时，启用此项后保存的JSON文件可读性较高（经过排版），但文件大小会稍大。                               |
+| `enablesHtmlEscaping`           | 布尔值  | `false`  | 启用此项后，保存JSON文件时，会将`=`、`>`、`<`等于HTML中有特殊功能的字符转成转义序列。                      |
+| `enablesUnicodeEscaping`        | 布尔值  | `false`  | 启用此项后，保存JSON文件时，会将“非ASCII字符”转成Unicode转义序列。<b style="color:red">实验性内容</b> |
 
 这些设置都能在“JSON编辑器”中设置（有些设置需要”启用实验性内容“才能于程序内修改，也可透过直接修改`settings.properties`设置（不建议）。
 

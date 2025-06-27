@@ -19,15 +19,16 @@ If your computer already has Java installed, or you have just installed it, you 
 
 ## Settings (`settings.properties`)
 The settings of the "JSON Editor" are saved in the file `settings.properties`. All settings in the file are listed below:
-|Key|Type|Default Value|Notes|
-|--|--|:--:|--|
-|`language`|language code|`en_us`||
-|`isExperimentalFeaturesEnabled`|Boolean|`false`|Enable experimental features. The change will take effect after restarting the program.|
-|`fontFamily`|font family name|`Dialog`|`Dialog` is the name of the Java default font family. <b style="color:red">Experimental Feature</b>|
-|`fontSize`|integer|`15`|Font Size. The minimum value is `8`, and the maximum value is `28`|
-|`enablesPrettyPrinting`|Boolean|`false`|After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled.|
-|`enablesHtmlEscaping`|Boolean|`false`|After enabling HTML escaping, characters with special meaning in HTML, such as `=`,`>`, and `<`, will be escaped when saving the file.|
-|`enablesUnicodeEscaping`|Boolean|`false`|After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b>|
+
+| Key                             | Type             | Default Value | Notes                                                                                                                                                                                   |
+|---------------------------------|------------------|:-------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `language`                      | language code    |    `en_us`    |                                                                                                                                                                                         |
+| `isExperimentalFeaturesEnabled` | Boolean          |    `false`    | Enable experimental features. The change will take effect after restarting the program.                                                                                                 |
+| `fontFamily`                    | font family name |   `Dialog`    | `Dialog` is the name of the Java default font family. <b style="color:red">Experimental Feature</b>                                                                                     |
+| `fontSize`                      | integer          |     `15`      | Font Size. The minimum value is `8`, and the maximum value is `28`                                                                                                                      |
+| `enablesPrettyPrinting`         | Boolean          |    `false`    | After enabling pretty printing, the JSON file saved by the "JSON Editor" will be more readable, but the file size will be slightly larger compared to when pretty printing is disabled. |
+| `enablesHtmlEscaping`           | Boolean          |    `false`    | After enabling HTML escaping, characters with special meaning in HTML, such as `=`,`>`, and `<`, will be escaped when saving the file.                                                  |
+| `enablesUnicodeEscaping`        | Boolean          |    `false`    | After enabling Unicode escaping, non-ASCII characters will be escaped when saving the file. <b style="color:red">Experimental Feature</b>                                               |
 
 All settings listed above can be changed in the "JSON Editor" (some cannot only be changed if experimental features are disabled) or edited by other application (not recommended).
 
