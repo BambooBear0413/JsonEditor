@@ -1,5 +1,5 @@
 # Bamboo Bear's JSON Editor
-Version: 0.0.0 (Beta)
+Version: 0.0.0
 
 **Bamboo Bear's JSON Editor** ("JSON Editor") is a Java program used for editing JSON files.
 
