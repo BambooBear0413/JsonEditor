@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'application'
     id 'io.github.crimix.replace-placeholders' version '3.0'
 }
 
@@ -17,10 +16,6 @@ dependencies {
     api 'com.google.code.gson:gson:2.13.0' exclude(group: 'com.google.errorprone', module: 'error_prone_annotations')
 }
 
-application {
-    mainClass = 'io.bamboobear.json_editor.Main'
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -33,7 +28,7 @@ jar {
 
     manifest {
         attributes (
-                'Main-Class': application.mainClass,
+                'Main-Class': project.main_class,
                 'Class-Path': project.configurations.runtimeClasspath.files
                         .collect {"libs/${it.name}" }
                         .join(' '),
@@ -45,13 +40,18 @@ jar {
 
 replaceSourcePlaceholders {
     enabled true
-    filesToExpand "${application.mainClass.get().replace('.', '/')}.java"
+    filesToExpand "${project.main_class.replace('.', '/')}.java"
     extraProperties 'app_version'
 }
 
 tasks.register('copyDependencies', Copy.class) {
     from project.configurations.runtimeClasspath
     into layout.buildDirectory.dir("libs")
+}
+
+tasks.register('run', JavaExec.class) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = project.main_class
 }
 
 tasks.build.dependsOn('copyDependencies')
