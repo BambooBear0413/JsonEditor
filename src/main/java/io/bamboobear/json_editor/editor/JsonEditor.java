@@ -177,7 +177,7 @@ public class JsonEditor extends JPanel{
 		FileFilter jsonFileFilter = new FileNameExtensionFilter("JSON File", "json");
 		
 		if(this.file != null) {
-			File file = new File(this.file.getFilePath());
+			File file = this.file.file;
 			chooser.setCurrentDirectory(file.getParentFile());
 		} else {
 			chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));

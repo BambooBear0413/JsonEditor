@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,11 +21,11 @@ import com.google.gson.stream.JsonWriter;
 
 import io.bamboobear.json_editor.settings.Settings;
 
-public final class JsonFile {
-	private final File file;
-	
-	private static final Charset UTF_8 = StandardCharsets.UTF_8;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
+public final class JsonFile {
+	public final File file;
+	
 	public JsonFile(String filePath){ this(new File(filePath)); }
 
 	public JsonFile(File file){
