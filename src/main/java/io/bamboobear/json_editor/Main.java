@@ -91,7 +91,7 @@ public class Main{
 		Objects.requireNonNull(newEditor, "newEditor is null");
 		
 		if (editor != null) {
-			if (!editor.close()) return;
+			if (!editor.canBeClosed()) return;
 			
 			mainWindow.remove(editor);
 		}
@@ -221,7 +221,7 @@ public class Main{
 			addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent e) {
-					boolean canWindowBeClosed = editor == null || editor.close();
+					boolean canWindowBeClosed = editor == null || editor.canBeClosed();
 					setDefaultCloseOperation(canWindowBeClosed ? EXIT_ON_CLOSE : DO_NOTHING_ON_CLOSE);
 				}
 			});

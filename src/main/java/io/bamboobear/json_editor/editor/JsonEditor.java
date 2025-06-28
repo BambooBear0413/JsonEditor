@@ -86,7 +86,7 @@ public class JsonEditor extends JPanel{
 	}
 
 	public void openFile() {
-		if(!close()) return;
+		if(!canBeClosed()) return;
 		
 		File selectedFile = chooseFileToBeOpened();
 		if(selectedFile == null || !selectedFile.exists()) return;
@@ -95,7 +95,7 @@ public class JsonEditor extends JPanel{
 	}
 	
 	public void newFile() {
-		if(!close()) return;
+		if(!canBeClosed()) return;
 		
 		load(null);
 	}
@@ -196,7 +196,7 @@ public class JsonEditor extends JPanel{
 		return selectedFile;
 	}
 	
-	public boolean close() {
+	public boolean canBeClosed() {
 		if(hasSaved()) return true;
 		
 		int result = JOptionPane.showConfirmDialog(Main.getMainWindow(),
