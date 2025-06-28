@@ -7,7 +7,11 @@
 - The format of placeholders in translations now only allows either `%s` or `%n$s`, where `n` is a positive integer.
     - This update does not affect any existing translations since other placeholder formats had never been used before.
 - Updated `json_editor.settings.restart` in `en_us.json` from "*Need to Restart*" to "*Requires Restart*".
-- Removed the plugin system.
+
+## Removal
+- The plugin system.
+- Unused translations:
+  - `json_editor.color_picker.title`
 
 ## Fixes
 - The language ID was not displayed in the language options.
