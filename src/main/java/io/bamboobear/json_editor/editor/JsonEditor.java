@@ -82,7 +82,7 @@ public class JsonEditor extends JPanel{
 		body = new JScrollPane();
 		body.getVerticalScrollBar().setUnitIncrement(10);
 		add(body, BorderLayout.CENTER);
-		body.setViewportView(rootComponent);
+		setRootComponent((JsonCompositeComponent<?>) rootComponent);
 	}
 
 	public void openFile() {
@@ -102,29 +102,29 @@ public class JsonEditor extends JPanel{
 	
 	private void load(JsonFile file) {
 		Main.getMainWindow().setTitle(TranslatableText.create("json_editor.loading"));
-		
-		this.file = file;
-		this.lastModified = (this.file == null) ? 0 : this.file.lastModified();
-		
+
+		JsonCompositeComponent<?> root = null;
+
 		if(file != null) {
 			try {
-				JsonElement root = this.file.load();
-				if(root.isJsonArray() || root.isJsonObject()) {
-					body.setViewportView(JsonComponent.createDefaultJsonComponent(root));
+				JsonElement json = file.load();
+				if(json.isJsonArray() || json.isJsonObject()) {
+					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(json);
 				} else {
 					OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.invalid_root_element"),
 							TranslatableText.create("json_editor.error.invalid_root_element.title"));
-					body.setViewportView(JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID));
-					this.file = null;
-					this.lastModified = 0;
+					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
 				}
-			} catch (Exception e) {
+			} catch(Exception e) {
+			} catch(OutOfMemoryError e) {
 			}
 		} else {
-			body.setViewportView(JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID));
+			root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
 		}
-		
-		JsonCompositeComponent<?> root = getRootComponent();
+
+		if(root == null) return;
+
+		setRootComponent(file, root);
 		body.revalidate();
 		body.repaint();
 		removeAllChange();
@@ -213,6 +213,21 @@ public class JsonEditor extends JPanel{
 		boolean hasSaved = changesRecord.hasUnsavedChanges();
 		boolean lastModified = (file == null || this.lastModified == file.lastModified());
 		return (hasSaved && lastModified);
+	}
+
+	private void setRootComponent(JsonCompositeComponent<?> root) {
+		setRootComponent(this.file, root);
+	}
+
+	private void setRootComponent(JsonFile file, JsonCompositeComponent<?> root) {
+		if(root == getRootComponent()) return;
+
+		if(file != this.file) {
+			this.file = file;
+			this.lastModified = (file == null) ? 0 : file.lastModified();
+		}
+
+		body.setViewportView(Objects.requireNonNull(root, "root component is null"));
 	}
 	
 	public JsonCompositeComponent<?> getRootComponent() {
