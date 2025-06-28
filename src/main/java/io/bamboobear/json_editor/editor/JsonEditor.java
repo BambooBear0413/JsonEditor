@@ -41,16 +41,15 @@ import io.bamboobear.json_editor.util.OptionPaneDialogUtilities;
 public class JsonEditor extends JPanel{
 	private JsonFile file;
 	
-	private static JToolBar toolBar;
-	private static Button undoButton;
-	private static Button redoButton;
-	
 	private JScrollPane body;
 	
 	private final ChangesRecord changesRecord;
 	
 	private long lastModified;
-	
+
+	private final Button undoButton;
+	private final Button redoButton;
+
 	private static final int ICON_SIZE = 16;
 	private static final int HINTS = Image.SCALE_SMOOTH;
 	
@@ -58,28 +57,26 @@ public class JsonEditor extends JPanel{
 	private static final ImageIcon REDO_ICON = ResourceImageLoader.getImageIcon("redo.png", ICON_SIZE, ICON_SIZE, HINTS);
 	
 	private static final Executor LOAD_FILE_THREAD = Executors.newSingleThreadExecutor();
-	
-	static {
-		toolBar = new JToolBar();
+
+	public JsonEditor() {
+		super(new BorderLayout());
+
+		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		
 		undoButton = new Button(UNDO_ICON);
-		undoButton.addActionListener(e -> Main.getEditor().undo());
+		undoButton.addActionListener(e -> undo());
 		toolBar.add(undoButton);
 		
 		redoButton = new Button(REDO_ICON);
-		redoButton.addActionListener(e -> Main.getEditor().redo());
+		redoButton.addActionListener(e -> redo());
 		toolBar.add(redoButton);
-	}
-	
-	public JsonEditor() {
-		super(new BorderLayout());
-		
+
+		add(toolBar, BorderLayout.NORTH);
+
 		JsonComponent<?> rootComponent;
 		rootComponent = JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
-		
-		add(toolBar, BorderLayout.NORTH);
-		
+
 		changesRecord = new ChangesRecord();
 
 		body = new JScrollPane();
@@ -87,9 +84,7 @@ public class JsonEditor extends JPanel{
 		add(body, BorderLayout.CENTER);
 		body.setViewportView(rootComponent);
 	}
-	
-	public void load() { load(null); }
-	
+
 	public void openFile() {
 		if(!close()) return;
 		
@@ -102,7 +97,7 @@ public class JsonEditor extends JPanel{
 	public void newFile() {
 		if(!close()) return;
 		
-		load();
+		load(null);
 	}
 	
 	private void load(JsonFile file) {
@@ -252,8 +247,8 @@ public class JsonEditor extends JPanel{
 	}
 	
 	private class ChangesRecord {
-		private ArrayList<Change> undoChanges = new ArrayList<Change>();
-		private ArrayList<Change> redoChanges = new ArrayList<Change>();
+		private ArrayList<Change> undoChanges = new ArrayList<>();
+		private ArrayList<Change> redoChanges = new ArrayList<>();
 		
 		private Change savingPoint;
 		
@@ -331,12 +326,12 @@ public class JsonEditor extends JPanel{
 		}
 	}
 	
-	public static record Change(ChangeType type, Object[] args) {
+	public record Change(ChangeType type, Object[] args) {
 		private void undo() { type.undo(args); }
 		private void redo() { type.redo(args); }
 	}
 	
-	private static enum ChangeType {
+	private enum ChangeType {
 		/**
 		 * arguments:
 		 * <ol start=0>
@@ -376,11 +371,11 @@ public class JsonEditor extends JPanel{
 		 * <li>{@linkplain JsonCompositeComponent} - the JsonCompositeComponent which is the parent of JsonComponent</li>
 		 * <li>{@linkplain Integer} - the index</li>
 		 * </ol>*/
-		ADD_ELEMENT_CHANGE((args) -> {
-			doRemove(args);
-		}, (args) -> {
-			doAdd(args);
-		}, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
+		ADD_ELEMENT_CHANGE(
+				ChangeType::doRemove,
+				ChangeType::doAdd,
+				JsonComponent.class, JsonCompositeComponent.class, Integer.class
+		),
 		
 		/**
 		 * arguments:
@@ -389,11 +384,11 @@ public class JsonEditor extends JPanel{
 		 * <li>{@linkplain JsonCompositeComponent} - the JsonCompositeComponent which is the parent of JsonComponent before the change</li>
 		 * <li>{@linkplain Integer} - the index</li>
 		 * </ol>*/
-		REMOVE_ELEMENT_CHANGE((args) -> {
-			doAdd(args);
-		}, (args) -> {
-			doRemove(args);
-		}, JsonComponent.class, JsonCompositeComponent.class, Integer.class),
+		REMOVE_ELEMENT_CHANGE(
+				ChangeType::doAdd,
+				ChangeType::doRemove,
+				JsonComponent.class, JsonCompositeComponent.class, Integer.class
+		),
 		
 		//TODO ELEMENT_POSITION_CHANGE
 		
@@ -405,7 +400,7 @@ public class JsonEditor extends JPanel{
 		private final Consumer<Object[]> redo;
 		private final Class<?>[] argumentTypes;
 		
-		private ChangeType(Consumer<Object[]> undo, Consumer<Object[]> redo, Class<?>...argumentTypes) {
+		ChangeType(Consumer<Object[]> undo, Consumer<Object[]> redo, Class<?>...argumentTypes) {
 			this.undo = Objects.requireNonNull(undo);
 			this.redo = Objects.requireNonNull(redo);
 			this.argumentTypes = Objects.requireNonNull(argumentTypes);

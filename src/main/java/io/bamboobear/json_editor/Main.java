@@ -98,7 +98,7 @@ public class Main{
 		
 		editor = newEditor;
 		mainWindow.add(editor);
-		editor.load();
+		editor.newFile();
 		mainWindow.revalidate();
 		mainWindow.repaint();
 	}
