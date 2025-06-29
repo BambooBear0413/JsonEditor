@@ -235,6 +235,7 @@ public class JsonEditor extends JPanel{
 	
 	public JsonCompositeComponent<?> getRootComponent() {
 		Component c = body.getViewport().getView();
+		if(c == null) return null;
 		if(c instanceof JsonCompositeComponent<?> jcc) return jcc;
 		
 		throw new IllegalStateException();
