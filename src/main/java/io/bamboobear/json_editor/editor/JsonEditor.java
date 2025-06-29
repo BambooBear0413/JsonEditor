@@ -122,7 +122,10 @@ public class JsonEditor extends JPanel{
 			root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
 		}
 
-		if(root == null) return;
+		if(root == null) { // root is null if there is any error occurs during loading
+			updateTitle();
+			return;
+		}
 
 		setRootComponent(file, root);
 		body.revalidate();
