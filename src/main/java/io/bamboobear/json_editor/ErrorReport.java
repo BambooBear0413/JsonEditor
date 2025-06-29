@@ -34,7 +34,7 @@ public final class ErrorReport {
 	public static void output(Throwable throwable, boolean showDialog) { output(Thread.currentThread(), throwable, showDialog); }
 	public static void output(Thread thread, Throwable throwable)      { output(thread, throwable, true); }
 	
-	public static void output(Thread thread, Throwable throwable, boolean showDialog) {
+	public static synchronized void output(Thread thread, Throwable throwable, boolean showDialog) {
 		throwable.printStackTrace();
 		
 		if(!reportsDir.isDirectory() && !reportsDir.mkdir()) { // Failed to create directory
@@ -47,8 +47,13 @@ public final class ErrorReport {
 		}
 		
 		String className = throwable.getClass().getCanonicalName();
-		File outputFile = new File(reportsDir, String.format("%s-%s.txt", getDateTime(), className));
-		
+		String dateTime = getDateTime();
+		File outputFile = new File(reportsDir, String.format("%s-%s.txt", dateTime, className));
+
+		for(int i = 1; outputFile.exists(); i++) {
+			outputFile = new File(reportsDir, "%s-%s-%d".formatted(dateTime, className, i));
+		}
+
 		try (FileWriter fw = new FileWriter(outputFile, StandardCharsets.UTF_8)) {
 			fw.write(createReportContent(thread, throwable));
 		} catch (IOException e) {
