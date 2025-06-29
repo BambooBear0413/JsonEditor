@@ -7,6 +7,7 @@
 - 翻译中的占位符现在只允许`%s`或`%n$s`（`n`是正整数）这两种形式。
     - 这不影响任何已有的翻译，因为其余形式的占位符在之前从未被使用过。
 - 将`en_us.json`中的`json_editor.settings.restart`从“*Need to Restart*”变更为“*Requires Restart*”。
+- 当打开JSON文件时发生任何错误——I/O错误、JSON语法错误、记忆体不足...——时，会通知使用者，并在需要时生成错误报告。
 
 ## 移除
 - 插件系统。

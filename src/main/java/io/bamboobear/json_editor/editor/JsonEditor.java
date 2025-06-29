@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -21,8 +22,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonPrimitive;
-
+import com.google.gson.JsonSyntaxException;
 import io.bamboobear.json_editor.ErrorReport;
 import io.bamboobear.json_editor.JsonFile;
 import io.bamboobear.json_editor.Main;
@@ -115,8 +117,22 @@ public class JsonEditor extends JPanel{
 							TranslatableText.create("json_editor.error.invalid_root_element.title"));
 					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
 				}
-			} catch(Exception e) {
+			} catch(JsonIOException e) {
+				if(e.getCause() instanceof IOException ioException) ioExceptionDuringLoading(ioException, file);
+			} catch(JsonSyntaxException e) {
+				OptionPaneDialogUtilities.showErrorMessageDialog(
+						TranslatableText.create("json_editor.error.json_syntax_error", file, e),
+						TranslatableText.create("json_editor.error.json_syntax_error.title")
+				);
+			} catch(IOException e) {
+				ioExceptionDuringLoading(e, file);
 			} catch(OutOfMemoryError e) {
+				OptionPaneDialogUtilities.showErrorMessageDialog(
+						TranslatableText.create("json_editor.error.file_too_large", file),
+						TranslatableText.create("json_editor.error.file_too_large.title")
+				);
+			} catch(Exception e) {
+				ErrorReport.output(e);
 			}
 		} else {
 			root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
@@ -135,6 +151,13 @@ public class JsonEditor extends JPanel{
 		root.requestFocus();
 		
 		updateTitle();
+	}
+
+	private void ioExceptionDuringLoading(IOException e, JsonFile file) {
+		OptionPaneDialogUtilities.showErrorMessageDialog(
+				TranslatableText.create("json_editor.error.io_exception_while_loading", file, e),
+				TranslatableText.create("json_editor.error.io_exception_while_loading.title")
+		);
 	}
 	
 	private void updateTitle() {

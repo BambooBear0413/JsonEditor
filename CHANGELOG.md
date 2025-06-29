@@ -7,6 +7,7 @@
 - The format of placeholders in translations now only allows either `%s` or `%n$s`, where `n` is a positive integer.
     - This update does not affect any existing translations since other placeholder formats had never been used before.
 - Updated `json_editor.settings.restart` in `en_us.json` from "*Need to Restart*" to "*Requires Restart*".
+- The program now notifies users if an error--such as an I/O error, JSON syntax error, or out-of-memory error--occurs while opening a JSON file, and may generate an error report as needed.
 
 ## Removal
 - The plugin system.
