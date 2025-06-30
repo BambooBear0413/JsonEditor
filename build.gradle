@@ -20,6 +20,9 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 jar {
@@ -44,12 +47,33 @@ replaceSourcePlaceholders {
     extraProperties 'app_version'
 }
 
-tasks.register('copyDependencies', Copy.class) {
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = rootProject.name
+            from components.java
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project.app_name
+            }
+        }
+    }
+}
+
+tasks.register('copyDependencies', Copy) {
     from project.configurations.runtimeClasspath
     into layout.buildDirectory.dir("libs")
 }
 
-tasks.register('run', JavaExec.class) {
+tasks.register('run', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = project.main_class
 }

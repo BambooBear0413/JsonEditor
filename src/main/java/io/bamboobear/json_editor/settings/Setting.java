@@ -105,8 +105,9 @@ public abstract class Setting<T> {
 		
 		/**
 		 * WARNING: It is not recommended to perform repaint within the {@link Consumer},
-		 * as the {@link SettingDialog} will usually repaint after the settings are saved.
-		 * */
+		 * as the {@link io.bamboobear.json_editor.component.SettingsDialog SettingsDialog}
+		 * will usually repaint after the settings are saved.
+		 */
 		public final B afterValueChange(Consumer<? super T> afterValueChange) {
 			this.afterValueChange = Objects.requireNonNullElse(afterValueChange, this.afterValueChange);
 			return getThis();
