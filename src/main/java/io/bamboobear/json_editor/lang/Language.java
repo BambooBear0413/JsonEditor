@@ -16,7 +16,6 @@ public final class Language {
 	private final String id;
 	private final HashMap<String, String> translations = new HashMap<String, String>();
 	private String readme;
-	private String html;
 	private String name = UNKNOWN;
 	
 	private LinkedHashSet<String> alternativeLanguages = new LinkedHashSet<>();
@@ -26,17 +25,15 @@ public final class Language {
 	/**
 	 * @param id the ID of the language
 	 * @param readme the path of the corresponding README file 
-	 * @param html the path of the corresponding HTML attachment file
-	 * 
+	 *
 	 * @throws LanguageLoadingException
 	 */
-	Language(String id, String readme, String html) throws LanguageLoadingException {
+	Language(String id, String readme) throws LanguageLoadingException {
 		if(id == null) throw new LanguageLoadingException("\"id\" is null");
 		if(!id.matches("^" + LANGUAGE_ID_REGEX + "$")) throw new LanguageLoadingException("id=" + id + ", id must start with a lowercase letter (a-z) and can only contain lowercase letters (a-z), numbers (0-9), and underscores (_). It must be between 2 and 64 characters long.");
 		
 		this.id = id;
 		this.readme = readme;
-		this.html = html;
 	}
 	
 	void load(JsonElement element) {
@@ -70,13 +67,11 @@ public final class Language {
 	}
 	
 	public boolean hasReadmePath() { return readme != null; }
-	public boolean hasHtmlPath()   { return html   != null; }
-	
+
 	public String id()            { return id;     }
 	public String getName()       { return name;   }
 	public String getReadmePath() { return readme; }
-	public String getHtmlPath()   { return html;   }
-	
+
 	String getDisplayText(String key) {
 		if(key == null || key.isEmpty()) return "";
 		

@@ -15,6 +15,7 @@
 - The plugin system.
 - Unused translations:
   - `json_editor.color_picker.title`
+- The buttons in the About window that previously linked to the HTML attachments, along with their container.
 
 ## Fixes
 - The language ID was not displayed in the language options.

@@ -15,6 +15,7 @@
 - 插件系统。
 - 未使用的翻译：
   - `json_editor.color_picker.title`
+- “关于”窗口中链接到HTML文档的按钮与其容器。
 
 ## 修复
 - 语言设置没有显示语言ID。
