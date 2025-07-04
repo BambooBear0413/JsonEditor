@@ -76,15 +76,11 @@ public class JsonEditor extends JPanel{
 
 		add(toolBar, BorderLayout.NORTH);
 
-		JsonComponent<?> rootComponent;
-		rootComponent = JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
-
 		changesRecord = new ChangesRecord();
 
 		body = new JScrollPane();
 		body.getVerticalScrollBar().setUnitIncrement(10);
 		add(body, BorderLayout.CENTER);
-		setRootComponent((JsonCompositeComponent<?>) rootComponent);
 	}
 
 	public void openFile() {
