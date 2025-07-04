@@ -20,3 +20,6 @@
 ## Fixes
 - The language ID was not displayed in the language options.
 - The values of experimental settings were reset to the defaults when experimental features were disabled.
+- Typos in the dialog message shown when an error occurs during error report generation:
+  - contant -> content
+  - imcomplete -> incomplete

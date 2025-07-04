@@ -70,7 +70,7 @@ public final class ErrorReport {
 					
 					WARNING:
 					There are another error occurred when generating the error log: %s. (%s)
-					Therefore, The contant of the error log may be imcomplete or the file may not exist.\
+					Therefore, The content of the error log may be incomplete or the file may not exist.\
 					""", className, throwable.getMessage(), outputFile.getAbsolutePath(), e.getClass().getCanonicalName(), e.getMessage());
 				showDialog(thread, throwable, message);
 			}
