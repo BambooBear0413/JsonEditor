@@ -10,6 +10,7 @@
 - The program now notifies users if an error--such as an I/O error, JSON syntax error, or out-of-memory error--occurs while opening a JSON file, and may generate an error report as needed.
 - The error report generation is now thread-safe.
 - Improved the error report naming logic to prevent accidental overwriting of existing files.
+- The program no longer "closes" the current file when users attempt to open a JSON file whose root element is not a JSON object or array.
 
 ## Removal
 - The plugin system.

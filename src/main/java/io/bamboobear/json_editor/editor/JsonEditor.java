@@ -111,7 +111,6 @@ public class JsonEditor extends JPanel{
 				} else {
 					OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.invalid_root_element"),
 							TranslatableText.create("json_editor.error.invalid_root_element.title"));
-					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(JsonObjectComponent.TYPE_ID);
 				}
 			} catch(JsonIOException e) {
 				if(e.getCause() instanceof IOException ioException) ioExceptionDuringLoading(ioException, file);
