@@ -236,10 +236,6 @@ public class JsonEditor extends JPanel{
 		return (hasSaved && lastModified);
 	}
 
-	private void setRootComponent(JsonCompositeComponent<?> root) {
-		setRootComponent(this.file, root);
-	}
-
 	private void setRootComponent(JsonFile file, JsonCompositeComponent<?> root) {
 		if(root == getRootComponent()) return;
 
