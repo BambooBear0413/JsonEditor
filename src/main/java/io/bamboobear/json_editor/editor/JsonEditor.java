@@ -109,23 +109,16 @@ public class JsonEditor extends JPanel{
 				if(json.isJsonArray() || json.isJsonObject()) {
 					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(json);
 				} else {
-					OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.invalid_root_element"),
-							TranslatableText.create("json_editor.error.invalid_root_element.title"));
+					OptionPaneDialogUtilities.showWarningMessageDialog("json_editor.error.invalid_root_element");
 				}
 			} catch(JsonIOException e) {
 				if(e.getCause() instanceof IOException ioException) ioExceptionDuringLoading(ioException, file);
 			} catch(JsonSyntaxException e) {
-				OptionPaneDialogUtilities.showErrorMessageDialog(
-						TranslatableText.create("json_editor.error.json_syntax_error", file, e),
-						TranslatableText.create("json_editor.error.json_syntax_error.title")
-				);
+				OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.json_syntax_error", file, e);
 			} catch(IOException e) {
 				ioExceptionDuringLoading(e, file);
 			} catch(OutOfMemoryError e) {
-				OptionPaneDialogUtilities.showErrorMessageDialog(
-						TranslatableText.create("json_editor.error.file_too_large", file),
-						TranslatableText.create("json_editor.error.file_too_large.title")
-				);
+				OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.file_too_large", file);
 			} catch(Exception e) {
 				ErrorReport.output(e);
 			}
@@ -149,10 +142,7 @@ public class JsonEditor extends JPanel{
 	}
 
 	private void ioExceptionDuringLoading(IOException e, JsonFile file) {
-		OptionPaneDialogUtilities.showErrorMessageDialog(
-				TranslatableText.create("json_editor.error.io_exception_while_loading", file, e),
-				TranslatableText.create("json_editor.error.io_exception_while_loading.title")
-		);
+		OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.io_exception_while_loading", file, e);
 	}
 	
 	private void updateTitle() {
@@ -183,8 +173,7 @@ public class JsonEditor extends JPanel{
 			lastModified = file.lastModified();
 			return true;
 		} catch (Exception e) {
-			OptionPaneDialogUtilities.showErrorMessageDialog(TranslatableText.create("json_editor.error.failed_to_save_file", file.getFilePath()),
-					TranslatableText.create("json_editor.error.failed_to_save_file.title"));
+			OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.failed_to_save_file", file);
 			ErrorReport.output(e);
 			return false;
 		}

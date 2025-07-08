@@ -41,6 +41,7 @@ import io.bamboobear.json_editor.lang.Language;
 import io.bamboobear.json_editor.lang.Languages;
 import io.bamboobear.json_editor.lang.TranslatableText;
 import io.bamboobear.json_editor.settings.Settings;
+import io.bamboobear.json_editor.util.OptionPaneDialogUtilities;
 
 public class Main{
 	public static final TranslatableText NAME = TranslatableText.create("json_editor.name");
@@ -179,8 +180,7 @@ public class Main{
 		try {
 			Desktop.getDesktop().open(file);
 		} catch (IllegalArgumentException e) {
-			JOptionPane.showMessageDialog(mainWindow, TranslatableText.create("json_editor.warning.open_file.file_not_exist", file.getAbsolutePath()).getDisplayText(),
-					TranslatableText.create("json_editor.warning.open_file.file_not_exist.title").getDisplayText(), JOptionPane.WARNING_MESSAGE);
+			OptionPaneDialogUtilities.showWarningMessageDialog("json_editor.warning.open_file.file_not_exist", file);
 		} catch (IOException e) {
 			ErrorReport.output(e);
 		}
