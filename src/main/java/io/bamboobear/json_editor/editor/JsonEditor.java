@@ -114,7 +114,7 @@ public class JsonEditor extends JPanel{
 			} catch(JsonIOException e) {
 				if(e.getCause() instanceof IOException ioException) ioExceptionDuringLoading(ioException, file);
 			} catch(JsonSyntaxException e) {
-				OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.json_syntax_error", file, e);
+				OptionPaneDialogUtilities.showErrorMessageDialog("json_editor.error.json_syntax_error", file, e.getMessage());
 			} catch(IOException e) {
 				ioExceptionDuringLoading(e, file);
 			} catch(OutOfMemoryError e) {
