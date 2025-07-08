@@ -9,12 +9,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import io.bamboobear.json_editor.ErrorReport;
+import io.bamboobear.json_editor.JsonFile;
 import io.bamboobear.json_editor.util.JsonArrayUtilities;
 import io.bamboobear.json_editor.util.JsonObjectUtilities;
 
 public final class Language {
 	private static final String UNKNOWN = "Unknown Language";
 	
+	private static final Map<String, String> REPLACEMENTS = new HashMap<>();
+
 	private final String id;
 	private final Map<String, String> translations = new HashMap<>();
 	private String readme;
@@ -24,6 +28,37 @@ public final class Language {
 	
 	private static final String LANGUAGE_ID_REGEX = "[a-z][a-z0-9_]{1,63}";
 	
+	static {
+		try {
+			JsonElement element = JsonFile.loadResource("lang/key_mapping.json");
+			if(!(element instanceof JsonObject object)) {
+				throw new IllegalStateException("Unexpected JSON type: " + element.getClass().getSimpleName());
+			}
+			object.asMap().forEach((key, value) -> {
+				if(REPLACEMENTS.containsKey(key)) return;
+				if(!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) return;
+
+				String stringValue = value.getAsString();
+				String remappedValue = REPLACEMENTS.getOrDefault(stringValue, stringValue);
+				if(key.equals(remappedValue)) return;
+
+				for (var entry : REPLACEMENTS.entrySet()) {
+					/*
+					 * remappedValue never equals to entry.getKey() ("k") because when value equals to "k",
+					 * the result of remappedValue will be entry.getValue().
+					 */
+
+					String v = entry.getValue();
+					if (v.equals(key)) entry.setValue(remappedValue);
+				}
+
+				REPLACEMENTS.put(key, remappedValue);
+			});
+		} catch (Exception e) {
+			ErrorReport.output(e);
+		}
+	}
+
 	/**
 	 * @param id the ID of the language
 	 * @param readme the path of the corresponding README file 
@@ -45,7 +80,7 @@ public final class Language {
 			
 			object.asMap().forEach((key, value) -> {
 				if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
-					add(key, value.getAsString());
+					add(REPLACEMENTS.getOrDefault(key, key), value.getAsString());
 				}
 			});
 		}
@@ -77,6 +112,8 @@ public final class Language {
 	String getDisplayText(String key) {
 		if(key == null || key.isEmpty()) return "";
 		
+		key = REPLACEMENTS.getOrDefault(key, key);
+
 		String value = translations.get(key);
 		if(isValidValue(value)) return value;
 		

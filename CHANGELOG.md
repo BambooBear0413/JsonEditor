@@ -1,4 +1,7 @@
 # 0.1.0
+## New Features
+- The translation key remapping system.
+
 ## Changes
 - The program now requires **Java 21**.
 - Updated **GSON** to **2.13.0**.
