@@ -1,7 +1,9 @@
 package io.bamboobear.json_editor.lang;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,13 +16,13 @@ public final class Language {
 	private static final String UNKNOWN = "Unknown Language";
 	
 	private final String id;
-	private final HashMap<String, String> translations = new HashMap<String, String>();
+	private final Map<String, String> translations = new HashMap<>();
 	private String readme;
-	private String name = UNKNOWN;
+	private String name;
 	
 	private LinkedHashSet<String> alternativeLanguages = new LinkedHashSet<>();
 	
-	public static final String LANGUAGE_ID_REGEX = "[a-z][a-z0-9_]{1,63}";
+	private static final String LANGUAGE_ID_REGEX = "[a-z][a-z0-9_]{1,63}";
 	
 	/**
 	 * @param id the ID of the language
@@ -39,7 +41,7 @@ public final class Language {
 	void load(JsonElement element) {
 		switch(element) {
 		case JsonObject object -> {
-			if(name == UNKNOWN) name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
+			if(name == null) name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
 			
 			object.asMap().forEach((key, value) -> {
 				if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
@@ -49,9 +51,7 @@ public final class Language {
 		}
 		case JsonArray array -> {
 			String[] languages = JsonArrayUtilities.getStrings(array, (string) -> string.matches("^" + LANGUAGE_ID_REGEX + "$"));
-			for(String lang : languages) {
-				alternativeLanguages.add(lang);
-			}
+			alternativeLanguages.addAll(Arrays.asList(languages));
 			
 			JsonObject[] objects = JsonArrayUtilities.getJsonObjects(array);
 			for(JsonObject object : objects) {
@@ -68,8 +68,10 @@ public final class Language {
 	
 	public boolean hasReadmePath() { return readme != null; }
 
-	public String id()            { return id;     }
-	public String getName()       { return name;   }
+	public String id() { return id;     }
+
+	public String getName() { return (name == null) ? UNKNOWN : name; }
+
 	public String getReadmePath() { return readme; }
 
 	String getDisplayText(String key) {
