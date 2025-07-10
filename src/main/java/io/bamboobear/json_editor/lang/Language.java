@@ -74,27 +74,35 @@ public final class Language {
 	}
 	
 	void load(JsonElement element) {
-		switch(element) {
-		case JsonObject object -> {
-			if(name == null) name = JsonObjectUtilities.getString(object, "lang.name", UNKNOWN);
-			
-			object.asMap().forEach((key, value) -> {
-				if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
-					add(REPLACEMENTS.getOrDefault(key, key), value.getAsString());
-				}
-			});
+		switch(element){
+			case JsonObject object -> load(object);
+			default -> {} // TODO loading warning;
 		}
-		case JsonArray array -> {
-			String[] languages = JsonArrayUtilities.getStrings(array, (string) -> string.matches("^" + LANGUAGE_ID_REGEX + "$"));
-			alternativeLanguages.addAll(Arrays.asList(languages));
-			
-			JsonObject[] objects = JsonArrayUtilities.getJsonObjects(array);
-			for(JsonObject object : objects) {
-				load(object);
+	}
+
+	private void load(JsonObject object) {
+		JsonObject translations = JsonObjectUtilities.getJsonObject(object, "translations");
+		if(translations == null) {
+			loadTranslations(object);
+			return;
+		}
+		loadTranslations(translations);
+
+		JsonArray alternativeLanguages = JsonObjectUtilities.getJsonArray(object, "alternative_languages");
+		if(alternativeLanguages != null) {
+			String[] languages = JsonArrayUtilities.getStrings(alternativeLanguages, (str) -> str.matches("^" + LANGUAGE_ID_REGEX + "$"));
+			this.alternativeLanguages.addAll(Arrays.asList(languages));
+		}
+	}
+
+	private void loadTranslations(JsonObject object) {
+		if(name == null) name = JsonObjectUtilities.getString(object, "lang.name", null);
+
+		object.asMap().forEach((key, value) -> {
+			if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
+				add(REPLACEMENTS.getOrDefault(key, key), value.getAsString());
 			}
-		}
-		default -> {} // TODO loading warning
-		}
+		});
 	}
 	
 	private void add(String key, String value) {

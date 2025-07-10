@@ -10,6 +10,14 @@
 - 佔位符現在只允許`%s`或`%n$s`兩種形式，其中`n`是正整數。
   - 此更新不影響現存翻譯，因為其他格式的佔位符在此前從未使用過。
 - 將`en_us.json`中的`json_editor.settings.restart`從「*Need to Restart*」 更改為 「*Requires Restart*」。
+- 更新語言檔案的格式。
+  - 現在支援2種格式：
+    1. 包含`"translations"`（JSON物件，翻譯鍵值對）及其他元資料（可選）的JSON物件。
+       - 目前支援的元資料僅有`"alternative_languages"`──包含零個或數個「語言ID」的JSON陣列。
+       - 如果當前語言中不包含某翻譯鍵對應的翻譯，「JSON編輯器」會先於替代語言（由`"alternative_languages"`定義）中尋找，再尋找預設語言。
+       - 此格式此前是JSON陣列。
+    2. 格式一中`"translations"`的值。
+  - 如果語言檔案的根元素是包含`"translations"`的JSON物件，且`"translations"`的值是JSON物件，則此元素會被視為格式一。
 
 ### JSON支援
 - 現在支援JSON空值（`null`）。

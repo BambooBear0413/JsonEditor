@@ -10,6 +10,14 @@
 - Placeholders now only support either `%s` or `%n$s`, where `n` is a positive integer.
   - This update does not affect any existing translations as other placeholder formats were never used.
 - Updated `json_editor.settings.restart` in `en_us.json` from "*Need to Restart*" to "*Requires Restart*".
+- Updated the language file format.
+  - 2 formats are now supported:
+    1. A JSON object containing a `"translations"` key, whose value is another JSON object holding translation entries, along with optional metadata.
+       - Currently, the only supported metadata is `"alternative_languages"`, an array of zero or more language IDs.
+       - If a translation key is missing in the current language, the JSON Editor will attempt to retrieve it from the alternative languages (defined by `"alternative_languages"`) first, and then fall back to the default language.
+       - This replaces the previous format, where the root element was a JSON array.
+    2. A JSON object that directly represents the value of the `"translations"` key from Format 1.
+  - If the root element of a language file is a JSON object containing a `"translations"` key with an object value, it will be considered to be in Format 1.
 
 ### JSON Support
 - Now supports the JSON `null` value.
