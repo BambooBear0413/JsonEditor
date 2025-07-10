@@ -18,6 +18,9 @@
        - This replaces the previous format, where the root element was a JSON array.
     2. A JSON object that directly represents the value of the `"translations"` key from Format 1.
   - If the root element of a language file is a JSON object containing a `"translations"` key with an object value, it will be considered to be in Format 1.
+- Updated translation keys:
+  - `json_editor.error.invalid_root_element.title` -> `json_editor.warning.invalid_root_element.title`
+  - `json_editor.error.invalid_root_element` -> `json_editor.warning.invalid_root_element`
 
 ### JSON Support
 - Now supports the JSON `null` value.

@@ -18,6 +18,9 @@
        - 此格式此前是JSON陣列。
     2. 格式一中`"translations"`的值。
   - 如果語言檔案的根元素是包含`"translations"`的JSON物件，且`"translations"`的值是JSON物件，則此元素會被視為格式一。
+- 更新翻譯鍵：
+  - `json_editor.error.invalid_root_element.title` → `json_editor.warning.invalid_root_element.title`
+  - `json_editor.error.invalid_root_element` → `json_editor.warning.invalid_root_element`
 
 ### JSON支援
 - 現在支援JSON空值（`null`）。

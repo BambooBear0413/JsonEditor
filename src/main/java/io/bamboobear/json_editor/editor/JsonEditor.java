@@ -109,7 +109,7 @@ public class JsonEditor extends JPanel{
 				if(json.isJsonArray() || json.isJsonObject()) {
 					root = (JsonCompositeComponent<?>)JsonComponent.createDefaultJsonComponent(json);
 				} else {
-					OptionPaneDialogUtilities.showWarningMessageDialog("json_editor.error.invalid_root_element");
+					OptionPaneDialogUtilities.showWarningMessageDialog("json_editor.warning.invalid_root_element");
 				}
 			} catch(JsonIOException e) {
 				if(e.getCause() instanceof IOException ioException) ioExceptionDuringLoading(ioException, file);

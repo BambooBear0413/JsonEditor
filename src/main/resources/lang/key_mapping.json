@@ -1,2 +1,4 @@
 {
+	"json_editor.error.invalid_root_element.title": "json_editor.warning.invalid_root_element.title",
+	"json_editor.error.invalid_root_element": "json_editor.warning.invalid_root_element"
 }
