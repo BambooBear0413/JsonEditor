@@ -9,7 +9,7 @@
 ### 翻译
 - 占位符现在只允许`%s`或`%n$s`两种形式，其中`n`时正整数。
   - 此更新不影响现存翻译，因为其他格式的占位符在此前从未使用过。
-- 将`en_us.json`中的`json_editor.settings.restart`从“*Need to Restar*t”变更为“*Requires Restart*”。
+- 将`en_us.json`中的`json_editor.settings.restart`从“*Need to Restart*”变更为“*Requires Restart*”。
 - 更新语言文件的格式。
   - 现在支援2种格式：
     1. 包含`"translations"`JSON对象，翻译键值对）及其他元数据（可选）的JSON对象。
