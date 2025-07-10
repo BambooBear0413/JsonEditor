@@ -2,7 +2,7 @@
 ## New Features
 ### Translation Key Remapping
 - Currently available for the "JSON Editor" only.
-- Allows developers to update translation keys by editing `lang/key_mappings.json`.
+- Allows developers to update translation keys by editing `lang/key-mappings.json`.
 - Intended for backward compatibility--developers are encouraged to update translation keys in language files and/or source code, not just in `lang/key_mappings.json`, whenever possible.
 
 ## Changes

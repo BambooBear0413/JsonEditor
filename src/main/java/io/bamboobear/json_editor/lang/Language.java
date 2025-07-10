@@ -30,7 +30,7 @@ public final class Language {
 	
 	static {
 		try {
-			JsonElement element = JsonFile.loadResource("lang/key_mapping.json");
+			JsonElement element = JsonFile.loadResource("lang/key-mappings.json");
 			if(!(element instanceof JsonObject object)) {
 				throw new IllegalStateException("Unexpected JSON type: " + element.getClass().getSimpleName());
 			}
