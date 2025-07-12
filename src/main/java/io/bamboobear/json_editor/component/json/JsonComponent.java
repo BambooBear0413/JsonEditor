@@ -28,6 +28,7 @@ import io.bamboobear.json_editor.component.EditorInputField;
 import io.bamboobear.json_editor.component.EditorInputField.Type;
 import io.bamboobear.json_editor.component.EditorTextField;
 import io.bamboobear.json_editor.component.Label;
+import io.bamboobear.json_editor.editor.Changes;
 import io.bamboobear.json_editor.lang.TranslatableText;
 
 @SuppressWarnings("serial")
@@ -58,7 +59,7 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 		if(index < 0) return;
 		
 		oldParent.removeElement(this);
-		Main.getEditor().addRemoveElementChange(this, oldParent, index);
+		Main.getEditor().addChange(new Changes.RemoveElementChange(this, oldParent, index));
 		oldParent.refresh();
 	}
 	

@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.json.JsonComponent;
 import io.bamboobear.json_editor.component.json.JsonPrimitiveComponent;
+import io.bamboobear.json_editor.editor.Changes;
 
 public sealed interface EditorInputField permits EditorTextField, EditorComboBox{
 	JComponent getAsComponent();
@@ -95,23 +96,20 @@ public sealed interface EditorInputField permits EditorTextField, EditorComboBox
 		return sb.toString();
 	}
 	
-	public static enum Type {
-		KEY((json, before, after) -> Main.getEditor().addKeyFieldChange(json, before, after)),
-		VALUE((json, before, after) -> Main.getEditor().addValueFieldChange((JsonPrimitiveComponent<?>)json, before, after));
-		
-		private ChangeAdder adder;
-		
-		Type(ChangeAdder adder) {
-			this.adder = adder;
-		}
-		
-		public void addChange(JsonComponent<?> json, String before, String after) {
-			adder.addChange(json, before, after);
-		}
-		
-		@FunctionalInterface
-		private interface ChangeAdder {
-			void addChange(JsonComponent<?> json, String before, String after);
-		}
+	enum Type {
+		KEY {
+			@Override
+			public void addChange(JsonComponent<?> json, String before, String after) {
+				Main.getEditor().addChange(new Changes.KeyFieldChange(json, before, after));
+			}
+		},
+		VALUE {
+			@Override
+			public void addChange(JsonComponent<?> json, String before, String after) {
+				Main.getEditor().addChange(new Changes.ValueFieldChange((JsonPrimitiveComponent<?>)json, before, after));
+			}
+		};
+
+		public void addChange(JsonComponent<?> json, String before, String after) { throw new AssertionError(); }
 	}
 }

@@ -9,6 +9,7 @@ import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.component.AddElementDialog;
 import io.bamboobear.json_editor.component.ComboBox;
 import io.bamboobear.json_editor.component.ComboBoxItem;
+import io.bamboobear.json_editor.editor.Changes;
 
 @SuppressWarnings({"serial"})
 public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> {
@@ -61,7 +62,7 @@ public final class JsonArrayComponent extends JsonCompositeComponent<JsonArray> 
 			JsonComponent<?> c = JsonComponent.createDefaultJsonComponent(typeID);
 			addElement("", c.getTypeDisplayName(), c);
 			int index = indexOf(c);
-			Main.getEditor().addAddElementChange(c, this, index);
+			Main.getEditor().addChange(new Changes.AddElementChange(c, this, index));
 			refresh();
 		}
 	}
