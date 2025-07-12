@@ -72,7 +72,11 @@ public final class EditorTextField extends TextField implements EditorInputField
 		fireTextChange(true);
 	}
 	
-	@Override public void setText(String t) { super.setText(translateInputValue(t)); }
+	@Override
+	public void setText(String t) {
+		super.setText(translateInputValue(t));
+		beforeChange = getText();
+	}
 	
 	@Override
 	public void setValue(String value) { this.setText(value); }

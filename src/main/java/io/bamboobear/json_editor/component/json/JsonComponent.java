@@ -90,14 +90,18 @@ public sealed abstract class JsonComponent<T extends JsonElement> extends JPanel
 	public boolean isRemovable() { return removeButton.isEnabled(); }
 	
 	protected void setParentElement(JsonCompositeComponent<?> parent) {
+		var oldParent = this.parent;
 		this.parent = parent;
 		
 		keyField.setVisible(parent != null);
 		removeButton.setVisible(parent != null);
 		icon.setVisible(parent != null);
 		
-		if(parent instanceof JsonObjectComponent)     keyField.setValue(keyField.getValue());
-		else if(parent instanceof JsonArrayComponent) keyField.setDisplayText(getTypeDisplayName());
+		if(parent instanceof JsonObjectComponent ^ oldParent instanceof JsonObjectComponent) {
+			keyField.setValue(keyField.getValue());
+		} else if(parent instanceof JsonArrayComponent ^ oldParent instanceof JsonArrayComponent) {
+			keyField.setDisplayText(getTypeDisplayName());
+		}
 	}
 	
 	public final JsonCompositeComponent<?> getParentElement() { return parent; }
