@@ -58,3 +58,4 @@
 - Typos in the dialog message shown when an error occurs during error report generation:
   - contant -> content
   - imcomplete -> incomplete
+- Pressing Ctrl+Z (Undo) or Ctrl+Y (Redo) while editing the field could cause incorrect undo/redo behavior.

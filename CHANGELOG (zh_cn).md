@@ -58,3 +58,4 @@
 - 生成错误报告的过程中发生错误时，现实的对话框讯息中的拼字错误：
   - contant → content
   - imcomplete → incomplete
+- 编辑栏位的过程中按下Ctrl+Z（撤销）或Ctrl+Y（重做）可能导致不正确的行为。

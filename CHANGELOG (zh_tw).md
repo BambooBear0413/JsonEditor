@@ -58,3 +58,4 @@
 - 產生錯誤報告的過程中發生錯誤時，顯示的對話框訊息中的拼字錯誤：
   - contant → content
   - imcomplete → incomplete
+- 編輯欄位的過程中按下Ctrl+Z（復原）或Ctrl+Y（重做）可能導致不正確的行為。

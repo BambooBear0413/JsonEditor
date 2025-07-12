@@ -17,6 +17,8 @@ public sealed interface EditorInputField permits EditorTextField, EditorComboBox
 	
 	boolean isEditable();
 	
+	void onUndoRedoRequested();
+
 	default void addChange(JsonComponent<?> json, String beforeChange, String afterChange) {
 		getType().addChange(json, beforeChange, afterChange);
 	}

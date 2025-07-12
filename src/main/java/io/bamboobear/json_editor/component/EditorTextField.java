@@ -142,4 +142,6 @@ public final class EditorTextField extends TextField implements EditorInputField
 			if(repaint) SwingUtilities.invokeLater(() -> doParentRepaint());
 		}
 	}
+
+	@Override public void onUndoRedoRequested() { fireTextChange(false); }
 }

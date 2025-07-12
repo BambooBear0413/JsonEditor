@@ -27,6 +27,7 @@ import io.bamboobear.json_editor.JsonFile;
 import io.bamboobear.json_editor.Main;
 import io.bamboobear.json_editor.ResourceImageLoader;
 import io.bamboobear.json_editor.component.Button;
+import io.bamboobear.json_editor.component.EditorInputField;
 import io.bamboobear.json_editor.component.json.JsonComponent;
 import io.bamboobear.json_editor.component.json.JsonCompositeComponent;
 import io.bamboobear.json_editor.component.json.JsonObjectComponent;
@@ -238,8 +239,20 @@ public class JsonEditor extends JPanel{
 		throw new IllegalStateException();
 	}
 	
-	public void undo() { changesRecord.undo(); }
-	public void redo() { changesRecord.redo(); }
+	public void undo() {
+		beforeUndoRedo();
+		changesRecord.undo();
+	}
+
+	public void redo() {
+		beforeUndoRedo();
+		changesRecord.redo();
+	}
+
+	private void beforeUndoRedo() {
+		var c = Main.getMainWindow().getFocusOwner();
+		if(c instanceof EditorInputField field) field.onUndoRedoRequested();
+	}
 	
 	public boolean canDoUndo() { return changesRecord.canDoUndo(); }
 	public boolean canDoRedo() { return changesRecord.canDoRedo(); }

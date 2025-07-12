@@ -73,4 +73,6 @@ public final class EditorComboBox extends ComboBox implements EditorInputField{
 	}
 	
 	@Override public Type getType() { return Type.VALUE; }
+
+	@Override public void onUndoRedoRequested() { fireValueChange(); }
 }
