@@ -27,9 +27,7 @@ public class AboutDialog extends Dialog{
 		
 		init();
 		
-		addWindowListener(new WindowAdapter() {
-			@Override public void windowClosing(WindowEvent e) { dispose(); }
-		});
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		pack();
 		if(getWidth() < 500) setSize(500, getHeight());

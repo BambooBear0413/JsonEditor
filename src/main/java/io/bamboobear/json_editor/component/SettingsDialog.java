@@ -34,9 +34,7 @@ public class SettingsDialog extends Dialog{
 				
 		init();
 		
-		addWindowListener(new WindowAdapter() {
-			@Override public void windowClosing(WindowEvent e) { dispose(); }
-		});
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		setSize(800, 400);
 		setLocationRelativeTo(getParent());

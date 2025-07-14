@@ -27,9 +27,7 @@ public class AddElementDialog extends Dialog{
 		Label typeLabel = new Label(TranslatableText.create("json_editor.add_element.type"), Label.CENTER);
 		ComboBox typeField = Objects.requireNonNull(type);
 		
-		addWindowListener(new WindowAdapter() {
-			@Override public void windowClosing(WindowEvent e) { dispose(); }
-		});
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		contentPanel.add(typeLabel);
 		contentPanel.add(typeField);

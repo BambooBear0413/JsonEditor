@@ -194,6 +194,7 @@ public class Main{
 			super((JFrame)null, "Loading");
 			setSize(new Dimension(300, 150));
 			setLocationRelativeTo(null);
+			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			label = new JLabel("", JLabel.LEFT);
 			add(label);
 			setVisible(true);
