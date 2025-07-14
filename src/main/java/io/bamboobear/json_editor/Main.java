@@ -194,9 +194,23 @@ public class Main{
 			super((JFrame)null, "Loading");
 			setSize(new Dimension(300, 150));
 			setLocationRelativeTo(null);
+			setAlwaysOnTop(true);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			label = new JLabel("", JLabel.LEFT);
 			add(label);
+
+			addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent e) {
+					/*
+					 * If this dialog is closed before the main window has been visible,
+					 * the program should exit; otherwise, it will continue running in the background.
+					 */
+
+					if(!mainWindow.isVisible()) System.exit(-1);
+				}
+			});
+
 			setVisible(true);
 		}
 		

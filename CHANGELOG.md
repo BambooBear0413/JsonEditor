@@ -35,6 +35,10 @@
   - The current file is no longer closed.
   - A warning dialog is shown instead of an error dialog.
 
+### Loading Dialog
+- Now stays always on top to prevent it from disappearing when it loses focus.
+- If the dialog is closed before the main window shows, the program will now exit (with status code `-1`).
+
 ### General
 - Now requires **Java 21**.
 - Updated **GSON** to **2.13.0**.
