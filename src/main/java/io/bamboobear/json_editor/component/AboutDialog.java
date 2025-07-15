@@ -45,16 +45,26 @@ public class AboutDialog extends Dialog{
 		Label version = new Label(TranslatableText.literal("%s", Main.VERSION), Label.CENTER);
 		northPanel.add(version);
 		
-		JPanel centeralPanel = new JPanel(new GridLayout(0, 1));
+		JPanel centralPanel = new JPanel(new GridLayout(0, 1));
 		
-		centeralPanel.add(createFilePanel("README", Language::hasReadmePath, Language::getReadmePath));
+		centralPanel.add(createFilePanel("README", Language::hasReadmePath, Language::getReadmePath));
+
+		JPanel southPanel = new JPanel(new GridLayout(0, 1));
+
+		Button githubButton = new Button(TranslatableText.literal("GitHub"));
+		githubButton.addActionListener(e -> Main.browse("https://github.com/BambooBear0413/JsonEditor"));
+		southPanel.add(githubButton);
 
 		Button issueTrackerButton = new Button(TranslatableText.create("json_editor.about_editor.issue_tracker"));
 		issueTrackerButton.addActionListener(e -> Main.browse("https://github.com/BambooBear0413/JsonEditor/issues"));
-		
+		southPanel.add(issueTrackerButton);
+
+		Label copyright = new Label(TranslatableText.literal("Copyright 2025 Bamboo Bear"), Label.CENTER);
+		southPanel.add(copyright);
+
 		add(northPanel, BorderLayout.NORTH);
-		add(centeralPanel);
-		add(issueTrackerButton, BorderLayout.SOUTH);
+		add(centralPanel);
+		add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	private Button createButton(Language lang, String filePath) {

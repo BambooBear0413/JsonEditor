@@ -39,6 +39,10 @@
 - Now stays always on top to prevent it from disappearing when it loses focus.
 - If the dialog is closed before the main window shows, the program will now exit (with status code `-1`).
 
+### About Window
+- Added a button linking to the [GitHub repository](https://github.com/BambooBear0413/JsonEditor).
+- Added a line of text at the bottom: Copyright 2025 Bamboo Bear.
+
 ### General
 - Now requires **Java 21**.
 - Updated **GSON** to **2.13.0**.
