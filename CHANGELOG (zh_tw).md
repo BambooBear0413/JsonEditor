@@ -43,6 +43,10 @@
 - 添加連結到[GitHub倉儲](https://github.com/BambooBear0413/JsonEditor)的按鈕。
 - 於最底部新增一行字：「Copyright 2025 Bamboo Bear」。
 
+### 檔案命名
+- 現在僅當選擇的檔案「不存在」且其名稱不含附檔名時，會添加`.json`副檔名。
+  - 先前只要檔名不以`.json`結尾，就會添加`.json`。
+
 ### 一般
 - 現在需要至少**Java 21**才能執行。
 - 更新**GSON**至**2.13.0**。

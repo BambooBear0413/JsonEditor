@@ -43,6 +43,10 @@
 - Added a button linking to the [GitHub repository](https://github.com/BambooBear0413/JsonEditor).
 - Added a line of text at the bottom: Copyright 2025 Bamboo Bear.
 
+### File Naming
+- Now only appends a `.json` suffix when the selected file does not exist and its name has no extension.
+  - Previously, the program appended `.json` if the selected file's name does not end with `.json`.
+
 ### General
 - Now requires **Java 21**.
 - Updated **GSON** to **2.13.0**.
