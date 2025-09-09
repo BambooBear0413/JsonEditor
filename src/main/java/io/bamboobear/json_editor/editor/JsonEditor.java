@@ -195,7 +195,7 @@ public class JsonEditor extends JPanel{
 		if (result != JFileChooser.APPROVE_OPTION) return null;
 		
 		File selectedFile = chooser.getSelectedFile();
-		if(chooser.getFileFilter() == jsonFileFilter && !selectedFile.getName().endsWith(".json")) {
+		if(chooser.getFileFilter() == jsonFileFilter && !selectedFile.isFile() && !selectedFile.getName().contains(".")) {
 			return new File(selectedFile.getPath() + ".json");
 		}
 		return selectedFile;
